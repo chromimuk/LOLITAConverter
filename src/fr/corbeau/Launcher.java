@@ -26,7 +26,7 @@ public class Launcher {
 
 		String HTMLFile = "src/hello.html";
 		String procedureName = "index";
-		// convertHTML(HTMLFile, procedureName);
+		convertHTML(HTMLFile, procedureName);
 
 		
 		String SQLFile = "src/course.sql";
@@ -48,7 +48,7 @@ public class Launcher {
 		List<String> PLCode = HTMLConverter.convertHTMLToPL(HTMLCode);
 		String PLSQLCode = HTMLConverter.addHeadings(procedureName, PLCode);
 		
-		System.out.println(PLSQLCode);
+		// System.out.println(PLSQLCode);
 	}
 	
 	
@@ -59,17 +59,18 @@ public class Launcher {
 	 * @param tableName	the name of the table
 	 */
 	public static void convertSQL(String SQLFile, String tableName) {
+		
 		List<String> SQLCode = getCode(SQLFile);
 		Map<String, String> proceduresSQL = SQLConverter.convertSQLToPL(SQLCode, tableName);
 		
 		
-		System.out.println(proceduresSQL.get("pa_add"));
-		System.out.println();
-		System.out.println(proceduresSQL.get("ui_execadd"));
-		System.out.println();
-		System.out.println(proceduresSQL.get("ui_frmadd"));
-		System.out.println();
-		System.out.println(proceduresSQL.get("afft"));
+//		System.out.println(proceduresSQL.get("pa_add"));
+//		System.out.println();
+//		System.out.println(proceduresSQL.get("ui_execadd"));
+//		System.out.println();
+//		System.out.println(proceduresSQL.get("ui_frmadd"));
+//		System.out.println();
+//		System.out.println(proceduresSQL.get("afft"));
 		
 	}
 	
@@ -81,7 +82,7 @@ public class Launcher {
 	 * @param filePath	the file
 	 * @return			the code
 	 */
-	@SuppressWarnings({ "deprecation", "resource" })
+	@SuppressWarnings({ "deprecation" })
 	public static List<String> getCode(String filePath) {
 
 		File file = new File(filePath);

@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.corbeau.sql.Delete;
+import fr.corbeau.sql.Insert;
+import fr.corbeau.sql.Update;
+
 /**
  * Methods to convert a SQL file to a PL/SQL Web Toolkit code
  * 
@@ -46,15 +50,32 @@ public class SQLConverter {
 		
 		Map<String, String> proceduresSQL = new HashMap<String, String>();
 
-		proceduresSQL.put("ui_frmadd", uiFrmadd(names, types, tableName));
-		proceduresSQL.put("ui_execadd", uiExeadd(names, types, tableName));
-		proceduresSQL.put("pa_add", paAdd(names, types, tableName));
+		// show
 		proceduresSQL.put("afft", afft(names, types, tableName));
 
+		// insert
+		proceduresSQL.put("pa_add", Insert.paAdd(names, types, tableName));
+		proceduresSQL.put("ui_execadd", Insert.uiExecadd(names, types, tableName));
+		proceduresSQL.put("ui_frmadd", Insert.uiFrmadd(names, types, tableName));
+
+		// update
+		proceduresSQL.put("pa_edit", Update.paEdit(names, types, tableName));
+		proceduresSQL.put("ui_execedit", Update.uiExecedit(names, types, tableName));
+		proceduresSQL.put("ui_frmedit", Update.uiFrmedit(names, types, tableName));
+		
+		// delete
+		proceduresSQL.put("pa_del", Delete.paDel(names, types, tableName));
+		proceduresSQL.put("ui_execdel", Delete.uiExecdel(names, types, tableName));
+		
+		
+		System.out.println(Delete.paDel(names, types, tableName));
+		System.out.println(Delete.uiExecdel(names, types, tableName));
 		
 		return proceduresSQL;
 	}
 
+	
+	
 
 	private static String afft(List<String> names, List<String> types, String tableName) {
 
@@ -111,7 +132,8 @@ public class SQLConverter {
 		return code;
 	}
 
-
+	
+	
 	/**
 	 * Transform the SQL type to the equivalent in PL/SQL
 	 * 
@@ -127,203 +149,6 @@ public class SQLConverter {
 
 		return code;
 	}
-
-
-
-	/**
-	 * INSERT command
-	 * 
-	 * @param names		a list with the name of the parameters
-	 * @param types		a list with the type of parameters
-	 * @param tableName	the name of the table
-	 * @return			the INSERT command
-	 */
-	public static String paAdd(List<String> names, List<String> types, String tableName) {
-
-		String code = "CREATE OR REPLACE PROCEDURE pa_add_" + tableName;
-		code += "\n\t(";
-
-		for (int i=0; i<names.size(); i++) {
-			code += "\n\t\t" + names.get(i) + " in " + getPLType(types.get(i));
-			if (i+1 != names.size())
-				code += ",";
-		}
-
-		code += "\n\t)\n";
-		code += "IS\nBEGIN\n";
-		code += "\tINSERT INTO " + tableName + " VALUES";
-		code += "\n\t(";
-
-		for (int i=0; i<names.size(); i++) {
-			code += "\n\t\t" + names.get(i) + "";
-			if (i+1 != names.size())
-				code += ",";
-		}
-
-		code += "\n\t);\n";
-		code += "COMMIT;\n";
-		code += "END;\n";
-		code += "/";
-
-		return code;
-	}
-
-
-
-
-	/**
-	 * @param names a list with the name of the parameters
-	 * @param types a list with the name of the parameters
-	 * @param tableName the name of the table
-	 * @return	the form
-	 */
-	public static String uiFrmadd(List<String> names, List<String> types, String tableName) {
-
-		List<String> body = new ArrayList<String>();
-
-		String code = "CREATE OR REPLACE PROCEDURE ui_frmadd_" + tableName;
-		code += "\nIS";
-		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
-		code += "\nBEGIN";
-
-		body.add("htp.print('<!DOCTYPE html>');");
-		body.add("htp.htmlOpen;");
-		body.add("htp.headOpen;");
-		body.add("htp.title('Insertion " + tableName + "');");
-		body.add("htp.print('<link href=\"' || rep_css || '\" rel=\"stylesheet\" type=\"text/css\" />');");
-		body.add("htp.headClose;");
-		body.add("htp.bodyOpen;");
-		
-		body.add("htp.print('<div class=\"container\">');");
-		body.add("htp.header(1, 'Ajout élément dans la table "+ tableName + "');");
-
-		body.add("htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_"+tableName+"', 'POST');");	
-		body.add("htp.print('<table class=\"table\">');");
-
-		for (int i=0; i<names.size(); i++) {
-			body.add("htp.tableRowOpen;");
-			body.add("htp.tableData('"+names.get(i)+"');");
-			body.add("htp.tableData(htf.formText('"+names.get(i)+"', "+getLengthType(types.get(i))+"));");
-			body.add("htp.tableRowClose;");
-		}
-		body.add("htp.tableClose;");
-		
-		body.add("htp.print('<button class=\"btn btn-primary\" type=\"submit\">Validation</button>');");
-		body.add("htp.formClose;");
-		body.add("htp.print('</div>');");
-		body.add("htp.bodyClose;");
-		body.add("htp.htmlClose;");
-
-
-		for (String line : body) {
-			code += "\n\t" + line;
-		}
-		code += "\nEND;";
-		code += "\n/";
-		
-		return code;
-	}
-
-
-	/**
-	 * Get the length of the type of the variable
-	 * 
-	 * @param type	the complete type (eg varchar(45))
-	 * @return	the length (eg 45)
-	 */
-	public static int getLengthType(String type) {
-		
-		if(type.equals("date"))
-			return 10;
-		else if(type.equals("clob"))
-			return 1000;
-
-		return Integer.parseInt(type.substring(type.indexOf("(")+1, type.indexOf(")")));
-	}
-
-
-	/**
-	 * @param names a list with the name of the parameters
-	 * @param types a list with the type of the parameters
-	 * @param tableName the name of the table
-	 * @return the confirmation message
-	 */
-	public static String uiExeadd(List<String> names, List<String> types, String tableName) {
-		
-		List<String> body = new ArrayList<String>();
-
-		String code = "CREATE OR REPLACE PROCEDURE ui_execadd_" + tableName;
-		
-		code += "\n\t(";
-		for (int i=0; i<names.size(); i++) {
-			code += "\n\t\t" + names.get(i) + " in " + getPLType(types.get(i));
-			if (i+1 != names.size())
-				code += ",";
-		}
-		code += "\n\t)\n";
-		
-		code += "\nIS";
-		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
-		code += "\nBEGIN";
-
-		body.add("htp.print('<!DOCTYPE html>');");
-		body.add("htp.htmlOpen;");
-		body.add("htp.headOpen;");
-		body.add("htp.title('Insertion " + tableName + "');");
-		body.add("htp.print('<link href=\"' || rep_css || '\" rel=\"stylesheet\" type=\"text/css\" />');");
-		body.add("htp.headClose;");
-		body.add("htp.bodyOpen;");
-		
-		body.add("htp.print('<div class=\"container\">');");
-		
-		body.add(addSQLFunctionInExec(names, tableName));
-		
-		body.add("htp.header(1, 'LOLITA');");
-		body.add("htp.hr;");		
-		body.add("htp.header(2, 'Ajout effectue dans la table "+tableName+"');");
-		
-		body.add("htp.print('<a class=\"btn btn-primary\" href=\"afft_"+tableName+"\" >Voir la liste complete</a>');");
-		
-		body.add("htp.print('</div>');");
-		
-		body.add("htp.bodyClose;");
-		body.add("htp.htmlClose;");
-		
-		for (String line : body) {
-			code += "\n\t" + line;
-		}
-		
-		
-		code += "\nEXCEPTION";
-		code += "\n\tWHEN OTHERS THEN";
-		
-		code += "\n\t\thtp.print('ERROR: ' || SQLCODE);";
-		
-		code += "\nEND;";
-		code += "\n/";
-		
-		return code;
-	}
-
 	
-	/**
-	 * Simple method to add the call to the PL/SQL procedure of the SQL function 
-	 * 
-	 * @param names		a list with the name of the parameters 
-	 * @param tableName	the name of the table
-	 * @return	string with the call to the procedure
-	 */
-	public static String addSQLFunctionInExec(List<String> names, String tableName) {
-		
-		String code = "pa_add_" + tableName + "(";
-		for (int i=0; i<names.size(); i++) {
-			code += names.get(i);
-			if (i+1 != names.size())
-				code += ",";
-		}
-		code += ");";
-		
-		return code;
-	}
 	
 }
