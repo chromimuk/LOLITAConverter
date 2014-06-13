@@ -53,8 +53,11 @@ public class HTMLConverter {
 	 */
 	public static String addHeadings(String name, List<String> PLCode) {
 
-		String code = "CREATE OR REPLACE PROCEDURE " + name + " IS\n";
-		code += "BEGIN\n";
+		String code = "CREATE OR REPLACE PROCEDURE " + name;
+		code += "\nIS";
+		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
+		code += "\nBEGIN\n";
+		
 
 		for (String pl : PLCode)
 			code += "\t" + pl + "\n";

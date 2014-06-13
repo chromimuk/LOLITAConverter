@@ -49,9 +49,66 @@ public class SQLConverter {
 		proceduresSQL.put("ui_frmadd", uiFrmadd(names, types, tableName));
 		proceduresSQL.put("ui_execadd", uiExeadd(names, types, tableName));
 		proceduresSQL.put("pa_add", paAdd(names, types, tableName));
+		proceduresSQL.put("afft", afft(names, types, tableName));
 
 		
 		return proceduresSQL;
+	}
+
+
+	private static String afft(List<String> names, List<String> types, String tableName) {
+
+		List<String> body = new ArrayList<String>();
+
+		String code = "CREATE OR REPLACE PROCEDURE afft_" + tableName;
+		code += "\nIS";
+		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
+		
+		code += "\nCURSOR lst IS SELECT * FROM " + tableName.toUpperCase() + ";"; 
+		
+		code += "\nBEGIN";
+
+		body.add("htp.print('<!DOCTYPE html>');");
+		body.add("htp.htmlOpen;");
+		body.add("htp.headOpen;");
+		body.add("htp.title('Table " + tableName + "');");
+		body.add("htp.print('<link href=\"' || rep_css || '\" rel=\"stylesheet\" type=\"text/css\" />');");
+		body.add("htp.headClose;");
+		body.add("htp.bodyOpen;");
+		
+		body.add("htp.print('<div class=\"container\">');");
+		
+		body.add("htp.header(1, 'LOLITA');");
+		body.add("htp.hr;");
+		body.add("htp.header(2, 'Liste "+ tableName + "');");
+
+		body.add("htp.print('<table class=\"table\">');");
+		body.add("htp.tableRowOpen;");
+		body.add("htp.tableHeader('Numero');");
+		body.add("htp.tableRowClose;");
+		body.add("FOR rec IN lst loop");
+		body.add("htp.tableRowOpen;");
+		
+		for (int i=0; i<names.size(); i++) {
+			body.add("htp.tableData(rec."+names.get(i).substring(1)+");");
+		}
+		
+		body.add("htp.tableRowClose;");
+		body.add("END LOOP;");
+		body.add("htp.tableClose;");
+
+		body.add("htp.print('</div>');");
+		body.add("htp.bodyClose;");
+		body.add("htp.htmlClose;");
+
+
+		for (String line : body) {
+			code += "\n\t" + line;
+		}
+		code += "\nEND;";
+		code += "\n/";
+		
+		return code;
 	}
 
 
@@ -126,21 +183,22 @@ public class SQLConverter {
 
 		String code = "CREATE OR REPLACE PROCEDURE ui_frmadd_" + tableName;
 		code += "\nIS";
+		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
 		code += "\nBEGIN";
 
-		body.add("htp.htmlOpen");
-		body.add("htp.headOpen");
+		body.add("htp.print('<!DOCTYPE html>');");
+		body.add("htp.htmlOpen;");
+		body.add("htp.headOpen;");
 		body.add("htp.title('Insertion " + tableName + "');");
-		body.add("htp.headClose");
-		body.add("htp.bodyOpen");
+		body.add("htp.print('<link href=\"' || rep_css || '\" rel=\"stylesheet\" type=\"text/css\" />');");
+		body.add("htp.headClose;");
+		body.add("htp.bodyOpen;");
+		
+		body.add("htp.print('<div class=\"container\">');");
+		body.add("htp.header(1, 'Ajout élément dans la table "+ tableName + "');");
 
 		body.add("htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_"+tableName+"', 'POST');");	
-		body.add("htp.tableOpen;");
-
-		body.add("htp.tableRowOpen");
-		body.add("htp.tableHeader('');");
-		body.add("htp.tableHeader('Saisir les valeurs');");
-		body.add("htp.tableRowClose;");
+		body.add("htp.print('<table class=\"table\">');");
 
 		for (int i=0; i<names.size(); i++) {
 			body.add("htp.tableRowOpen;");
@@ -148,14 +206,11 @@ public class SQLConverter {
 			body.add("htp.tableData(htf.formText('"+names.get(i)+"', "+getLengthType(types.get(i))+"));");
 			body.add("htp.tableRowClose;");
 		}
-		
-		body.add("htp.tableRowOpen;");
-		body.add("htp.tableData('Validation :')");
-		body.add("htp.tableData(htf.formSubmit(NULL, 'Insertion'))");
-		body.add("htp.tableRowClose;");
-
 		body.add("htp.tableClose;");
+		
+		body.add("htp.print('<button class=\"btn btn-primary\" type=\"submit\">Validation</button>');");
 		body.add("htp.formClose;");
+		body.add("htp.print('</div>');");
 		body.add("htp.bodyClose;");
 		body.add("htp.htmlClose;");
 
@@ -180,6 +235,8 @@ public class SQLConverter {
 		
 		if(type.equals("date"))
 			return 10;
+		else if(type.equals("clob"))
+			return 1000;
 
 		return Integer.parseInt(type.substring(type.indexOf("(")+1, type.indexOf(")")));
 	}
@@ -206,18 +263,28 @@ public class SQLConverter {
 		code += "\n\t)\n";
 		
 		code += "\nIS";
+		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
 		code += "\nBEGIN";
 
-		body.add("htp.htmlOpen");
-		body.add("htp.headOpen");
+		body.add("htp.print('<!DOCTYPE html>');");
+		body.add("htp.htmlOpen;");
+		body.add("htp.headOpen;");
 		body.add("htp.title('Insertion " + tableName + "');");
-		body.add("htp.headClose");
-		body.add("htp.bodyOpen");
+		body.add("htp.print('<link href=\"' || rep_css || '\" rel=\"stylesheet\" type=\"text/css\" />');");
+		body.add("htp.headClose;");
+		body.add("htp.bodyOpen;");
+		
+		body.add("htp.print('<div class=\"container\">');");
 		
 		body.add(addSQLFunctionInExec(names, tableName));
-						
-		body.add("htp.br;");
-		body.add("htp.print('Ajout effectué dans la table "+tableName+"')");
+		
+		body.add("htp.header(1, 'LOLITA');");
+		body.add("htp.hr;");		
+		body.add("htp.header(2, 'Ajout effectue dans la table "+tableName+"');");
+		
+		body.add("htp.print('<a class=\"btn btn-primary\" href=\"afft_"+tableName+"\" >Voir la liste complete</a>');");
+		
+		body.add("htp.print('</div>');");
 		
 		body.add("htp.bodyClose;");
 		body.add("htp.htmlClose;");

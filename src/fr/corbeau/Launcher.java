@@ -25,12 +25,12 @@ public class Launcher {
 	public static void main(String[] args) {
 
 		String HTMLFile = "src/hello.html";
-		String procedureName = "hello";
+		String procedureName = "index";
 		// convertHTML(HTMLFile, procedureName);
 
 		
 		String SQLFile = "src/course.sql";
-		String tableName = "course";
+		String tableName = "langue";
 		convertSQL(SQLFile, tableName);
 		
 	}
@@ -63,11 +63,13 @@ public class Launcher {
 		Map<String, String> proceduresSQL = SQLConverter.convertSQLToPL(SQLCode, tableName);
 		
 		
+		System.out.println(proceduresSQL.get("pa_add"));
+		System.out.println();
 		System.out.println(proceduresSQL.get("ui_execadd"));
 		System.out.println();
 		System.out.println(proceduresSQL.get("ui_frmadd"));
 		System.out.println();
-		System.out.println(proceduresSQL.get("pa_add"));
+		System.out.println(proceduresSQL.get("afft"));
 		
 	}
 	

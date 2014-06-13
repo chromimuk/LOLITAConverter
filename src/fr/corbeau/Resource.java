@@ -56,6 +56,7 @@ public class Resource {
 		
 		// with elements and attributes
 		equivalence.put("<a (.*=\".*\")* >.*</a>", "htp.anchor(");
+		
 	}
 	
 	
@@ -77,11 +78,12 @@ public class Resource {
 		listPatterns.add(Pattern.compile("<td>.*</td>"));
 		
 		// with attributes
-		listPatterns.add(Pattern.compile("<img (.*=\".*\")* />"));
+		// listPatterns.add(Pattern.compile("<img (.*=\".*\")* />"));
 		
 		
 		// with elements and attributes
-		listPatterns.add(Pattern.compile("<a (.*=\".*\")* >.*</a>"));
+		// listPatterns.add(Pattern.compile("<a (.*=\".*\")* >.*</a>"));
+		
 	}
 	
 	
