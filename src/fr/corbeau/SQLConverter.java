@@ -1,5 +1,6 @@
 package fr.corbeau;
 
+import java.lang.Character.Subset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +29,7 @@ public class SQLConverter {
 	 * @param tableName		the name of the table
 	 * @return the PL/SQL code
 	 */
-	public static Map<String, String> convertSQLToPL(List<String> SQLCode, String tableName) {
+	public static Map<String, Map> convertSQLToPL(List<String> SQLCode, String tableName) {
 
 		Pattern pattern = Pattern.compile("^$|^--|^DROP|^CREATE|^CONSTRAINT|\\);|\\($");
 
@@ -47,74 +48,88 @@ public class SQLConverter {
 
 		}
 
-		
-		Map<String, String> proceduresSQL = new HashMap<String, String>();
+
+		Map<String, Map> proceduresSQL = new HashMap<String, Map>();
+		Map<String, String> show = new HashMap<String, String>();
+		Map<String, String> insert = new HashMap<String, String>();
+		Map<String, String> update = new HashMap<String, String>();
+		Map<String, String> delete = new HashMap<String, String>();
+
 
 		// show
-		proceduresSQL.put("afft", afft(names, types, tableName));
+		show.put("afft_"+tableName, afft(names, types, tableName));
 
 		// insert
-		proceduresSQL.put("pa_add", Insert.paAdd(names, types, tableName));
-		proceduresSQL.put("ui_execadd", Insert.uiExecadd(names, types, tableName));
-		proceduresSQL.put("ui_frmadd", Insert.uiFrmadd(names, types, tableName));
+		insert.put("pa_add_"+tableName, Insert.paAdd(names, types, tableName));
+		insert.put("ui_execadd_"+tableName, Insert.uiExecadd(names, types, tableName));
+		insert.put("ui_frmadd_"+tableName, Insert.uiFrmadd(names, types, tableName));
 
 		// update
-		proceduresSQL.put("pa_edit", Update.paEdit(names, types, tableName));
-		proceduresSQL.put("ui_execedit", Update.uiExecedit(names, types, tableName));
-		proceduresSQL.put("ui_frmedit", Update.uiFrmedit(names, types, tableName));
-		
+		update.put("pa_edit_"+tableName, Update.paEdit(names, types, tableName));
+		update.put("ui_execedit_"+tableName, Update.uiExecedit(names, types, tableName));
+		update.put("ui_frmedit_"+tableName, Update.uiFrmedit(names, types, tableName));
+
 		// delete
-		proceduresSQL.put("pa_del", Delete.paDel(names, types, tableName));
-		proceduresSQL.put("ui_execdel", Delete.uiExecdel(names, types, tableName));
-		
-		
-		System.out.println(Delete.paDel(names, types, tableName));
-		System.out.println(Delete.uiExecdel(names, types, tableName));
-		
+		delete.put("pa_del_"+tableName, Delete.paDel(names, types, tableName));
+		delete.put("ui_execdel_"+tableName, Delete.uiExecdel(names, types, tableName));
+
+
+		proceduresSQL.put("show", show);
+		proceduresSQL.put("insert", insert);
+		proceduresSQL.put("update", update);
+		proceduresSQL.put("delete", delete);
+
+
 		return proceduresSQL;
 	}
 
-	
-	
+
+
 
 	private static String afft(List<String> names, List<String> types, String tableName) {
 
 		List<String> body = new ArrayList<String>();
 
-		String code = "CREATE OR REPLACE PROCEDURE afft_" + tableName;
+		String code = "CREATE OR REPLACE";
+		code += "\nPROCEDURE afft_" + tableName;
 		code += "\nIS";
-		code += "\nrep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';";
-		
-		code += "\nCURSOR lst IS SELECT * FROM " + tableName.toUpperCase() + ";"; 
-		
+		code += "\n\trep_css varchar2(255) := "+Resource.css+";";
+
+		code += "\n\tCURSOR lst";
+		code += "\n\tIS \n\tSELECT \n\t\t *";
+		code += "\n\tFROM \n\t\t" + tableName.toUpperCase() + ";"; 
+
 		code += "\nBEGIN";
 
 		body.add("htp.print('<!DOCTYPE html>');");
 		body.add("htp.htmlOpen;");
 		body.add("htp.headOpen;");
-		body.add("htp.title('Table " + tableName + "');");
+		body.add("htp.title('Affichage table " + tableName + "');");
 		body.add("htp.print('<link href=\"' || rep_css || '\" rel=\"stylesheet\" type=\"text/css\" />');");
 		body.add("htp.headClose;");
 		body.add("htp.bodyOpen;");
-		
+
 		body.add("htp.print('<div class=\"container\">');");
-		
+
 		body.add("htp.header(1, 'LOLITA');");
 		body.add("htp.hr;");
 		body.add("htp.header(2, 'Liste "+ tableName + "');");
 
 		body.add("htp.print('<table class=\"table\">');");
-		body.add("htp.tableRowOpen;");
-		body.add("htp.tableHeader('Numero');");
+		body.add("htp.tableRowOpen(cattributes => 'class=active');");
+		body.add("htp.tableHeader('Numéro');");
 		body.add("htp.tableRowClose;");
-		body.add("FOR rec IN lst loop");
+		body.add("FOR rec IN lst LOOP");
 		body.add("htp.tableRowOpen;");
-		
+
 		for (int i=0; i<names.size(); i++) {
 			body.add("htp.tableData(rec."+names.get(i).substring(1)+");");
 		}
-		
+
+		body.add(addActions(tableName, names.get(0)));
+
 		body.add("htp.tableRowClose;");
+
 		body.add("END LOOP;");
 		body.add("htp.tableClose;");
 
@@ -128,12 +143,27 @@ public class SQLConverter {
 		}
 		code += "\nEND;";
 		code += "\n/";
-		
+
 		return code;
 	}
 
-	
-	
+
+
+	public static String addActions(String tableName, String id) {
+
+		String code = "htp.tableData(";
+
+		code += "\n\t\thtf.anchor('ui_frmedit_"+tableName+"?"+id+"=' || rec."+id.substring(1)+", 'Modifier')";
+		code += "\n\t\t|| ' ou ' ||";
+		code += "\n\t\thtf.anchor('ui_execdel_"+tableName+"?"+id+"=' || rec."+id.substring(1)+", 'Supprimer')";
+		
+		code += "\n\t);";
+
+		return code;
+	}
+
+
+
 	/**
 	 * Transform the SQL type to the equivalent in PL/SQL
 	 * 
@@ -149,6 +179,44 @@ public class SQLConverter {
 
 		return code;
 	}
-	
-	
+
+
+	/**
+	 * Simple method to add the call to the PL/SQL procedure of the SQL function 
+	 * 
+	 * @param names		a list with the name of the parameters 
+	 * @param tableName	the name of the table
+	 * @return	string with the call to the procedure
+	 */
+	public static String addSQLFunctionInExec(String function, List<String> names, String tableName) {
+
+		String code = "pa_" + function  + "_" + tableName + "(";
+
+		for (int i=0; i<names.size(); i++) {
+			code += names.get(i);
+			if (i+1 != names.size())
+				code += ",";
+		}
+		code += ");";
+
+		return code;
+	}
+
+
+	/**
+	 * Get the length of the type of the variable
+	 * 
+	 * @param type	the complete type (eg varchar(45))
+	 * @return	the length (eg 45)
+	 */
+	public static int getLengthType(String type) {
+
+		if(type.equals("date"))
+			return 10;
+		else if(type.equals("clob"))
+			return 1000;
+
+		return Integer.parseInt(type.substring(type.indexOf("(")+1, type.indexOf(")")));
+	}
+
 }

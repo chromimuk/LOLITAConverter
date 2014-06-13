@@ -16,7 +16,8 @@ public class Resource {
 	
 	public static final String css = "https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css";
 	public static final String user_homepage = "hello";
-	public static final String admin_homepage = "hello";
+	public static final String admin_homepage = "admin";
+
 	
 	/**
 	 * 
