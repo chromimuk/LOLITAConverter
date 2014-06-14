@@ -10,9 +10,10 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 *
+		 A.DATECODE, A.MOTIF, A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE
 	FROM 
-		AVOIR;
+		AVOIR A Inner Join MEMBRE M
+		ON A.NUMMEMBRE = M.NUMMEMBRE;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -31,7 +32,7 @@ BEGIN
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
-	htp.tableData(rec.nummembre);
+	htp.tableData(rec.premembre || ' ' || rec.nommembre);
 	htp.tableData(rec.datecode);
 	htp.tableData(rec.motif);
 	htp.tableData(rec.nature);

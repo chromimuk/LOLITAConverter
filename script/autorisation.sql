@@ -10,9 +10,12 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 *
+		A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE, D.LIBDOMAINE
 	FROM 
-		AUTORISATION;
+		AUTORISATION A Inner Join MEMBRE M
+		ON A.NUMMEMBRE = M.NUMMEMBRE
+		Inner Join DOMAINE D
+		ON A.NUMDOMAINE = D.NUMDOMAINE;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -31,10 +34,10 @@ BEGIN
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
-	htp.tableData(rec.nummembre);
+	htp.tableData(rec.premembre || ' ' || rec.nommembre);
 	htp.tableData(rec.nature);
 	htp.tableData(rec.code);
-	htp.tableData(rec.numdomaine);
+	htp.tableData(rec.libdomaine);
 	htp.tableData(
 		htf.anchor('ui_frmedit_autorisation?vnummembre=' || rec.nummembre, 'Modifier')
 		|| ' ou ' ||

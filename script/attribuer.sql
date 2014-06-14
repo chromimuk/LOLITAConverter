@@ -10,9 +10,10 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 *
+		 A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE
 	FROM 
-		ATTRIBUER;
+		ATTRIBUER A Inner Join MEMBRE M
+		ON A.NUMMEMBRE = M.NUMMEMBRE;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -33,7 +34,7 @@ BEGIN
 	htp.tableRowOpen;
 	htp.tableData(rec.nature);
 	htp.tableData(rec.code);
-	htp.tableData(rec.nummembre);
+	htp.tableData(rec.premembre || ' ' || rec.nommembre);
 	htp.tableData(
 		htf.anchor('ui_frmedit_attribuer?vnature=' || rec.nature, 'Modifier')
 		|| ' ou ' ||
