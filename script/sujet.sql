@@ -1,8 +1,8 @@
 -- PROCEDURES CONCERNANT LA TABLE SUJET
 
---1 Affichage des données
+--1 Affichage des donnï¿½es
 
---1.1 Affichage de toutes les données de la table
+--1.1 Affichage de toutes les donnï¿½es de la table
 CREATE OR REPLACE
 PROCEDURE afft_sujet
 IS
@@ -10,9 +10,24 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 *
+		  S.NUMSUJET
+		 ,S.TITSUJET
+		 ,S.STASUJET
+		 ,S.LIBVISIBILITE
+		 ,S.LIBTYPESUJET
+		 ,S.DTESUJET
+		 ,D.LIBDOMAINE
+		 ,MC.PREMEMBRE
+		 ,MC.NOMMEMBRE
+		 ,ME.PREMEMBRE
+		 ,ME.NOMMEMBRE
 	FROM 
-		SUJET;
+		SUJET S Inner Join MEMBRE MC
+		On S.NUMMEMBRE = MC.NUMMEMBRE
+		Inner Join MEMBRE ME
+		On S.NUMMEMBRE_HER_MEMBRE = ME.NUMMEMBRE
+		Inner Join DOMAINE D
+		ON S.NUMDOMAINE = D.NUMDOMAINE;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -27,12 +42,13 @@ BEGIN
 	htp.header(2, 'Liste sujet');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
+	htp.tableHeader('Numï¿½ro');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
 	htp.tableData(rec.numsujet);
-	htp.tableData(rec.numdomaine);
+	htp.tableData(rec.nomdomaine);
+	-- Ã  voir comment accÃ©der quand y a plusieurs colonnes du meme nom
 	htp.tableData(rec.nummembre);
 	htp.tableData(rec.nummembre_her_membre);
 	htp.tableData(rec.titsujet);
@@ -132,7 +148,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Ajout élément dans la table sujet');
+	htp.header(1, 'Ajout ï¿½lï¿½ment dans la table sujet');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_sujet', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
@@ -182,7 +198,7 @@ END;
 
 
 --2.1.2 Page de validation d'insertion, avec gestion des erreurs
--------Appel à la requête pa_add_sujet
+-------Appel ï¿½ la requï¿½te pa_add_sujet
 CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 	(
 		vnumsujet in number,
@@ -222,7 +238,7 @@ END;
 /
 
 
---2.1.1 Requête SQL
+--2.1.1 Requï¿½te SQL
 CREATE OR REPLACE PROCEDURE pa_add_sujet
 	(
 		vnumsujet in number,
@@ -256,7 +272,7 @@ END;
 
 --3 Edition
 
---3.1.3 Formulaire d'édition
+--3.1.3 Formulaire d'ï¿½dition
 ------- Validation redirige vers ui_execedit_sujet
 CREATE OR REPLACE PROCEDURE ui_frmadd_sujet
 IS
@@ -319,7 +335,7 @@ END;
 /
 
 
---3.1.1 Requête SQL
+--3.1.1 Requï¿½te SQL
 CREATE OR REPLACE
 PROCEDURE pa_edit_sujet
 	(
@@ -353,8 +369,8 @@ END;
 /
 
 
---3.1.2 Page de validation d'édition
--------Appel à la requête pa_edit_sujet
+--3.1.2 Page de validation d'ï¿½dition
+-------Appel ï¿½ la requï¿½te pa_edit_sujet
 CREATE OR REPLACE
 PROCEDURE ui_execedit_sujet
 	(
@@ -382,7 +398,7 @@ BEGIN
 	pa_edit_sujet(vnumsujet,vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet,vdtesujet);
 	htp.header(1, 'LOLITA');
 	htp.hr;
-	htp.header(2, 'Edition effectuée dans la table SUJET');
+	htp.header(2, 'Edition effectuï¿½e dans la table SUJET');
 	htp.print('<a class="btn btn-primary" href="afft_sujet" >>Consulter la liste SUJET</a>');
 	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 	htp.print('</div>');
@@ -399,7 +415,7 @@ END;
 
 
 
---3.2.1 Requête SQL
+--3.2.1 Requï¿½te SQL
 CREATE OR REPLACE
 PROCEDURE pa_edit_sujet_stasujet
 	(
@@ -420,8 +436,8 @@ END;
 
 
 
---3.2.2 Page de validation d'édition du statut de sujet
--------Appel à la requête pa_edit_sujet_stasujet
+--3.2.2 Page de validation d'ï¿½dition du statut de sujet
+-------Appel ï¿½ la requï¿½te pa_edit_sujet_stasujet
 CREATE OR REPLACE
 PROCEDURE ui_execedit_sujet_stasujet_stasujet
 	(
@@ -442,7 +458,7 @@ BEGIN
 	pa_edit_sujet_stasujet(vnumsujet,vstasujet);
 	htp.header(1, 'LOLITA');
 	htp.hr;
-	htp.header(2, 'Edition effectuée dans la table SUJET');
+	htp.header(2, 'Edition effectuï¿½e dans la table SUJET');
 	htp.print('<a class="btn btn-primary" href="afft_sujet" >>Consulter la liste SUJET</a>');
 	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 	htp.print('</div>');
@@ -456,7 +472,7 @@ END;
 
 
 
---3.2.3 Formulaire d'édition du statut du sujet
+--3.2.3 Formulaire d'ï¿½dition du statut du sujet
 ------- Validation redirige vers ui_execedit_sujet_stasujet
 CREATE OR REPLACE PROCEDURE ui_frmadd_sujet_stasujet
 IS
@@ -494,7 +510,7 @@ END;
 --4 Suppression
 
 --4.1.2 Page de validation de suppression
--------Appel à la requête pa_del_sujet
+-------Appel ï¿½ la requï¿½te pa_del_sujet
 CREATE OR REPLACE
 PROCEDURE ui_execdel_sujet
 	(
@@ -514,7 +530,7 @@ BEGIN
 	pa_del_sujet(vnumsujet)
 	htp.header(1, 'LOLITA');
 	htp.hr;
-	htp.header(2, 'Suppression élément dans la table SUJET');
+	htp.header(2, 'Suppression ï¿½lï¿½ment dans la table SUJET');
 	htp.print('<a class="btn btn-primary" href="afft_sujet" >>Consulter la liste SUJET</a>');
 	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 	htp.print('</div>');
@@ -527,7 +543,7 @@ END;
 /
 
 
---4.1.1 Requête SQL
+--4.1.1 Requï¿½te SQL
 CREATE OR REPLACE
 PROCEDURE pa_del_sujet
 	(
