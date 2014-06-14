@@ -157,8 +157,7 @@ BEGIN
 							htp.tableData(htf.formText('vliblangue', 30));
 						htp.tableRowClose;
 					htp.tableClose;
-					htp.print('<a class="btn btn-primary" href="afft_langue" >Consulter la liste LANGUE</a>');
-					htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+					htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
 				htp.formClose;
 			htp.print('</div>');
 		htp.bodyClose;

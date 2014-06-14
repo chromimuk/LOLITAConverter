@@ -13,7 +13,10 @@ BEGIN
 			htp.print('<div class="container">');
 			htp.header(1,'LOLITA');
 			htp.br;
+			htp.print('Hello ' || owa_cookie.get('LOLITA'));
 			htp.print('<a class="btn btn-success" href="ui_frmadd_membre" >Inscription</a>');
+			htp.print('<a class="btn btn-primary" href="login" >Connexion</a>');
+			htp.hr;
 			htp.print('<a class="btn btn-info" href="admin" >Administration</a>');
 			htp.print('<a class="btn btn-danger" href="admin_expert" >Administration expert</a>');
 			htp.br;

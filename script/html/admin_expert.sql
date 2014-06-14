@@ -1,7 +1,7 @@
-create or replace
+CREATE OR REPLACE
 PROCEDURE admin
 IS
-rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
