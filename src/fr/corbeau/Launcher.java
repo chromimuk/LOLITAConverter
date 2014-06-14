@@ -34,7 +34,7 @@ public class Launcher {
 
 		
 		String SQLFile = "src/course.sql";
-		String tableName = "langue";
+		String tableName = "posseder";
 		convertSQL(SQLFile, tableName);
 		
 	}
