@@ -61,7 +61,11 @@ END;
 /
 
 
+<<<<<<< HEAD
 --1.2 Affichage du profil d'une société
+=======
+-- 1.2 Affichage profil société
+>>>>>>> origin/master
 CREATE OR REPLACE 
 PROCEDURE afft_societe_from_numsociete
 	(vnumsociete number default 2) is
