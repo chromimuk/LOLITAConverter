@@ -1,8 +1,8 @@
 -- PROCEDURES CONCERNANT LA TABLE SUJET
 
---1 Affichage des donn�es
+--1 Affichage des données
 
---1.1 Affichage de toutes les donn�es de la table
+--1.1 Affichage de toutes les données de la table
 CREATE OR REPLACE
 PROCEDURE afft_sujet
 IS
@@ -274,7 +274,7 @@ END;
 
 --3.1.3 Formulaire d'�dition
 ------- Validation redirige vers ui_execedit_sujet
-CREATE OR REPLACE PROCEDURE ui_frmadd_sujet
+CREATE OR REPLACE PROCEDURE ui_frmedit_sujet
 IS
 	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
 BEGIN

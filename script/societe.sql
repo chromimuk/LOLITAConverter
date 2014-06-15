@@ -61,7 +61,7 @@ END;
 /
 
 
-
+--1.2 Affichage du profil d'une société
 CREATE OR REPLACE 
 PROCEDURE afft_societe_from_numsociete
 	(vnumsociete number default 2) is
@@ -121,17 +121,12 @@ End;
 /
 
 
-
-
-
-
-
-
 --2 Insertion
 
 --2.1.3 Formulaire d'insertion
 ------- Validation redirige vers ui_execadd_societe
-CREATE OR REPLACE PROCEDURE ui_frmadd_societe
+CREATE OR REPLACE 
+PROCEDURE ui_frmadd_societe
 IS
 	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
 BEGIN
@@ -331,7 +326,7 @@ PROCEDURE ui_execedit_societe
 		vfonsociete in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -405,7 +400,7 @@ END;
 
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_societe
-CREATE OR REPLACE PROCEDURE ui_frmadd_societe
+CREATE OR REPLACE PROCEDURE ui_frmedit_societe
 IS
 	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
 BEGIN

@@ -196,7 +196,7 @@ END;
 
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_se_specialiser
-CREATE OR REPLACE PROCEDURE ui_frmadd_se_specialiser
+CREATE OR REPLACE PROCEDURE ui_frmedit_se_specialiser
 IS
 	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
 BEGIN
