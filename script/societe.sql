@@ -61,7 +61,7 @@ END;
 /
 
 
-
+-- 1.2 Affichage profil société
 CREATE OR REPLACE 
 PROCEDURE afft_societe_from_numsociete
 	(vnumsociete number default 2) is
