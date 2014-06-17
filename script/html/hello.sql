@@ -36,8 +36,8 @@ BEGIN
 			htp.print('<a class="btn btn-primary" href="afft_membre" >En savoir plus sur nos experts</a>');
 			htp.hr;
 			htp.header(2,'Questions/r�ponses');
-			htp.print('<a class="btn btn-primary" href="afft_sujet" >Consulter la FAQ</a>');
-			htp.print('<a class="btn btn-primary" href="afft_sujet" >Consulter la liste des sujets</a>');
+			htp.print('<a class="btn btn-primary" href="afft_sujet_from_libtypesujet?vlibtypesujet=FQ" >Consulter la FAQ</a>');
+			htp.print('<a class="btn btn-primary" href="afft_sujet_from_libtypesujet?vlibtypesujet=QR" >Consulter la liste des sujets</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_sujet" >Creer un nouveau sujet</a>');
 			htp.print('</div>');
 		htp.bodyClose;
