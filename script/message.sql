@@ -190,7 +190,7 @@ BEGIN
 	htp.header(1, 'Edition message');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_message', 'POST');
 	htp.print('<table class="table">');
-	htp.print('<input type="hidden" name="vnumcategorie" value="' || vnumcategorie || '"/>');
+	htp.print('<input type="hidden" name="vnummessage" value="' || vnummessage || '"/>');
 	htp.tableRowOpen;
 	htp.tableData('vnumsujet');
 	htp.tableData(htf.formText('vnumsujet', 5));
