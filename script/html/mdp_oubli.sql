@@ -1,18 +1,20 @@
-﻿CREATE OR REPLACE PROCEDURE pa_change_mdp
+CREATE OR REPLACE PROCEDURE pa_change_mdp
 	(
-		vemail in varchar2,
+		vemail in varchar2
 	)
 IS
+	vnummembre number(5);
 BEGIN
+	SELECT nummembre INTO vnummembre FROM membre WHERE MAIMEMBRE = vemail;
 	UPDATE 
-		AVOIR INNER JOIN MEMBRE ON AVOIR.NUMMEMBRE = MEMBRE.NUMMEMBRE 
+		AVOIR
 	SET
 		DATECODE = TO_CHAR(SYSDATE),
 		MOTIF = null,
 		NATURE = 'STA',
 		CODE = 'S05'
 	WHERE 
-		MEMBRE.NUMMEMBRE = vnummembre
+		NUMMEMBRE = vnummembre;
 	COMMIT;
 COMMIT;
 END;
