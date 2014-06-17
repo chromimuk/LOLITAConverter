@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_message
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -69,7 +69,7 @@ END;
 ------- Validation redirige vers ui_execadd_message
 CREATE OR REPLACE PROCEDURE ui_frmadd_message
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -155,7 +155,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_message
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -186,7 +186,7 @@ END;
 ------- Validation redirige vers ui_execedit_message
 CREATE OR REPLACE PROCEDURE ui_frmedit_message
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -246,7 +246,7 @@ PROCEDURE ui_execedit_message
 		vnsumessage in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -294,7 +294,7 @@ BEGIN
 		dtemessage = vdtemessage,
 		nsumessage = vnsumessage
 	WHERE 
-		nummessage = vnummessage
+		nummessage = vnummessage;
 	COMMIT;
 END;
 /
@@ -310,7 +310,7 @@ PROCEDURE ui_execdel_message
 		vnummessage in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -320,7 +320,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_message(vnummessage)
+	pa_del_message(vnummessage);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table MESSAGE');
@@ -347,7 +347,7 @@ BEGIN
 	DELETE FROM 
 		MESSAGE
 	WHERE 
-		nummessage = vnummessage
+		nummessage = vnummessage;
 	COMMIT;
 END;
 /
