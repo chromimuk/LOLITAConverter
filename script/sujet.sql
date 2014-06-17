@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_sujet
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -42,26 +42,26 @@ BEGIN
 	htp.header(2, 'Liste sujet');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Num�ro');
+	htp.tableHeader('Numéro');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
-	htp.tableRowOpen;
-	htp.tableData(rec.numsujet);
-	htp.tableData(rec.nomdomaine);
-	-- à voir comment accéder quand y a plusieurs colonnes du meme nom
-	htp.tableData(rec.nummembre);
-	htp.tableData(rec.nummembre_her_membre);
-	htp.tableData(rec.titsujet);
-	htp.tableData(rec.stasujet);
-	htp.tableData(rec.libvisibilite);
-	htp.tableData(rec.libtypesujet);
-	htp.tableData(rec.dtesujet);
-	htp.tableData(
-		htf.anchor('ui_frmedit_sujet?vnumsujet=' || rec.numsujet, 'Modifier')
-		|| ' ou ' ||
-		htf.anchor('ui_execdel_sujet?vnumsujet=' || rec.numsujet, 'Supprimer')
-	);
-	htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData(rec.numsujet);
+		htp.tableData(rec.nomdomaine);
+		-- à voir comment accéder quand y a plusieurs colonnes du meme nom
+		htp.tableData(rec.nummembre);
+		htp.tableData(rec.nummembre_her_membre);
+		htp.tableData(rec.titsujet);
+		htp.tableData(rec.stasujet);
+		htp.tableData(rec.libvisibilite);
+		htp.tableData(rec.libtypesujet);
+		htp.tableData(rec.dtesujet);
+		htp.tableData(
+			htf.anchor('ui_frmedit_sujet?vnumsujet=' || rec.numsujet, 'Modifier')
+			|| ' ou ' ||
+			htf.anchor('ui_execdel_sujet?vnumsujet=' || rec.numsujet, 'Supprimer')
+		);
+		htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
 	htp.print('</div>');
@@ -138,7 +138,7 @@ END;
 ------- Validation redirige vers ui_execadd_sujet
 CREATE OR REPLACE PROCEDURE ui_frmadd_sujet
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -213,7 +213,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -276,7 +276,7 @@ END;
 ------- Validation redirige vers ui_execedit_sujet
 CREATE OR REPLACE PROCEDURE ui_frmedit_sujet
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -363,7 +363,7 @@ BEGIN
 		libtypesujet = vlibtypesujet,
 		dtesujet = vdtesujet
 	WHERE 
-		numsujet = vnumsujet
+		numsujet = vnumsujet;
 	COMMIT;
 END;
 /
@@ -385,7 +385,7 @@ PROCEDURE ui_execedit_sujet
 		vdtesujet in date
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -427,9 +427,9 @@ BEGIN
 	UPDATE 
 		SUJET
 	SET
-		stasujet = vstasujet,
+		stasujet = vstasujet
 	WHERE 
-		numsujet = vnumsujet
+		numsujet = vnumsujet;
 	COMMIT;
 END;
 /
@@ -439,13 +439,13 @@ END;
 --3.2.2 Page de validation d'�dition du statut de sujet
 -------Appel � la requ�te pa_edit_sujet_stasujet
 CREATE OR REPLACE
-PROCEDURE ui_execedit_sujet_stasujet_stasujet
+PROCEDURE ui_execedit_sujet_stasujet
 	(
 		vnumsujet in number,
 		vstasujet in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -476,7 +476,7 @@ END;
 ------- Validation redirige vers ui_execedit_sujet_stasujet
 CREATE OR REPLACE PROCEDURE ui_frmadd_sujet_stasujet
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -517,7 +517,7 @@ PROCEDURE ui_execdel_sujet
 		vnumsujet in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -527,7 +527,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_sujet(vnumsujet)
+	pa_del_sujet(vnumsujet);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression �l�ment dans la table SUJET');
@@ -554,7 +554,7 @@ BEGIN
 	DELETE FROM 
 		SUJET
 	WHERE 
-		numsujet = vnumsujet
+		numsujet = vnumsujet;
 	COMMIT;
 END;
 /
