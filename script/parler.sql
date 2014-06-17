@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_parler
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -59,7 +59,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_parler
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -88,7 +88,7 @@ END;
 ------- Validation redirige vers ui_execadd_parler
 CREATE OR REPLACE PROCEDURE ui_frmadd_parler
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -143,7 +143,7 @@ END;
 ------- Validation redirige vers ui_execedit_parler
 CREATE OR REPLACE PROCEDURE ui_frmedit_parler
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -183,7 +183,7 @@ PROCEDURE ui_execedit_parler
 		vnumlangue in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -223,7 +223,7 @@ BEGIN
 	SET
 		numlangue = vnumlangue
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
@@ -239,7 +239,7 @@ PROCEDURE ui_execdel_parler
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -249,7 +249,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_parler(vnummembre)
+	pa_del_parler(vnummembre);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table PARLER');
@@ -276,7 +276,7 @@ BEGIN
 	DELETE FROM 
 		PARLER
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
