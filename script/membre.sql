@@ -85,8 +85,9 @@ Create or replace procedure afft_membre_from_nummembre
 		rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 		vnommembre varchar2(30);
 		vpremembre varchar2(30);
+		vtypmembre varchar(1);
 		vphomembre clob;
-		Cursor lst is 
+		CURSOR lst IS 
 			SELECT 
 				M.NUMMEMBRE, S.NOMSOCIETE, L.LIBLANGUE, M.TYPMEMBRE, M.MAIMEMBRE, M.DTEMEMBRE, M.POSMEMBRE, M.PHOMEMBRE, M.DSCEXPERT, M.TELEXPERT
 			FROM 
@@ -97,8 +98,31 @@ Create or replace procedure afft_membre_from_nummembre
 				On L.NUMLANGUE = M.NUMLANGUE
 			WHERE
 				M.NUMMEMBRE = vnummembre;
+		CURSOR lstDom IS 
+			SELECT 
+				D.LIBDOMAINE
+			FROM 
+				DOMAINE D
+				INNER JOIN SE_SPECIALISER S 
+				ON D.NUMDOMAINE = S.NUMDOMAINE
+			WHERE
+				S.NUMMEMBRE = vnummembre;
+		CURSOR lstLan IS 
+			SELECT 
+				L.LIBLANGUE
+			FROM 
+				LANGUE L
+				INNER JOIN PARLER P 
+				ON L.NUMLANGUE = P.NUMLANGUE
+			WHERE
+				P.NUMMEMBRE = vnummembre;
 Begin
-	Select NOMMEMBRE, PREMEMBRE, PHOMEMBRE Into vnommembre, vpremembre, vphomembre From MEMBRE Where NUMMEMBRE = vnummembre;
+	SELECT
+		NOMMEMBRE, PREMEMBRE, PHOMEMBRE, TYPMEMBRE
+	INTO vnommembre, vpremembre, vphomembre, vtypemembre
+	FROM MEMBRE 
+	WHERE NUMMEMBRE = vnummembre;
+
 	htp.htmlOpen;
 	htp.headopen;
 	htp.title('Profil membre');
@@ -122,7 +146,7 @@ Begin
 		htp.tableheader('Inscrit le');
 		htp.tableheader('Poste');
 	htp.tableRowClose;
-	for rec in lst loop
+	FOR rec IN lst LOOP
 		htp.tableRowOpen;
 		htp.tableData(rec.nummembre);
 		htp.tableData(rec.typmembre);
@@ -132,8 +156,22 @@ Begin
 		htp.tableData(rec.dtemembre);
 		htp.tableData(rec.posmembre);
 		htp.tableRowClose;
-	end loop;
+	END LOOP;
 	htp.tableClose;
+	IF (vtypmembre = 'E') THEN
+		htp.header(3, 'Domaine(s) de compétences');
+		htp.hr;
+		FOR rec IN lstDom LOOP
+			htp.print(libdomaine);
+			htp.br;
+		END LOOP;
+		htp.header(3, 'Sait aussi parler');
+		htp.hr;
+		FOR rec IN lstDom LOOP
+			htp.print(libdomaine);
+			htp.br;
+		END LOOP;
+	END IF;
 	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	htp.print('</div>');
 	htp.bodyClose;
@@ -304,6 +342,12 @@ END;
 CREATE OR REPLACE PROCEDURE ui_frmadd_membre
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstLan IS
+		SELECT 
+			L.LIBLANGUE
+		FROM 
+			LANGUE L
+		;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -325,8 +369,13 @@ BEGIN
 	htp.tableData(htf.formText('vnumlangue', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Type du membre');
-	htp.tableData(htf.formText('vtypmembre', 1));
+	--htp.tableData('Type du membre');
+	--htp.tableData(htf.formText('vtypmembre', 1));
+	htp.formSelectOpen('vliblangue', 'Selection langue');
+	FOR rec IN lstLan LOOP
+		htp.formSelectOption(rec.liblangue);
+	END LOOP;
+	htp.formSelectClose;
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Nom du membre');
