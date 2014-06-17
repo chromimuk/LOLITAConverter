@@ -259,6 +259,9 @@ END;
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_domaine
 CREATE OR REPLACE PROCEDURE ui_frmedit_domaine
+(
+	vnumdomaine integer
+)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
@@ -273,10 +276,7 @@ BEGIN
 	htp.header(1, 'Edition domaine');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_domaine', 'POST');
 	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
-	htp.tableRowClose;
+	htp.print('<input type="hidden" name="vnumdomaine" value="' || vnumdomaine || '"/>');
 	htp.tableRowOpen;
 	htp.tableData('vnumdomaine_appartenir');
 	htp.tableData(htf.formText('vnumdomaine_appartenir', 2));
