@@ -5,6 +5,7 @@ CREATE OR REPLACE PROCEDURE pa_login
 		vmdp in varchar2
 	)
 IS
+  vnummembre is number(5);
 BEGIN
 	SELECT
 		NUMMEMBRE into vnummembre
