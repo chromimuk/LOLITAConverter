@@ -44,9 +44,9 @@ BEGIN
 	htp.tableData(rec.code);
 	htp.tableData(rec.libelle);
 	htp.tableData(
-		htf.anchor('ui_frmedit_codelolita?vnature=' || rec.nature, 'Modifier')
+		htf.anchor('ui_frmedit_codelolita?vcode=' || rec.code, 'Modifier')
 		|| ' ou ' ||
-		htf.anchor('ui_execdel_codelolita?vnature=' || rec.nature, 'Supprimer')
+		htf.anchor('ui_execdel_codelolita?vcode=' || rec.code, 'Supprimer')
 	);
 	htp.tableRowClose;
 	END LOOP;
@@ -169,7 +169,7 @@ BEGIN
 	UPDATE 
 		CODELOLITA
 	SET
-		code = vcode,
+		nature = vnature,
 		libelle = vlibelle
 	WHERE 
 		nature = vnature;
@@ -181,6 +181,9 @@ END;
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_codelolita
 CREATE OR REPLACE PROCEDURE ui_frmedit_codelolita
+(
+	vcode varchar2
+)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
@@ -199,10 +202,7 @@ BEGIN
 	htp.tableData('vnature');
 	htp.tableData(htf.formText('vnature', 3));
 	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vcode');
-	htp.tableData(htf.formText('vcode', 3));
-	htp.tableRowClose;
+	htp.print('<input type="hidden" name="vnumcode" value="' || vcode || '"/>');
 	htp.tableRowOpen;
 	htp.tableData('vlibelle');
 	htp.tableData(htf.formText('vlibelle', 50));
@@ -260,7 +260,7 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_execdel_codelolita
 	(
-		vnature in varchar2
+		vcode in varchar2
 	)
 IS
 rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
@@ -273,7 +273,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_codelolita(vnature);
+	pa_del_codelolita(vcode);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table CODELOLITA');
@@ -293,14 +293,14 @@ END;
 CREATE OR REPLACE
 PROCEDURE pa_del_codelolita
 	(
-		vnature in varchar2
+		vcode in varchar2
 	)
 IS
 BEGIN
 	DELETE FROM 
 		CODELOLITA
 	WHERE 
-		nature = vnature;
+		code = vcode;
 	COMMIT;
 END;
 /
