@@ -25,7 +25,7 @@ BEGIN
 			htp.print('<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 			htp.print('</div>');
 			htp.br;
-			htp.header(2,'Nos domaines de comp�tences');
+			htp.header(2,'Nos domaines de compétences');
 			htp.print('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 			htp.br;
 			htp.print('<a class="btn btn-primary" href="afft_membre" >Consulter nos domaines de comp�tences</a>');
@@ -33,9 +33,9 @@ BEGIN
 			htp.header(2,'Nos experts');
 			htp.print('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.');
 			htp.br;
-			htp.print('<a class="btn btn-primary" href="afft_membre" >En savoir plus sur nos experts</a>');
+			htp.print('<a class="btn btn-primary" href="afft_membre_fromvtypmembre=E" >En savoir plus sur nos experts</a>');
 			htp.hr;
-			htp.header(2,'Questions/r�ponses');
+			htp.header(2,'Questions/réponses');
 			htp.print('<a class="btn btn-primary" href="afft_sujet_from_libtypesujet?vlibtypesujet=FQ" >Consulter la FAQ</a>');
 			htp.print('<a class="btn btn-primary" href="afft_sujet_from_libtypesujet?vlibtypesujet=QR" >Consulter la liste des sujets</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_sujet" >Creer un nouveau sujet</a>');
