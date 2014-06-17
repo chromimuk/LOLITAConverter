@@ -18,7 +18,7 @@ BEGIN
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_membre" >Inscrire un membre</a>');
 			htp.hr;
 			htp.header(2, 'Droits et statuts');
-			htp.print('<a class="btn btn-info" href="ui_frmedit_avoir" >Validation inscription membre</a>');
+			htp.print('<a class="btn btn-info" href="afft_membre_from_stamembre?vstamembre=S05" >Validation inscription membre</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_attribuer" >Attribuer un droit à un membre</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_autoriser" >Ajouter un droit sur un domaine</a>');
 			htp.hr;

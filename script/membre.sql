@@ -253,6 +253,74 @@ END;
 /
 
 
+--1.3 Affichage des membres selon leurs statuts
+CREATE OR REPLACE 
+PROCEDURE afft_membre_from_stamembre
+	(vstamembre varchar default 'S05')
+IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lst IS
+		SELECT 
+			M.NUMMEMBRE, S.NOMSOCIETE, M.TYPMEMBRE, M.NOMMEMBRE,
+			M.PREMEMBRE, M.MAIMEMBRE, M.DTEMEMBRE, M.POSMEMBRE
+		FROM 
+			SOCIETE S
+			Inner Join MEMBRE M
+			On M.NUMSOCIETE = S.NUMSOCIETE
+			Inner Join AVOIR A
+			On A.NUMMEMBRE = M.NUMEMBRE
+		WHERE
+			A.CODE = vstamembre
+		ORDER BY
+			M.NUMMEMBRE
+		;
+BEGIN
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Table membre');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'LOLITA');
+	htp.hr;
+	htp.header(2, 'Liste de nos membres experts');
+	htp.print('<table class="table">');
+	htp.tableRowOpen(cattributes => 'class=active');
+		htp.tableheader('N°');
+		htp.tableheader('Membre');
+		htp.tableheader('Societe');
+		htp.tableheader('Mail');
+		htp.tableheader('Inscription le');
+		htp.tableheader('Poste');
+		htp.tableheader('Actions');
+	htp.tableRowClose;
+	FOR rec IN lst loop
+		htp.tableRowOpen;
+		htp.tableData(rec.nummembre);
+		htp.tableData(rec.premembre || ' ' || rec.nommembre);
+		htp.tableData(rec.nomsociete);
+		htp.tableData(rec.maimembre);
+		htp.tableData(rec.dtemembre);
+		htp.tableData(rec.posmembre);
+		htp.tableData(
+			htf.anchor('ui_frmedit_membre?vnummembre=' || rec.nummembre, 'Accepter')
+			|| ' ou ' ||
+			htf.anchor('ui_execdel_membre?vnummembre=' || rec.nummembre, 'Refuser')
+		);
+		htp.tableRowClose;
+	END LOOP;
+	htp.tableClose;
+	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
+END;
+/
+
+
+
 
 --2 Insertion
 
