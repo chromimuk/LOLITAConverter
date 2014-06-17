@@ -173,6 +173,9 @@ END;
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_message
 CREATE OR REPLACE PROCEDURE ui_frmedit_message
+(
+	vnummessage integer
+)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
@@ -187,10 +190,7 @@ BEGIN
 	htp.header(1, 'Edition message');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_message', 'POST');
 	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('vnummessage');
-	htp.tableData(htf.formText('vnummessage', 10));
-	htp.tableRowClose;
+	htp.print('<input type="hidden" name="vnummessage" value="' || vnummessage || '"/>');
 	htp.tableRowOpen;
 	htp.tableData('vnumsujet');
 	htp.tableData(htf.formText('vnumsujet', 5));

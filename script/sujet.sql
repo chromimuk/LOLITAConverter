@@ -315,10 +315,7 @@ BEGIN
 	htp.header(1, 'Edition sujet');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_sujet', 'POST');
 	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('Numéro du sujet');
-	htp.tableData(htf.formText('vnumsujet', 5));
-	htp.tableRowClose;
+	htp.print('<input type="hidden" name="vnumsujet" value="' || vnumsujet || '"/>');
 	htp.tableRowOpen;
 	htp.tableData('Numéro du domaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));

@@ -184,7 +184,7 @@ END;
 
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_posseder
-CREATE OR REPLACE PROCEDURE ui_frmadd_posseder
+CREATE OR REPLACE PROCEDURE ui_frmedit_posseder
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
