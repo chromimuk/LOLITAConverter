@@ -6,11 +6,11 @@
 CREATE OR REPLACE
 PROCEDURE afft_avoir
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
-		 A.DATECODE, A.MOTIF, A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE
+		 A.DATECODE, A.MOTIF, A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE, M.NUMMEMBRE
 	FROM 
 		AVOIR A Inner Join MEMBRE M
 		ON A.NUMMEMBRE = M.NUMMEMBRE;
@@ -82,7 +82,7 @@ END;
 ------- Validation redirige vers ui_execadd_avoir
 CREATE OR REPLACE PROCEDURE ui_frmadd_avoir
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -137,7 +137,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_avoir
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -184,7 +184,7 @@ BEGIN
 		nature = vnature,
 		code = vcode
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
@@ -202,7 +202,7 @@ PROCEDURE ui_execedit_avoir
 		vcode in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -232,7 +232,7 @@ END;
 ------- Validation redirige vers ui_execedit_avoir
 CREATE OR REPLACE PROCEDURE ui_frmedit_avoir
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -286,7 +286,7 @@ PROCEDURE ui_execdel_avoir
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -296,7 +296,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_avoir(vnummembre)
+	pa_del_avoir(vnummembre);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table AVOIR');
@@ -323,7 +323,7 @@ BEGIN
 	DELETE FROM 
 		AVOIR
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
