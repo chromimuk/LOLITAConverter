@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_codelolita
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -64,7 +64,7 @@ END;
 ------- Validation redirige vers ui_execadd_codelolita
 CREATE OR REPLACE PROCEDURE ui_frmadd_codelolita
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -109,7 +109,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_codelolita
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -172,7 +172,7 @@ BEGIN
 		code = vcode,
 		libelle = vlibelle
 	WHERE 
-		nature = vnature
+		nature = vnature;
 	COMMIT;
 END;
 /
@@ -182,7 +182,7 @@ END;
 ------- Validation redirige vers ui_execedit_codelolita
 CREATE OR REPLACE PROCEDURE ui_frmedit_codelolita
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -227,7 +227,7 @@ PROCEDURE ui_execedit_codelolita
 		vlibelle in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -263,7 +263,7 @@ PROCEDURE ui_execdel_codelolita
 		vnature in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -273,7 +273,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_codelolita(vnature)
+	pa_del_codelolita(vnature);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table CODELOLITA');
@@ -300,7 +300,7 @@ BEGIN
 	DELETE FROM 
 		CODELOLITA
 	WHERE 
-		nature = vnature
+		nature = vnature;
 	COMMIT;
 END;
 /
