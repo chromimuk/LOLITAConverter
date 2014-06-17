@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_categorie
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -59,7 +59,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_categorie
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -106,7 +106,7 @@ END;
 ------- Validation redirige vers ui_execadd_categorie
 CREATE OR REPLACE PROCEDURE ui_frmadd_categorie
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -148,7 +148,7 @@ PROCEDURE ui_execedit_categorie
 		vlibcategorie in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -178,7 +178,7 @@ END;
 ------- Validation redirige vers ui_execedit_categorie
 CREATE OR REPLACE PROCEDURE ui_frmedit_categorie
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -223,7 +223,7 @@ BEGIN
 	SET
 		libcategorie = vlibcategorie
 	WHERE 
-		numcategorie = vnumcategorie
+		numcategorie = vnumcategorie;
 	COMMIT;
 END;
 /
@@ -239,7 +239,7 @@ PROCEDURE ui_execdel_categorie
 		vnumcategorie in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -249,7 +249,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_categorie(vnumcategorie)
+	pa_del_categorie(vnumcategorie);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table CATEGORIE');
@@ -276,7 +276,7 @@ BEGIN
 	DELETE FROM 
 		CATEGORIE
 	WHERE 
-		numcategorie = vnumcategorie
+		numcategorie = vnumcategorie;
 	COMMIT;
 END;
 /
