@@ -28,6 +28,14 @@ BEGIN
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
 	htp.tableHeader('Numéro');
+	htp.tableHeader('Numéro domaine père');
+	htp.tableHeader('Numéro de société');
+	htp.tableHeader('Libellé domaine');
+	htp.tableHeader('Abréviation domaine');
+	htp.tableHeader('Date domaine');
+	htp.tableHeader('Date modification domaine');
+	htp.tableHeader('Description');
+	htp.tableHeader('Logo domaine');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
@@ -65,7 +73,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
 	)
@@ -81,7 +88,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdmodomaine,vdscdomaine,vlogdomaine);
+	pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdscdomaine,vlogdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table domaine');
@@ -114,31 +121,27 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_domaine', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine_appartenir');
+	htp.tableData('Domaine père');
 	htp.tableData(htf.formText('vnumdomaine_appartenir', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnumsociete');
+	htp.tableData('Numéro société');
 	htp.tableData(htf.formText('vnumsociete', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlibdomaine');
+	htp.tableData('Libellé');
 	htp.tableData(htf.formText('vlibdomaine', 50));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vabrdomaine');
+	htp.tableData('Abréviation');
 	htp.tableData(htf.formText('vabrdomaine', 32));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vdmodomaine');
-	htp.tableData(htf.formText('vdmodomaine', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vdscdomaine');
+	htp.tableData('Description');
 	htp.tableData(htf.formText('vdscdomaine', 1000));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlogdomaine');
+	htp.tableData('Logo');
 	htp.tableData(htf.formText('vlogdomaine', 100));
 	htp.tableRowClose;
 	htp.tableClose;
@@ -158,7 +161,6 @@ CREATE OR REPLACE PROCEDURE pa_add_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
 	)
@@ -172,7 +174,7 @@ BEGIN
 		vlibdomaine,
 		vabrdomaine,
 		TO_CHAR(SYSDATE),
-		vdmodomaine,
+		TO_CHAR(SYSDATE),
 		vdscdomaine,
 		vlogdomaine
 	);
@@ -192,7 +194,6 @@ PROCEDURE pa_edit_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
 	)
@@ -205,7 +206,7 @@ BEGIN
 		numsociete = vnumsociete,
 		libdomaine = vlibdomaine,
 		abrdomaine = vabrdomaine,
-		dmodomaine = vdmodomaine,
+		dmodomaine = TO_DATE(SYSDATE),
 		dscdomaine = vdscdomaine,
 		logdomaine = vlogdomaine
 	WHERE 
@@ -225,7 +226,6 @@ PROCEDURE ui_execedit_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
 	)
@@ -240,7 +240,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdmodomaine,vdscdomaine,vlogdomaine);
+	pa_edit_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdscdomaine,vlogdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table DOMAINE');
@@ -278,31 +278,27 @@ BEGIN
 	htp.print('<table class="table">');
 	htp.print('<input type="hidden" name="vnumdomaine" value="' || vnumdomaine || '"/>');
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine_appartenir');
+	htp.tableData('Domaine père');
 	htp.tableData(htf.formText('vnumdomaine_appartenir', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnumsociete');
+	htp.tableData('Numéro société');
 	htp.tableData(htf.formText('vnumsociete', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlibdomaine');
+	htp.tableData('Libellé');
 	htp.tableData(htf.formText('vlibdomaine', 50));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vabrdomaine');
+	htp.tableData('Abréviation');
 	htp.tableData(htf.formText('vabrdomaine', 32));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vdmodomaine');
-	htp.tableData(htf.formText('vdmodomaine', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vdscdomaine');
+	htp.tableData('Description');
 	htp.tableData(htf.formText('vdscdomaine', 1000));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlogdomaine');
+	htp.tableData('Logo');
 	htp.tableData(htf.formText('vlogdomaine', 100));
 	htp.tableRowClose;
 	htp.tableClose;
