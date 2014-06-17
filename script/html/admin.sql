@@ -16,12 +16,14 @@ BEGIN
 			htp.header(2, 'Membre');
 			htp.print('<a class="btn btn-primary" href="afft_membre" >Consulter la liste des membres</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_membre" >Inscrire un membre</a>');
-			htp.print('<a class="btn btn-primary" href="ui_frmedit_avoir" >Validation inscription membre</a>');
-			htp.print('<a class="btn btn-primary" href="ui_frmedit_attribuer" >Edition statut</a>');
-			htp.print('<a class="btn btn-primary" href="ui_frmedit_autoriser" >Edition droits utilisation</a>');
+			htp.hr;
+			htp.header(2, 'Droits et statuts');
+			htp.print('<a class="btn btn-info" href="ui_frmedit_avoir" >Validation inscription membre</a>');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_attribuer" >Attribuer un droit à un membre</a>');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_autoriser" >Ajouter un droit sur un domaine</a>');
 			htp.hr;
 			htp.header(2, 'Société');
-			htp.print('<a class="btn btn-primary" href="ui_frmedit_societe" >Modifier sa société</a>');
+			htp.print('<a class="btn btn-primary" href="ui_frmedit_societe" >Modifier de sa société</a>');
 			htp.hr;
 			htp.print('</div>');
 		htp.bodyClose;

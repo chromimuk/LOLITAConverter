@@ -7,6 +7,7 @@ CREATE OR REPLACE
 PROCEDURE afft_domaine
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	vdompere varchar2(30);
 	CURSOR lst
 	IS 
 	SELECT 
@@ -36,24 +37,26 @@ BEGIN
 	htp.tableHeader('Date modification domaine');
 	htp.tableHeader('Description');
 	htp.tableHeader('Logo domaine');
+	htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
-	htp.tableRowOpen;
-	htp.tableData(rec.numdomaine);
-	htp.tableData(rec.numdomaine_appartenir);
-	htp.tableData(rec.numsociete);
-	htp.tableData(rec.libdomaine);
-	htp.tableData(rec.abrdomaine);
-	htp.tableData(rec.dtedomaine);
-	htp.tableData(rec.dmodomaine);
-	htp.tableData(rec.dscdomaine);
-	htp.tableData(rec.logdomaine);
-	htp.tableData(
-		htf.anchor('ui_frmedit_domaine?vnumdomaine=' || rec.numdomaine, 'Modifier')
-		|| ' ou ' ||
-		htf.anchor('ui_execdel_domaine?vnumdomaine=' || rec.numdomaine, 'Supprimer')
-	);
-	htp.tableRowClose;
+		SELECT LIBDOMAINE INTO vdompere FROM DOMAINE WHERE NUMDOMAINE = rec.numdomaine_appartenir;
+		htp.tableRowOpen;
+			htp.tableData(rec.numdomaine);
+			htp.tableData(vdompere);
+			htp.tableData(rec.numsociete);
+			htp.tableData(rec.libdomaine);
+			htp.tableData(rec.abrdomaine);
+			htp.tableData(rec.dtedomaine);
+			htp.tableData(rec.dmodomaine);
+			htp.tableData(rec.dscdomaine);
+			htp.tableData(rec.logdomaine);
+			htp.tableData(
+				htf.anchor('ui_frmedit_domaine?vnumdomaine=' || rec.numdomaine, 'Modifier')
+				|| ' ou ' ||
+				htf.anchor('ui_execdel_domaine?vnumdomaine=' || rec.numdomaine, 'Supprimer')
+			);
+		htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
 	htp.print('</div>');
