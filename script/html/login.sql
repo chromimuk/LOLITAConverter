@@ -7,13 +7,20 @@ CREATE OR REPLACE PROCEDURE pa_login
 IS
 BEGIN
 	SELECT
-		*
+		NUMMEMBRE into vnummembre
 	FROM
 		MEMBRE
 	WHERE
 		MAIMEMBRE = vemail
 	AND
 		MDPMEMBRE = vmdp;
+		
+	ui_execlogin(vnummembre);
+	
+	EXCEPTION
+	    WHEN NO_DATA_FOUND THEN  
+	    login;
+	    
 COMMIT;
 END;
 /
@@ -25,14 +32,11 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_execlogin
 	(
-		vemail in varchar2,
-		vmdp in varchar2
+		vnummembre in number
 	)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
-	vnum number(5);
 BEGIN
-	SELECT NUMMEMBRE INTO vnum FROM MEMBRE WHERE MAIMEMBRE = vemail;
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 		htp.headOpen;
@@ -41,11 +45,10 @@ BEGIN
 		htp.headClose;
 		htp.bodyOpen;
 			htp.print('<div class="container">');
-			pa_login(vemail,vmdp);
 			htp.header(1, 'LOLITA');
 			htp.hr;
 			htp.header(2, 'Connexion réussie');
-			owa_cookie.send(name=>'LOLITA', value=>vnum); 
+			owa_cookie.send(name=>'LOLITA', value=>vnummembre); 
 			htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
@@ -74,7 +77,7 @@ BEGIN
 			htp.header(1,'LOLITA');
 			htp.br;
 			htp.header(2, 'Connexion');
-			htp.formOpen(owa_util.get_owa_service_path || 'ui_execlogin', 'POST');
+			htp.formOpen(owa_util.get_owa_service_path || 'pa_login', 'POST');
 				htp.print('<table class="table">');
 					htp.tableRowOpen;
 						htp.tableData('Email');
