@@ -148,7 +148,6 @@ End;
 --2.1.1 Requête SQL
 CREATE OR REPLACE PROCEDURE pa_add_membre
 	(
-		vnummembre in number,
 		vnumsociete in number,
 		vnumlangue in number,
 		vtypmembre in varchar2,
@@ -166,7 +165,7 @@ IS
 BEGIN
 	INSERT INTO membre VALUES
 	(
-		vnummembre,
+		seq_membre.nextval,
 		vnumsociete,
 		vnumlangue,
 		vtypmembre,
@@ -189,7 +188,6 @@ END;
 -------Appel à la requête pa_add_membre
 CREATE OR REPLACE PROCEDURE ui_execadd_membre
 	(
-		vnummembre in number,
 		vnumsociete in number,
 		vnumlangue in number,
 		vtypmembre in varchar2,
@@ -215,7 +213,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vdtemembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
+	pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vdtemembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table membre');
@@ -247,10 +245,6 @@ BEGIN
 	htp.header(1, 'Ajout élément dans la table membre');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_membre', 'POST');
 	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('vnummembre');
-	htp.tableData(htf.formText('vnummembre', 5));
-	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('vnumsociete');
 	htp.tableData(htf.formText('vnumsociete', 5));
