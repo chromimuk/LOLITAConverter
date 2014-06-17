@@ -7,6 +7,10 @@ CREATE OR REPLACE
 PROCEDURE afft_sujet
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	vpreclient varchar(30);
+	vnomclient varchar(30);
+	vpreexpert varchar(30);
+	vnomexpert varchar(30);
 	CURSOR lst
 	IS 
 	SELECT 
@@ -17,17 +21,14 @@ IS
 		 ,S.LIBTYPESUJET
 		 ,S.DTESUJET
 		 ,D.LIBDOMAINE
-		 ,MC.PREMEMBRE
-		 ,MC.NOMMEMBRE
-		 ,ME.PREMEMBRE
-		 ,ME.NOMMEMBRE
+		 ,S.NUMMEMBRE
+		 ,S.NUMMEMBRE_HER_MEMBRE
 	FROM 
-		SUJET S Inner Join MEMBRE MC
-		On S.NUMMEMBRE = MC.NUMMEMBRE
-		Inner Join MEMBRE ME
-		On S.NUMMEMBRE_HER_MEMBRE = ME.NUMMEMBRE
-		Inner Join DOMAINE D
-		ON S.NUMDOMAINE = D.NUMDOMAINE;
+		SUJET S Inner Join DOMAINE D
+		ON S.NUMDOMAINE = D.NUMDOMAINE
+	ORDER BY
+		S.DTESUJET DESC
+	;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -42,25 +43,58 @@ BEGIN
 	htp.header(2, 'Liste sujet');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
+		htp.tableHeader('N°');
+		htp.tableHeader('Titre');
+		htp.tableHeader('Domaine');
+		htp.tableHeader('Client');
+		htp.tableHeader('Expert');
+		htp.tableHeader('Visibilité');
+		htp.tableHeader('Type');
+		htp.tableHeader('Date');
+		htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
-		htp.tableRowOpen;
-		htp.tableData(rec.numsujet);
-		htp.tableData(rec.nomdomaine);
-		-- à voir comment accéder quand y a plusieurs colonnes du meme nom
-		htp.tableData(rec.nummembre);
-		htp.tableData(rec.nummembre_her_membre);
-		htp.tableData(rec.titsujet);
-		htp.tableData(rec.stasujet);
-		htp.tableData(rec.libvisibilite);
-		htp.tableData(rec.libtypesujet);
-		htp.tableData(rec.dtesujet);
-		htp.tableData(
-			htf.anchor('ui_frmedit_sujet?vnumsujet=' || rec.numsujet, 'Modifier')
-			|| ' ou ' ||
-			htf.anchor('ui_execdel_sujet?vnumsujet=' || rec.numsujet, 'Supprimer')
-		);
+		SELECT PREMEMBRE, NOMMEMBRE 
+		INTO vpreclient, vnomclient
+		FROM membre 
+		WHERE nummembre = rec.nummembre;
+		SELECT PREMEMBRE, NOMMEMBRE 
+		INTO vpreexpert, vnomexpert
+		FROM membre 
+		WHERE nummembre = rec.nummembre_her_membre; 		
+		IF (rec.stasujet = 0) THEN
+			htp.tableRowOpen(cattributes => 'class=warning');
+		ELSE
+			htp.tableRowOpen;
+		END IF;
+			htp.tableData(rec.numsujet);
+			htp.tableData(
+				htf.anchor(
+					'afft_sujet_from_numsujet?vnumsujet=' || rec.numsujet,
+					rec.titsujet
+				)
+			);
+			htp.tableData(rec.libdomaine);
+			htp.tableData(
+				htf.anchor(
+					'afft_membre_from_nummembre?vnummembre=' || rec.nummembre,
+					vpreclient || ' ' || vnomclient
+				)
+			);
+			htp.tableData(
+				htf.anchor(
+					'afft_membre_from_nummembre?vnummembre=' || rec.nummembre_her_membre,
+					vpreexpert || ' ' || vnomexpert
+				)
+			);
+			htp.tableData(rec.libvisibilite);
+			htp.tableData(rec.libtypesujet);
+			htp.tableData(rec.dtesujet);
+			htp.tableData(
+				htf.anchor('ui_frmedit_sujet?vnumsujet=' || rec.numsujet, 'Modifier')
+				|| ' ou ' ||
+				htf.anchor('ui_execdel_sujet?vnumsujet=' || rec.numsujet, 'Supprimer')
+			);
 		htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
@@ -69,6 +103,10 @@ BEGIN
 	htp.htmlClose;
 END;
 /
+
+
+
+
 
 --1.2 Affichage des elements d'un sujet selon son ID
 CREATE OR REPLACE PROCEDURE afft_sujet_from_numsujet
