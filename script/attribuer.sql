@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_attribuer
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -62,7 +62,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_attribuer
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -91,7 +91,7 @@ END;
 ------- Validation redirige vers ui_execadd_attribuer
 CREATE OR REPLACE PROCEDURE ui_frmadd_attribuer
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -164,7 +164,7 @@ BEGIN
 		code = vcode,
 		nummembre = vnummembre
 	WHERE 
-		nature = vnature
+		nature = vnature;
 	COMMIT;
 END;
 /
@@ -172,9 +172,10 @@ END;
 
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_attribuer
-CREATE OR REPLACE PROCEDURE ui_frmedit_attribuer
+CREATE OR REPLACE 
+PROCEDURE ui_frmedit_attribuer
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -219,7 +220,7 @@ PROCEDURE ui_execedit_attribuer
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -255,7 +256,7 @@ PROCEDURE ui_execdel_attribuer
 		vnature in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -265,7 +266,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_attribuer(vnature)
+	pa_del_attribuer(vnature);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table ATTRIBUER');
@@ -292,7 +293,7 @@ BEGIN
 	DELETE FROM 
 		ATTRIBUER
 	WHERE 
-		nature = vnature
+		nature = vnature;
 	COMMIT;
 END;
 /
