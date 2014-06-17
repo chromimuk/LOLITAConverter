@@ -223,7 +223,7 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_frmedit_langue
 (
-	vnumlangue in number
+	vnumlangue integer
 )
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
@@ -240,10 +240,7 @@ BEGIN
 				htp.header(1, 'Edition langue');
 				htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_langue', 'POST');
 					htp.print('<table class="table">');
-						htp.tableRowOpen;
-							htp.tableData('Numéro de la langue');
-							htp.tableData(htf.formText('vnumlangue', 2));
-						htp.tableRowClose;
+						htp.print('<input type="hidden" name="vnumlangue" value="' || vnumlangue || '"/>');
 						htp.tableRowOpen;
 							htp.tableData('Libellé de la langue');
 							htp.tableData(htf.formText('vliblangue', 30));
