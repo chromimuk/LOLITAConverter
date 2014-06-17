@@ -27,10 +27,10 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_execlogin
 	(
-		vemail in varchar2,
+		vemail in varchar2
 	)
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
