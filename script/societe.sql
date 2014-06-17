@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_societe
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -61,25 +61,23 @@ END;
 /
 
 
-<<<<<<< HEAD
+
 --1.2 Affichage du profil d'une société
-=======
--- 1.2 Affichage profil société
->>>>>>> origin/master
 CREATE OR REPLACE 
 PROCEDURE afft_societe_from_numsociete
-	(vnumsociete number default 2) is
-		rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
-		vnomsociete varchar2(30);
-		vlogsociete clob;
-		Cursor lst is 
-			SELECT 
-				*
-			FROM 
-				SOCIETE
-			WHERE
-				NUMSOCIETE = vnumsociete;
-Begin
+	(vnumsociete number default 2)
+IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	vnomsociete varchar2(30);
+	vlogsociete clob;
+	Cursor lst is 
+		SELECT 
+			*
+		FROM 
+			SOCIETE
+		WHERE
+			NUMSOCIETE = vnumsociete;
+BEGIN
 	Select NOMSOCIETE, LOGSOCIETE 
 	Into vnomsociete, vlogsociete 
 	From SOCIETE 
@@ -132,7 +130,7 @@ End;
 CREATE OR REPLACE 
 PROCEDURE ui_frmadd_societe
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -237,7 +235,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_societe
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -330,7 +328,7 @@ PROCEDURE ui_execedit_societe
 		vfonsociete in varchar2
 	)
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -396,7 +394,7 @@ BEGIN
 		logsociete = vlogsociete,
 		fonsociete = vfonsociete
 	WHERE 
-		numsociete = vnumsociete
+		numsociete = vnumsociete;
 	COMMIT;
 END;
 /
@@ -406,7 +404,7 @@ END;
 ------- Validation redirige vers ui_execedit_societe
 CREATE OR REPLACE PROCEDURE ui_frmedit_societe
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -502,7 +500,7 @@ BEGIN
 	DELETE FROM 
 		SOCIETE
 	WHERE 
-		numsociete = vnumsociete
+		numsociete = vnumsociete;
 	COMMIT;
 END;
 /
@@ -516,7 +514,7 @@ PROCEDURE ui_execdel_societe
 		vnumsociete in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -526,7 +524,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_societe(vnumsociete)
+	pa_del_societe(vnumsociete);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table SOCIETE');
