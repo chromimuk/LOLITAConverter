@@ -237,7 +237,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 		vtitsujet in varchar2,
 		vstasujet in number,
 		vlibvisibilite in varchar2,
-		vlibtypesujet in varchar2,
+		vlibtypesujet in varchar2
 	)
 
 IS
@@ -275,7 +275,7 @@ CREATE OR REPLACE PROCEDURE pa_add_sujet
 		vtitsujet in varchar2,
 		vstasujet in number,
 		vlibvisibilite in varchar2,
-		vlibtypesujet in varchar2,
+		vlibtypesujet in varchar2
 	)
 IS
 BEGIN
