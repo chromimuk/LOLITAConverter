@@ -205,7 +205,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_membre
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -234,7 +234,7 @@ END;
 ------- Validation redirige vers ui_execadd_membre
 CREATE OR REPLACE PROCEDURE ui_frmadd_membre
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -315,7 +315,7 @@ END;
 ------- Validation redirige vers ui_execedit_membre
 CREATE OR REPLACE PROCEDURE ui_frmedit_membre
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -426,7 +426,7 @@ BEGIN
 		dscexpert = vdscexpert,
 		telexpert = vtelexpert
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
@@ -452,7 +452,7 @@ PROCEDURE ui_execedit_membre
 		vtelexpert in varchar2
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -491,7 +491,7 @@ BEGIN
 	DELETE FROM 
 		MEMBRE
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
@@ -505,7 +505,7 @@ PROCEDURE ui_execdel_membre
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -515,7 +515,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_membre(vnummembre)
+	pa_del_membre(vnummembre);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table MEMBRE');
