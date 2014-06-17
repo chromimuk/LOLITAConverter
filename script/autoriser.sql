@@ -6,11 +6,11 @@
 CREATE OR REPLACE
 PROCEDURE afft_autoriser
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
-		A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE, D.LIBDOMAINE
+		A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE, M.NUMMEMBRE, D.LIBDOMAINE
 	FROM 
 		AUTORISER A Inner Join MEMBRE M
 		ON A.NUMMEMBRE = M.NUMMEMBRE
@@ -37,7 +37,7 @@ BEGIN
 	htp.tableData(rec.premembre || ' ' || rec.nommembre);
 	htp.tableData(rec.nature);
 	htp.tableData(rec.code);
-	htp.tableData(rec.numdomaine);
+	htp.tableData(rec.libdomaine);
 	htp.tableData(
 		htf.anchor('ui_frmedit_autoriser?vnummembre=' || rec.nummembre, 'Modifier')
 		|| ' ou ' ||
@@ -51,7 +51,6 @@ BEGIN
 	htp.htmlClose;
 END;
 /
-
 
 --2 Insertion
 
@@ -89,7 +88,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_autoriser
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -118,7 +117,7 @@ END;
 ------- Validation redirige vers ui_execadd_autoriser
 CREATE OR REPLACE PROCEDURE ui_frmadd_autoriser
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -164,7 +163,7 @@ END;
 ------- Validation redirige vers ui_execedit_autoriser
 CREATE OR REPLACE PROCEDURE ui_frmedit_autoriser
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -214,7 +213,7 @@ PROCEDURE ui_execedit_autoriser
 		vnumdomaine in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -258,7 +257,7 @@ BEGIN
 		code = vcode,
 		numdomaine = vnumdomaine
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
@@ -274,7 +273,7 @@ PROCEDURE ui_execdel_autoriser
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -284,7 +283,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_autoriser(vnummembre)
+	pa_del_autoriser(vnummembre);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table AUTORISER');
@@ -311,7 +310,7 @@ BEGIN
 	DELETE FROM 
 		AUTORISER
 	WHERE 
-		nummembre = vnummembre
+		nummembre = vnummembre;
 	COMMIT;
 END;
 /
