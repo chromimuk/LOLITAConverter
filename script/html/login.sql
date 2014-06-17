@@ -1,4 +1,5 @@
-﻿CREATE OR REPLACE PROCEDURE pa_login
+-- does not work :(
+CREATE OR REPLACE PROCEDURE pa_login
 	(
 		vemail in varchar2,
 		vmdp in varchar2
@@ -29,7 +30,7 @@ PROCEDURE ui_execlogin
 	)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
-	vnum in number(5);
+	vnum number(5);
 BEGIN
 	SELECT NUMMEMBRE INTO vnum FROM MEMBRE WHERE MAIMEMBRE = vemail;
 	htp.print('<!DOCTYPE html>');
