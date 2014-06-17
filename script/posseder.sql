@@ -10,9 +10,12 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 *
+		C.numcategorie, C.libcategorie, D.numdomaine, D.libdomaine
 	FROM 
-		POSSEDER;
+		POSSEDER P Inner Join CATEGORIE C
+		ON P.numcategorie = C.numcategorie
+		Inner Join DOMAINE D
+		ON P.numdomaine = D.numdomaine;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -27,12 +30,17 @@ BEGIN
 	htp.header(2, 'Liste posseder');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
+	htp.tableHeader('Numéro de la catégorie');
+	htp.tableHeader('Libellé de la catégorie');
+	htp.tableHeader('Numéro du domaine');
+	htp.tableHeader('Libellé du domaine');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
 	htp.tableData(rec.numcategorie);
+	htp.tableData(rec.libcategorie);
 	htp.tableData(rec.numdomaine);
+	htp.tableData(rec.libdomaine);
 	htp.tableData(
 		htf.anchor('ui_frmedit_posseder?vnumcategorie=' || rec.numcategorie, 'Modifier')
 		|| ' ou ' ||

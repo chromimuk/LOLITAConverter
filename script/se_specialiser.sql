@@ -10,9 +10,12 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 *
+		M.nummembre, M.premembre, M.nommembre, D.numdomaine, D.libdomaine
 	FROM 
-		SE_SPECIALISER;
+		SE_SPECIALISER S Inner Join MEMBRE M
+		ON S.nummembre = M.nummembre
+		Inner Join DOMAINE D
+		ON S.numdomaine = D.numdomaine;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -27,12 +30,17 @@ BEGIN
 	htp.header(2, 'Liste se_specialiser');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
+	htp.tableHeader('Numéro du domaine');
+	htp.tableHeader('Libellé du domaine');
+	htp.tableHeader('Numéro membre');
+	htp.tableHeader('Prénom/Nom du membre');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
 	htp.tableData(rec.numdomaine);
+	htp.tableData(rec.libdomaine);
 	htp.tableData(rec.nummembre);
+	htp.tableData(rec.premembre || ' ' || rec.nommembre);
 	htp.tableData(
 		htf.anchor('ui_frmedit_se_specialiser?vnumdomaine=' || rec.numdomaine, 'Modifier')
 		|| ' ou ' ||
@@ -120,11 +128,11 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_se_specialiser', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
+	htp.tableData('Numéro du domaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro du membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableClose;
@@ -212,11 +220,11 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_se_specialiser', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
+	htp.tableData('Numéro du domaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro du membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableClose;

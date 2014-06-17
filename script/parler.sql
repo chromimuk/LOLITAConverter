@@ -102,11 +102,11 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_parler', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro du membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnumlangue');
+	htp.tableData('Numéro de la langue');
 	htp.tableData(htf.formText('vnumlangue', 2));
 	htp.tableRowClose;
 	htp.tableClose;
@@ -157,11 +157,11 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_parler', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro du membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnumlangue');
+	htp.tableData('Numéro de la langue');
 	htp.tableData(htf.formText('vnumlangue', 2));
 	htp.tableRowClose;
 	htp.tableClose;

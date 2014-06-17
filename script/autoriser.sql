@@ -10,7 +10,7 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE, M.NUMMEMBRE, D.LIBDOMAINE
+		A.CODE, M.PREMEMBRE, M.NOMMEMBRE, M.NUMMEMBRE, D.LIBDOMAINE
 	FROM 
 		AUTORISER A Inner Join MEMBRE M
 		ON A.NUMMEMBRE = M.NUMMEMBRE
@@ -30,12 +30,13 @@ BEGIN
 	htp.header(2, 'Liste autoriser');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
+	htp.tableHeader('Prénom/Nom du membre');
+	htp.tableHeader('Code du droit');
+	htp.tableHeader('Domaine');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
 	htp.tableData(rec.premembre || ' ' || rec.nommembre);
-	htp.tableData(rec.nature);
 	htp.tableData(rec.code);
 	htp.tableData(rec.libdomaine);
 	htp.tableData(
@@ -59,7 +60,6 @@ END;
 CREATE OR REPLACE PROCEDURE pa_add_autoriser
 	(
 		vnummembre in number,
-		vnature in varchar2,
 		vcode in varchar2,
 		vnumdomaine in number
 	)
@@ -68,7 +68,7 @@ BEGIN
 	INSERT INTO autoriser VALUES
 	(
 		vnummembre,
-		vnature,
+		'DRO',
 		vcode,
 		vnumdomaine
 	);
@@ -82,7 +82,6 @@ END;
 CREATE OR REPLACE PROCEDURE ui_execadd_autoriser
 	(
 		vnummembre in number,
-		vnature in varchar2,
 		vcode in varchar2,
 		vnumdomaine in number
 	)
@@ -98,7 +97,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_autoriser(vnummembre,vnature,vcode,vnumdomaine);
+	pa_add_autoriser(vnummembre,vcode,vnumdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table autoriser');
@@ -131,19 +130,15 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_autoriser', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro du membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnature');
-	htp.tableData(htf.formText('vnature', 3));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vcode');
+	htp.tableData('Code du droit');
 	htp.tableData(htf.formText('vcode', 3));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
+	htp.tableData('Numéro du domaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
 	htp.tableClose;
@@ -181,10 +176,6 @@ BEGIN
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnature');
-	htp.tableData(htf.formText('vnature', 3));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vcode');
 	htp.tableData(htf.formText('vcode', 3));
 	htp.tableRowClose;
@@ -208,7 +199,6 @@ CREATE OR REPLACE
 PROCEDURE ui_execedit_autoriser
 	(
 		vnummembre in number,
-		vnature in varchar2,
 		vcode in varchar2,
 		vnumdomaine in number
 	)
@@ -223,7 +213,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_autoriser(vnummembre,vnature,vcode,vnumdomaine);
+	pa_edit_autoriser(vnummembre,vcode,vnumdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table AUTORISER');
@@ -244,7 +234,6 @@ CREATE OR REPLACE
 PROCEDURE pa_edit_autoriser
 	(
 		vnummembre in number,
-		vnature in varchar2,
 		vcode in varchar2,
 		vnumdomaine in number
 	)
@@ -253,11 +242,13 @@ BEGIN
 	UPDATE 
 		AUTORISER
 	SET
-		nature = vnature,
 		code = vcode,
-		numdomaine = vnumdomaine
 	WHERE 
-		nummembre = vnummembre;
+		nature = 'DRO'
+	AND
+		nummembre = vnummembre
+	AND
+		numdomaine = vnumdomaine;
 	COMMIT;
 END;
 /
