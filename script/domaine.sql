@@ -65,7 +65,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdtedomaine in date,
 		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
@@ -82,7 +81,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdtedomaine,vdmodomaine,vdscdomaine,vlogdomaine);
+	pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdmodomaine,vdscdomaine,vlogdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table domaine');
@@ -131,10 +130,6 @@ BEGIN
 	htp.tableData(htf.formText('vabrdomaine', 32));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vdtedomaine');
-	htp.tableData(htf.formText('vdtedomaine', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vdmodomaine');
 	htp.tableData(htf.formText('vdmodomaine', 10));
 	htp.tableRowClose;
@@ -163,7 +158,6 @@ CREATE OR REPLACE PROCEDURE pa_add_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdtedomaine in date,
 		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
@@ -177,7 +171,7 @@ BEGIN
 		vnumsociete,
 		vlibdomaine,
 		vabrdomaine,
-		vdtedomaine,
+		TO_CHAR(SYSDATE),
 		vdmodomaine,
 		vdscdomaine,
 		vlogdomaine
@@ -198,7 +192,6 @@ PROCEDURE pa_edit_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdtedomaine in date,
 		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
@@ -212,7 +205,6 @@ BEGIN
 		numsociete = vnumsociete,
 		libdomaine = vlibdomaine,
 		abrdomaine = vabrdomaine,
-		dtedomaine = vdtedomaine,
 		dmodomaine = vdmodomaine,
 		dscdomaine = vdscdomaine,
 		logdomaine = vlogdomaine
@@ -233,7 +225,6 @@ PROCEDURE ui_execedit_domaine
 		vnumsociete in number,
 		vlibdomaine in varchar2,
 		vabrdomaine in varchar2,
-		vdtedomaine in date,
 		vdmodomaine in date,
 		vdscdomaine in clob,
 		vlogdomaine in varchar2
@@ -249,7 +240,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdtedomaine,vdmodomaine,vdscdomaine,vlogdomaine);
+	pa_edit_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdmodomaine,vdscdomaine,vlogdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table DOMAINE');
@@ -301,10 +292,6 @@ BEGIN
 	htp.tableRowOpen;
 	htp.tableData('vabrdomaine');
 	htp.tableData(htf.formText('vabrdomaine', 32));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vdtedomaine');
-	htp.tableData(htf.formText('vdtedomaine', 10));
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('vdmodomaine');

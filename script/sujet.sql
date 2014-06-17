@@ -190,36 +190,32 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_sujet', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
+	htp.tableData('Numéro de domaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro de membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnummembre_her_membre');
+	htp.tableData('Numéro du membre qui prend en charge');
 	htp.tableData(htf.formText('vnummembre_her_membre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vtitsujet');
+	htp.tableData('Titre du sujet');
 	htp.tableData(htf.formText('vtitsujet', 80));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vstasujet');
+	htp.tableData('Statut du sujet');
 	htp.tableData(htf.formText('vstasujet', 1));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlibvisibilite');
+	htp.tableData('Visibilité (PR, PU, EN)');
 	htp.tableData(htf.formText('vlibvisibilite', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlibtypesujet');
+	htp.tableData('Type du sujet (QR, FQ)');
 	htp.tableData(htf.formText('vlibtypesujet', 2));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vdtesujet');
-	htp.tableData(htf.formText('vdtesujet', 10));
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
@@ -242,7 +238,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 		vstasujet in number,
 		vlibvisibilite in varchar2,
 		vlibtypesujet in varchar2,
-		vdtesujet in date
 	)
 
 IS
@@ -256,7 +251,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_sujet(vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet,vdtesujet);
+	pa_add_sujet(vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table sujet');
@@ -281,7 +276,6 @@ CREATE OR REPLACE PROCEDURE pa_add_sujet
 		vstasujet in number,
 		vlibvisibilite in varchar2,
 		vlibtypesujet in varchar2,
-		vdtesujet in date
 	)
 IS
 BEGIN
@@ -295,7 +289,7 @@ BEGIN
 		vstasujet,
 		vlibvisibilite,
 		vlibtypesujet,
-		vdtesujet
+		TO_CHAR(SYSDATE)
 	);
 COMMIT;
 END;
@@ -322,40 +316,36 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_sujet', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumsujet');
+	htp.tableData('Numéro du sujet');
 	htp.tableData(htf.formText('vnumsujet', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
+	htp.tableData('Numéro du domaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnummembre');
+	htp.tableData('Numéro du membre');
 	htp.tableData(htf.formText('vnummembre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vnummembre_her_membre');
+	htp.tableData('Numéro du membre qui prend en charge');
 	htp.tableData(htf.formText('vnummembre_her_membre', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vtitsujet');
+	htp.tableData('Titre');
 	htp.tableData(htf.formText('vtitsujet', 80));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vstasujet');
+	htp.tableData('Statut');
 	htp.tableData(htf.formText('vstasujet', 1));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlibvisibilite');
+	htp.tableData('Visibilité (PU, PR, EN)');
 	htp.tableData(htf.formText('vlibvisibilite', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vlibtypesujet');
+	htp.tableData('Type (QR, FQ)');
 	htp.tableData(htf.formText('vlibtypesujet', 2));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vdtesujet');
-	htp.tableData(htf.formText('vdtesujet', 10));
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
@@ -379,7 +369,6 @@ PROCEDURE pa_edit_sujet
 		vstasujet in number,
 		vlibvisibilite in varchar2,
 		vlibtypesujet in varchar2,
-		vdtesujet in date
 	)
 IS
 BEGIN
@@ -393,7 +382,6 @@ BEGIN
 		stasujet = vstasujet,
 		libvisibilite = vlibvisibilite,
 		libtypesujet = vlibtypesujet,
-		dtesujet = vdtesujet
 	WHERE 
 		numsujet = vnumsujet;
 	COMMIT;
@@ -414,7 +402,6 @@ PROCEDURE ui_execedit_sujet
 		vstasujet in number,
 		vlibvisibilite in varchar2,
 		vlibtypesujet in varchar2,
-		vdtesujet in date
 	)
 IS
 rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
@@ -427,7 +414,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_sujet(vnumsujet,vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet,vdtesujet);
+	pa_edit_sujet(vnumsujet,vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectu�e dans la table SUJET');
@@ -522,11 +509,11 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_sujet_stasujet', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumsujet');
+	htp.tableData('Numéro du sujet');
 	htp.tableData(htf.formText('vnumsujet', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vstasujet');
+	htp.tableData('Statut du sujet');
 	htp.tableData(htf.formText('vstasujet', 1));
 	htp.tableRowClose;
 	htp.tableClose;

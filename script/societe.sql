@@ -170,10 +170,6 @@ BEGIN
 	htp.tableData(htf.formText('vdscsociete', 1000));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Date inscription');
-	htp.tableData(htf.formText('vdtesociete', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('Mail société');
 	htp.tableData(htf.formText('vmaisociete', 80));
 	htp.tableRowClose;
@@ -230,7 +226,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_societe
 		vtypsociete in varchar2,
 		vnomsociete in varchar2,
 		vdscsociete in clob,
-		vdtesociete in date,
 		vmaisociete in varchar2,
 		vdomsociete in varchar2,
 		vnumadrsociete in varchar2,
@@ -254,7 +249,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_societe(vtypsociete,vnomsociete,vdscsociete,vdtesociete,vmaisociete,vdomsociete,vnumadrsociete,vnomadrsociete,vcopadrsociete,vviladrsociete,vpayadrsociete,vtelsociete,vlogsociete,vfonsociete);
+	pa_add_societe(vtypsociete,vnomsociete,vdscsociete,vmaisociete,vdomsociete,vnumadrsociete,vnomadrsociete,vcopadrsociete,vviladrsociete,vpayadrsociete,vtelsociete,vlogsociete,vfonsociete);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table societe');
@@ -275,7 +270,6 @@ CREATE OR REPLACE PROCEDURE pa_add_societe
 		vtypsociete in varchar2,
 		vnomsociete in varchar2,
 		vdscsociete in clob,
-		vdtesociete in date,
 		vmaisociete in varchar2,
 		vdomsociete in varchar2,
 		vnumadrsociete in varchar2,
@@ -295,7 +289,7 @@ BEGIN
 		vtypsociete,
 		vnomsociete,
 		vdscsociete,
-		vdtesociete,
+		TO_CHAR(SYSDATE),
 		vmaisociete,
 		vdomsociete,
 		vnumadrsociete,
@@ -323,7 +317,6 @@ PROCEDURE ui_execedit_societe
 		vtypsociete in varchar2,
 		vnomsociete in varchar2,
 		vdscsociete in clob,
-		vdtesociete in date,
 		vmaisociete in varchar2,
 		vdomsociete in varchar2,
 		vnumadrsociete in varchar2,
@@ -346,7 +339,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_societe(vnumsociete,vtypsociete,vnomsociete,vdscsociete,vdtesociete,vmaisociete,vdomsociete,vnumadrsociete,vnomadrsociete,vcopadrsociete,vviladrsociete,vpayadrsociete,vtelsociete,vlogsociete,vfonsociete);
+	pa_edit_societe(vnumsociete,vtypsociete,vnomsociete,vdscsociete,vmaisociete,vdomsociete,vnumadrsociete,vnomadrsociete,vcopadrsociete,vviladrsociete,vpayadrsociete,vtelsociete,vlogsociete,vfonsociete);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table SOCIETE');
@@ -370,7 +363,6 @@ PROCEDURE pa_edit_societe
 		vtypsociete in varchar2,
 		vnomsociete in varchar2,
 		vdscsociete in clob,
-		vdtesociete in date,
 		vmaisociete in varchar2,
 		vdomsociete in varchar2,
 		vnumadrsociete in varchar2,
@@ -390,7 +382,6 @@ BEGIN
 		typsociete = vtypsociete,
 		nomsociete = vnomsociete,
 		dscsociete = vdscsociete,
-		dtesociete = vdtesociete,
 		maisociete = vmaisociete,
 		domsociete = vdomsociete,
 		numadrsociete = vnumadrsociete,

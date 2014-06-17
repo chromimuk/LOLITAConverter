@@ -95,10 +95,6 @@ BEGIN
 	htp.tableData(htf.formText('vtexmessage', 1000));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vdtemessage');
-	htp.tableData(htf.formText('vdtemessage', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vnsumessage');
 	htp.tableData(htf.formText('vnsumessage', 4));
 	htp.tableRowClose;
@@ -118,7 +114,6 @@ CREATE OR REPLACE PROCEDURE pa_add_message
 		vnumsujet in number,
 		vnummembre in number,
 		vtexmessage in clob,
-		vdtemessage in date,
 		vnsumessage in number
 	)
 IS
@@ -129,7 +124,7 @@ BEGIN
 		vnumsujet,
 		vnummembre,
 		vtexmessage,
-		vdtemessage,
+		TO_CHAR(SYSDATE),
 		vnsumessage
 	);
 COMMIT;
@@ -144,7 +139,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_message
 		vnumsujet in number,
 		vnummembre in number,
 		vtexmessage in clob,
-		vdtemessage in date,
 		vnsumessage in number
 	)
 
@@ -159,7 +153,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_message(vnumsujet,vnummembre,vtexmessage,vdtemessage,vnsumessage);
+	pa_add_message(vnumsujet,vnummembre,vtexmessage,vnsumessage);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table message');
@@ -210,10 +204,6 @@ BEGIN
 	htp.tableData(htf.formText('vtexmessage', 1000));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('vdtemessage');
-	htp.tableData(htf.formText('vdtemessage', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vnsumessage');
 	htp.tableData(htf.formText('vnsumessage', 4));
 	htp.tableRowClose;
@@ -236,7 +226,6 @@ PROCEDURE ui_execedit_message
 		vnumsujet in number,
 		vnummembre in number,
 		vtexmessage in clob,
-		vdtemessage in date,
 		vnsumessage in number
 	)
 IS
@@ -250,7 +239,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_message(vnummessage,vnumsujet,vnummembre,vtexmessage,vdtemessage,vnsumessage);
+	pa_edit_message(vnummessage,vnumsujet,vnummembre,vtexmessage,vnsumessage);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table MESSAGE');
@@ -274,7 +263,6 @@ PROCEDURE pa_edit_message
 		vnumsujet in number,
 		vnummembre in number,
 		vtexmessage in clob,
-		vdtemessage in date,
 		vnsumessage in number
 	)
 IS
@@ -285,7 +273,6 @@ BEGIN
 		numsujet = vnumsujet,
 		nummembre = vnummembre,
 		texmessage = vtexmessage,
-		dtemessage = vdtemessage,
 		nsumessage = vnsumessage
 	WHERE 
 		nummessage = vnummessage;

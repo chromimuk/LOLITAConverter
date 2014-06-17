@@ -228,7 +228,6 @@ CREATE OR REPLACE PROCEDURE pa_add_membre
 		vpremembre in varchar2,
 		vmaimembre in varchar2,
 		vmdpmembre in varchar2,
-		vdtemembre in date,
 		vposmembre in varchar2,
 		vphomembre in varchar2,
 		vdscexpert in clob,
@@ -246,7 +245,7 @@ BEGIN
 		vpremembre,
 		vmaimembre,
 		vmdpmembre,
-		vdtemembre,
+		TO_CHAR(SYSDATE),
 		vposmembre,
 		vphomembre,
 		vdscexpert,
@@ -268,7 +267,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_membre
 		vpremembre in varchar2,
 		vmaimembre in varchar2,
 		vmdpmembre in varchar2,
-		vdtemembre in date,
 		vposmembre in varchar2,
 		vphomembre in varchar2,
 		vdscexpert in clob,
@@ -286,7 +284,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vdtemembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
+	pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table membre');
@@ -345,10 +343,6 @@ BEGIN
 	htp.tableRowOpen;
 	htp.tableData('Mot de passe');
 	htp.tableData(htf.formText('vmdpmembre', 20));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Date inscription du membre');
-	htp.tableData(htf.formText('vdtemembre', 10));
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Poste occupé par le membre');
@@ -428,10 +422,6 @@ BEGIN
 	htp.tableData(htf.formText('vmdpmembre', 20));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Date inscription du membre');
-	htp.tableData(htf.formText('vdtemembre', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('Poste occupé par le membre');
 	htp.tableData(htf.formText('vposmembre', 40));
 	htp.tableRowClose;
@@ -469,7 +459,6 @@ PROCEDURE pa_edit_membre
 		vpremembre in varchar2,
 		vmaimembre in varchar2,
 		vmdpmembre in varchar2,
-		vdtemembre in date,
 		vposmembre in varchar2,
 		vphomembre in varchar2,
 		vdscexpert in clob,
@@ -487,7 +476,6 @@ BEGIN
 		premembre = vpremembre,
 		maimembre = vmaimembre,
 		mdpmembre = vmdpmembre,
-		dtemembre = vdtemembre,
 		posmembre = vposmembre,
 		phomembre = vphomembre,
 		dscexpert = vdscexpert,
@@ -512,7 +500,6 @@ PROCEDURE ui_execedit_membre
 		vpremembre in varchar2,
 		vmaimembre in varchar2,
 		vmdpmembre in varchar2,
-		vdtemembre in date,
 		vposmembre in varchar2,
 		vphomembre in varchar2,
 		vdscexpert in clob,
@@ -529,7 +516,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vdtemembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
+	pa_edit_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table MEMBRE');

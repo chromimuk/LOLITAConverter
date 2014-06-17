@@ -138,6 +138,7 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_execedit_categorie
 	(
+		vnumcategorie in number
 		vlibcategorie in varchar2
 	)
 IS
