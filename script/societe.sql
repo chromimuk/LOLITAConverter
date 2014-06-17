@@ -158,10 +158,6 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_societe', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Numéro');
-	htp.tableData(htf.formText('vnumsociete', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('Type');
 	htp.tableData(htf.formText('vtypsociete', 1));
 	htp.tableRowClose;
@@ -231,7 +227,6 @@ END;
 -------Appel à la requête pa_add_societe
 CREATE OR REPLACE PROCEDURE ui_execadd_societe
 	(
-		vnumsociete in number,
 		vtypsociete in varchar2,
 		vnomsociete in varchar2,
 		vdscsociete in clob,
@@ -259,7 +254,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_societe(vnumsociete,vtypsociete,vnomsociete,vdscsociete,vdtesociete,vmaisociete,vdomsociete,vnumadrsociete,vnomadrsociete,vcopadrsociete,vviladrsociete,vpayadrsociete,vtelsociete,vlogsociete,vfonsociete);
+	pa_add_societe(vtypsociete,vnomsociete,vdscsociete,vdtesociete,vmaisociete,vdomsociete,vnumadrsociete,vnomadrsociete,vcopadrsociete,vviladrsociete,vpayadrsociete,vtelsociete,vlogsociete,vfonsociete);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table societe');
@@ -277,7 +272,6 @@ END;
 --2.1.1 Requête SQL
 CREATE OR REPLACE PROCEDURE pa_add_societe
 	(
-		vnumsociete in number,
 		vtypsociete in varchar2,
 		vnomsociete in varchar2,
 		vdscsociete in clob,
@@ -297,7 +291,7 @@ IS
 BEGIN
 	INSERT INTO societe VALUES
 	(
-		vnumsociete,
+		seq_societe.nextval,
 		vtypsociete,
 		vnomsociete,
 		vdscsociete,

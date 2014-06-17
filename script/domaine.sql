@@ -61,7 +61,6 @@ END;
 -------Appel à la requête pa_add_domaine
 CREATE OR REPLACE PROCEDURE ui_execadd_domaine
 	(
-		vnumdomaine in number,
 		vnumdomaine_appartenir in number,
 		vnumsociete in number,
 		vlibdomaine in varchar2,
@@ -83,7 +82,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdtedomaine,vdmodomaine,vdscdomaine,vlogdomaine);
+	pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdtedomaine,vdmodomaine,vdscdomaine,vlogdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table domaine');
@@ -115,10 +114,6 @@ BEGIN
 	htp.header(1, 'Ajout élément dans la table domaine');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_domaine', 'POST');
 	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
-	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('vnumdomaine_appartenir');
 	htp.tableData(htf.formText('vnumdomaine_appartenir', 2));
@@ -164,7 +159,6 @@ END;
 --2.1.1 Requête SQL
 CREATE OR REPLACE PROCEDURE pa_add_domaine
 	(
-		vnumdomaine in number,
 		vnumdomaine_appartenir in number,
 		vnumsociete in number,
 		vlibdomaine in varchar2,
@@ -178,7 +172,7 @@ IS
 BEGIN
 	INSERT INTO domaine VALUES
 	(
-		vnumdomaine,
+		seq_domaine.nextval,
 		vnumdomaine_appartenir,
 		vnumsociete,
 		vlibdomaine,

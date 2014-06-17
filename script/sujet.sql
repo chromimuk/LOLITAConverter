@@ -190,10 +190,6 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_sujet', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumsujet');
-	htp.tableData(htf.formText('vnumsujet', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vnumdomaine');
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
@@ -239,7 +235,6 @@ END;
 -------Appel � la requ�te pa_add_sujet
 CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 	(
-		vnumsujet in number,
 		vnumdomaine in number,
 		vnummembre in number,
 		vnummembre_her_membre in number,
@@ -261,7 +256,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_sujet(vnumsujet,vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet,vdtesujet);
+	pa_add_sujet(vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet,vdtesujet);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table sujet');
@@ -279,7 +274,6 @@ END;
 --2.1.1 Requ�te SQL
 CREATE OR REPLACE PROCEDURE pa_add_sujet
 	(
-		vnumsujet in number,
 		vnumdomaine in number,
 		vnummembre in number,
 		vnummembre_her_membre in number,
@@ -293,7 +287,7 @@ IS
 BEGIN
 	INSERT INTO sujet VALUES
 	(
-		vnumsujet,
+		seq_sujet.nextval,
 		vnumdomaine,
 		vnummembre,
 		vnummembre_her_membre,

@@ -54,7 +54,6 @@ END;
 -------Appel à la requête pa_add_categorie
 CREATE OR REPLACE PROCEDURE ui_execadd_categorie
 	(
-		vnumcategorie in number,
 		vlibcategorie in varchar2
 	)
 
@@ -69,7 +68,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_categorie(vnumcategorie,vlibcategorie);
+	pa_add_categorie(vlibcategorie);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table categorie');
@@ -87,14 +86,13 @@ END;
 --2.1.1 Requête SQL
 CREATE OR REPLACE PROCEDURE pa_add_categorie
 	(
-		vnumcategorie in number,
 		vlibcategorie in varchar2
 	)
 IS
 BEGIN
 	INSERT INTO categorie VALUES
 	(
-		vnumcategorie,
+		seq_categorie.nextval,
 		vlibcategorie
 	);
 COMMIT;
@@ -120,10 +118,6 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_categorie', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnumcategorie');
-	htp.tableData(htf.formText('vnumcategorie', 4));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vlibcategorie');
 	htp.tableData(htf.formText('vlibcategorie', 50));
 	htp.tableRowClose;
@@ -144,7 +138,6 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_execedit_categorie
 	(
-		vnumcategorie in number,
 		vlibcategorie in varchar2
 	)
 IS

@@ -81,14 +81,13 @@ END;
 CREATE OR REPLACE
 PROCEDURE pa_add_langue
 (
-	vnumlangue in number,
 	vliblangue in varchar2
 )
 IS
 BEGIN
 	INSERT INTO langue VALUES
 	(
-		vnumlangue,
+		seq_langue.nextval,
 		vliblangue
 	);
 	COMMIT;
@@ -100,7 +99,6 @@ END;
 CREATE OR REPLACE
 PROCEDURE ui_execadd_langue
 (
-	vnumlangue in number,
 	vliblangue in varchar2
 )
 IS
@@ -114,7 +112,7 @@ BEGIN
 		htp.headClose;
 		htp.bodyOpen;
 			htp.print('<div class="container">');
-			pa_add_langue(vnumlangue,vliblangue);
+			pa_add_langue(vliblangue);
 			htp.header(1, 'LOLITA');
 			htp.hr;
 			htp.header(2, 'Ajout effectue dans la table LANGUE');
@@ -148,10 +146,6 @@ BEGIN
 				htp.header(1, 'Insertion élément dans la table LANGUE');
 				htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_langue', 'POST');
 					htp.print('<table class="table">');
-						htp.tableRowOpen;
-							htp.tableData('vnumlangue');
-							htp.tableData(htf.formText('vnumlangue', 2));
-							htp.tableRowClose;
 						htp.tableRowOpen;
 							htp.tableData('vliblangue');
 							htp.tableData(htf.formText('vliblangue', 30));

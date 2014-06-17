@@ -83,10 +83,6 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_message', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('vnummessage');
-	htp.tableData(htf.formText('vnummessage', 10));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('vnumsujet');
 	htp.tableData(htf.formText('vnumsujet', 5));
 	htp.tableRowClose;
@@ -119,7 +115,6 @@ END;
 --2.1.1 Requête SQL
 CREATE OR REPLACE PROCEDURE pa_add_message
 	(
-		vnummessage in number,
 		vnumsujet in number,
 		vnummembre in number,
 		vtexmessage in clob,
@@ -130,7 +125,7 @@ IS
 BEGIN
 	INSERT INTO message VALUES
 	(
-		vnummessage,
+		seq_message.nextval,
 		vnumsujet,
 		vnummembre,
 		vtexmessage,
@@ -146,7 +141,6 @@ END;
 -------Appel à la requête pa_add_message
 CREATE OR REPLACE PROCEDURE ui_execadd_message
 	(
-		vnummessage in number,
 		vnumsujet in number,
 		vnummembre in number,
 		vtexmessage in clob,
@@ -165,7 +159,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_message(vnummessage,vnumsujet,vnummembre,vtexmessage,vdtemessage,vnsumessage);
+	pa_add_message(vnumsujet,vnummembre,vtexmessage,vdtemessage,vnsumessage);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table message');
