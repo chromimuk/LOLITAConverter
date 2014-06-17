@@ -6,7 +6,7 @@
 CREATE OR REPLACE
 PROCEDURE afft_se_specialiser
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lst
 	IS 
 	SELECT 
@@ -77,7 +77,7 @@ CREATE OR REPLACE PROCEDURE ui_execadd_se_specialiser
 	)
 
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -106,7 +106,7 @@ END;
 ------- Validation redirige vers ui_execadd_se_specialiser
 CREATE OR REPLACE PROCEDURE ui_frmadd_se_specialiser
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -153,7 +153,7 @@ BEGIN
 	SET
 		nummembre = vnummembre
 	WHERE 
-		numdomaine = vnumdomaine
+		numdomaine = vnumdomaine;
 	COMMIT;
 END;
 /
@@ -168,7 +168,7 @@ PROCEDURE ui_execedit_se_specialiser
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -198,7 +198,7 @@ END;
 ------- Validation redirige vers ui_execedit_se_specialiser
 CREATE OR REPLACE PROCEDURE ui_frmedit_se_specialiser
 IS
-	rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -242,7 +242,7 @@ BEGIN
 	DELETE FROM 
 		SE_SPECIALISER
 	WHERE 
-		numdomaine = vnumdomaine
+		numdomaine = vnumdomaine;
 	COMMIT;
 END;
 /
@@ -256,7 +256,7 @@ PROCEDURE ui_execdel_se_specialiser
 		vnumdomaine in number
 	)
 IS
-rep_css varchar2(255) := https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css;
+rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -266,7 +266,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_se_specialiser(vnumdomaine)
+	pa_del_se_specialiser(vnumdomaine);
 	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table SE_SPECIALISER');
