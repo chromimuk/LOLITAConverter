@@ -1,5 +1,5 @@
 CREATE OR REPLACE
-PROCEDURE admin
+PROCEDURE admin_expert
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
@@ -16,17 +16,17 @@ BEGIN
 			htp.header(2, 'Sujet');
 			htp.print('<a class="btn btn-primary" href="afft_sujet" >Edition statut sujet</a>');
 			htp.hr;
-			htp.header(2, 'Société');
-			htp.print('<a class="btn btn-primary" href="ui_frmadd_societe" >Inscription société</a>');
+			htp.header(2, 'Sociï¿½tï¿½');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_societe" >Inscription sociï¿½tï¿½</a>');
 			htp.hr;
 			htp.header(2, 'Domaine');
-			htp.print('<a class="btn btn-primary" href="ui_frmadd_domaine" >Création domaine</a>');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_domaine" >Crï¿½ation domaine</a>');
 			htp.print('<a class="btn btn-primary" href="afft_domaine" >Edition domaine</a>');
-			htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Edition spécialisation</a>');
+			htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Edition spï¿½cialisation</a>');
 			htp.hr;
-			htp.header(2, 'Catégorie');
-			htp.print('<a class="btn btn-primary" href="ui_frmadd_categorie" >Création catégorie</a>');
-			htp.print('<a class="btn btn-primary" href="ui_frmadd_posseder" >Attribution catégorie à un domaine</a>');
+			htp.header(2, 'Catï¿½gorie');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_categorie" >Crï¿½ation catï¿½gorie</a>');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_posseder" >Attribution catï¿½gorie ï¿½ un domaine</a>');
 			htp.hr;
 			htp.print('</div>');
 		htp.bodyClose;
