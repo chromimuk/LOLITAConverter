@@ -33,7 +33,7 @@ BEGIN
 			htp.header(2,'Nos experts');
 			htp.print('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.');
 			htp.br;
-			htp.print('<a class="btn btn-primary" href="afft_membre_fromvtypmembre=E" >En savoir plus sur nos experts</a>');
+			htp.print('<a class="btn btn-primary" href="afft_membre_from_vtypmembre?vtypmembre=E" >En savoir plus sur nos experts</a>');
 			htp.hr;
 			htp.header(2,'Questions/réponses');
 			htp.print('<a class="btn btn-primary" href="afft_sujet_from_libtypesujet?vlibtypesujet=FQ" >Consulter la FAQ</a>');
