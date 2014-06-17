@@ -3,23 +3,18 @@ PROCEDURE hello
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	info owa_cookie.cookie;
-	vpremembre varchar2;
-	vnommembre varchar2;
+	vnommembre varchar2(60);
+	vid number(5);
 BEGIN
 	info := owa_cookie.get('LOLITA');
-	Select 
-	  premembre into vpremembre, nommembre into vnommmembre
-	from
-	  MEMBRE
-	Where 
-	  nummembre = info.vals(0);
-	  
+	vid := info.vals(0); 
 	htp.print('<!DOCTYPE html>');
+	htp.print(vid);
 	htp.htmlOpen;
 		htp.headOpen;
 			htp.title('LOLITA');
-			if(vpremembre != '') then
-			  htp.print('<h1>Bonjour ' || vpremembre || ' ' || vnommembre || '</h1>');
+			if(vnommembre != '') then
+			  htp.print('<h1>Bonjour ' || vnommembre || '</h1>');
 			end if;
 			htp.print('<link href="https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css" rel="stylesheet">');
 		htp.headClose;
@@ -55,4 +50,7 @@ BEGIN
 			htp.print('</div>');
 		htp.bodyClose;
 	htp.htmlClose;
+	EXCEPTION
+		WHEN OTHERS THEN
+		htp.print('ERROR: ' || SQLCODE);
 END;
