@@ -2,20 +2,11 @@ CREATE OR REPLACE
 PROCEDURE hello
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
-	info owa_cookie.cookie;
-	vnommembre varchar2(60);
-	vid number(5);
 BEGIN
-	info := owa_cookie.get('LOLITA');
-	vid := info.vals(0); 
 	htp.print('<!DOCTYPE html>');
-	htp.print(vid);
 	htp.htmlOpen;
 		htp.headOpen;
 			htp.title('LOLITA');
-			if(vnommembre != '') then
-			  htp.print('<h1>Bonjour ' || vnommembre || '</h1>');
-			end if;
 			htp.print('<link href="https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css" rel="stylesheet">');
 		htp.headClose;
 		htp.bodyOpen;
@@ -54,3 +45,4 @@ BEGIN
 		WHEN OTHERS THEN
 		htp.print('ERROR: ' || SQLCODE);
 END;
+/
