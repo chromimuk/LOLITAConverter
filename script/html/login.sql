@@ -54,7 +54,7 @@ BEGIN
 			owa_cookie.send(name=>'LOLITA',
 					value=>vnummembre,
 					expires=>sysdate+1,
-					path=>'/'); 
+					path=>'/apex'); 
 			htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
