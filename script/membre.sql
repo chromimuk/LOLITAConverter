@@ -119,7 +119,7 @@ Create or replace procedure afft_membre_from_nummembre
 Begin
 	SELECT
 		NOMMEMBRE, PREMEMBRE, PHOMEMBRE, TYPMEMBRE
-	INTO vnommembre, vpremembre, vphomembre, vtypemembre
+	INTO vnommembre, vpremembre, vphomembre, vtypmembre
 	FROM MEMBRE 
 	WHERE NUMMEMBRE = vnummembre;
 
@@ -168,7 +168,7 @@ Begin
 		htp.header(3, 'Sait aussi parler');
 		htp.hr;
 		FOR rec IN lstDom LOOP
-			htp.print(libdomaine);
+			htp.print(liblangue);
 			htp.br;
 		END LOOP;
 	END IF;
