@@ -97,8 +97,10 @@ BEGIN
 				htp.tableClose;
 				htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
 			htp.formClose;
+			htp.br;
 			htp.print('<a class="btn btn-info" href="mdp_oubli" >Mot de passe oublié ?</a>');
 			htp.print('</div>');
 		htp.bodyClose;
 	htp.htmlClose;
 END;
+/
