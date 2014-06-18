@@ -3,9 +3,7 @@ PROCEDURE hello
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	cookie_lolita owa_cookie.cookie;
-	user_id  integer;
-BEGIN
-
+	user_id  number(5);
 BEGIN
     cookie_lolita := owa_cookie.get('LOLITA');
 	htp.print('<!DOCTYPE html>');
