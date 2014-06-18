@@ -46,7 +46,9 @@ BEGIN
 		htp.headClose;
 		htp.bodyOpen;
 			htp.print('<div class="container">');
-			htp.header(1, 'LOLITA');
+			htp.header(1, '<a href="hello">');
+			htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />'
+			htp.header(1, '</a>');
 			htp.hr;
 			htp.header(2, 'Connexion réussie');
 			owa_cookie.send(name=>'LOLITA', value=>vnummembre); 
