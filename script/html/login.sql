@@ -54,7 +54,8 @@ BEGIN
 			owa_cookie.send(name=>'user',
 					value=>vnummembre,
 					expires=>sysdate+1,
-					path=>'utbm.fr'); 
+					path=>'/',
+					domain=>'utbm.fr'); 
 			htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
