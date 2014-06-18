@@ -51,7 +51,7 @@ BEGIN
 			htp.header(1, '</a>');
 			htp.hr;
 			htp.header(2, 'Connexion réussie');
-			owa_cookie.send(name=>'LOLITA',
+			owa_cookie.send(name=>'user',
 					value=>vnummembre,
 					expires=>sysdate+1,
 					path=>'/apex'); 
