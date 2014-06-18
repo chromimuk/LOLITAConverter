@@ -29,9 +29,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Liste membre');
 	htp.print('<table class="table">');
@@ -131,9 +129,7 @@ Begin
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headclose;
 	htp.print('<div class="container">');
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Profil de ' || vnommembre || ' ' || vpremembre);
 	htp.br;
@@ -166,16 +162,18 @@ Begin
 		htp.header(3, 'Domaine(s) de compétences');
 		htp.hr;
 		FOR rec IN lstDom LOOP
-			htp.print(libdomaine);
+			htp.print(rec.libdomaine);
 			htp.br;
 		END LOOP;
 		htp.header(3, 'Sait aussi parler');
 		htp.hr;
-		FOR rec IN lstDom LOOP
-			htp.print(liblangue);
+		FOR rec IN lstLan LOOP
+			htp.print(rec.liblangue);
 			htp.br;
 		END LOOP;
 	END IF;
+	htp.br;
+	htp.br;
 	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	htp.print('</div>');
 	htp.bodyClose;
@@ -214,9 +212,8 @@ BEGIN
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headClose;
 	htp.bodyOpen;
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.print('<div class="container">');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Liste de nos membres experts');
 	htp.print('<table class="table">');
@@ -273,7 +270,7 @@ IS
 			Inner Join MEMBRE M
 			On M.NUMSOCIETE = S.NUMSOCIETE
 			Inner Join AVOIR A
-			On A.NUMMEMBRE = M.NUMEMBRE
+			On A.NUMMEMBRE = M.NUMMEMBRE
 		WHERE
 			A.CODE = vstamembre
 		ORDER BY
@@ -288,9 +285,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Liste de nos membres experts');
 	htp.print('<table class="table">');
@@ -398,9 +393,7 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table membre');
 	htp.print('<a class="btn btn-primary" href="afft_membre" >Voir la liste complete</a>');
@@ -416,12 +409,13 @@ END;
 
 --2.1.3 Formulaire d'insertion
 ------- Validation redirige vers ui_execadd_membre
-CREATE OR REPLACE PROCEDURE ui_frmadd_membre
+CREATE OR REPLACE
+PROCEDURE ui_frmadd_membre
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lstLan IS
 		SELECT 
-			L.LIBLANGUE
+			L.NUMLANGUE, L.LIBLANGUE
 		FROM 
 			LANGUE L
 		;
@@ -435,22 +429,23 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	htp.header(1, 'Ajout élément dans la table membre');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_membre', 'POST');
+	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_membre', 'GET');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
 	htp.tableData('Numéro de la société');
 	htp.tableData(htf.formText('vnumsociete', 5));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro de la langue');
-	htp.tableData(htf.formText('vnumlangue', 2));
+	htp.tableData('Type du membre');
+	htp.tableData(htf.formText('vtypmembre', 1));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	--htp.tableData('Type du membre');
-	--htp.tableData(htf.formText('vtypmembre', 1));
-	htp.formSelectOpen('vliblangue', 'Selection langue');
+	htp.formSelectOpen('vnumlangue', 'Langue');
 	FOR rec IN lstLan LOOP
-		htp.formSelectOption(rec.liblangue);
+		htp.formSelectOption(
+			rec.liblangue,
+			cattributes=>'value=' || rec.numlangue
+		);
 	END LOOP;
 	htp.formSelectClose;
 	htp.tableRowClose;
@@ -643,9 +638,7 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_edit_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table MEMBRE');
 	htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
@@ -698,9 +691,7 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_del_membre(vnummembre);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
+	htp.header(1, 'LOLITA');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table MEMBRE');
 	htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
