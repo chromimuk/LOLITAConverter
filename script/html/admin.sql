@@ -19,13 +19,14 @@ BEGIN
 			htp.hr;
 			htp.header(2, 'Droits et statuts');
 			htp.print('<a class="btn btn-info" href="afft_membre_from_stamembre?vstamembre=S05" >Validation inscription membre</a>');
-			htp.print('<a class="btn btn-primary" href="ui_frmadd_attribuer" >Attribuer un droit à un membre</a>');
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_attribuer" >Attribuer un droit ï¿½ un membre</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_autoriser" >Ajouter un droit sur un domaine</a>');
 			htp.hr;
-			htp.header(2, 'Société');
-			htp.print('<a class="btn btn-primary" href="ui_frmedit_societe" >Modifier de sa société</a>');
+			htp.header(2, 'Sociï¿½tï¿½');
+			htp.print('<a class="btn btn-primary" href="ui_frmedit_societe?vnumsociete=1" >Modifier de sa sociï¿½tï¿½</a>');
 			htp.hr;
 			htp.print('</div>');
 		htp.bodyClose;
 	htp.htmlClose;
 END;
+/
