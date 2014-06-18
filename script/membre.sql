@@ -287,7 +287,7 @@ BEGIN
 	htp.print('<div class="container">');
 	htp.header(1, 'LOLITA');
 	htp.hr;
-	htp.header(2, 'Liste de nos membres experts');
+	htp.header(2, 'Liste des membres en attente de validation');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
 		htp.tableheader('N°');
