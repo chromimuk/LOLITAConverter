@@ -32,7 +32,7 @@ BEGIN
 			htp.br;
 			htp.print('<div class="jumbotron">');
 			htp.print('<a href="hello">');
-			htp.print('<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />'
+			htp.print('<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 			htp.print('</a>');
 			htp.print('</div>');
 			htp.br;
