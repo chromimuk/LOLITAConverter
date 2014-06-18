@@ -42,10 +42,9 @@ BEGIN
 	htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
-		SELECT LIBDOMAINE INTO vdompere FROM DOMAINE WHERE NUMDOMAINE = rec.numdomaine_appartenir;
 		htp.tableRowOpen;
 			htp.tableData(rec.numdomaine);
-			htp.tableData(vdompere);
+			htp.tableData(rec.numdomaine_appartenir);
 			htp.tableData(rec.numsociete);
 			htp.tableData(rec.libdomaine);
 			htp.tableData(rec.abrdomaine);
