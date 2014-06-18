@@ -29,7 +29,9 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Liste membre');
 	htp.print('<table class="table">');
@@ -129,7 +131,9 @@ Begin
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headclose;
 	htp.print('<div class="container">');
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Profil de ' || vnommembre || ' ' || vpremembre);
 	htp.br;
@@ -210,8 +214,9 @@ BEGIN
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headClose;
 	htp.bodyOpen;
-	htp.print('<div class="container">');
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Liste de nos membres experts');
 	htp.print('<table class="table">');
@@ -283,7 +288,9 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Liste de nos membres experts');
 	htp.print('<table class="table">');
@@ -391,7 +398,9 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table membre');
 	htp.print('<a class="btn btn-primary" href="afft_membre" >Voir la liste complete</a>');
@@ -634,7 +643,9 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_edit_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table MEMBRE');
 	htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
@@ -687,7 +698,9 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_del_membre(vnummembre);
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table MEMBRE');
 	htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');

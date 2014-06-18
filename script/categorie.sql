@@ -22,7 +22,9 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Liste categorie');
 	htp.print('<table class="table">');
@@ -69,7 +71,9 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_add_categorie(vlibcategorie);
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table categorie');
 	htp.print('<a class="btn btn-primary" href="afft_categorie" >Voir la liste complete</a>');
@@ -153,7 +157,9 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_edit_categorie(vnumcategorie,vlibcategorie);
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Edition effectuée dans la table CATEGORIE');
 	htp.print('<a class="btn btn-primary" href="afft_categorie" >>Consulter la liste CATEGORIE</a>');
@@ -244,7 +250,9 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	pa_del_categorie(vnumcategorie);
-	htp.header(1, 'LOLITA');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Suppression élément dans la table CATEGORIE');
 	htp.print('<a class="btn btn-primary" href="afft_categorie" >>Consulter la liste CATEGORIE</a>');
