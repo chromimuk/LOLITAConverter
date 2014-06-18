@@ -36,6 +36,7 @@ BEGIN
 	htp.tableHeader('Libellé du domaine');
 	htp.tableHeader('Numéro membre');
 	htp.tableHeader('Prénom/Nom du membre');
+	htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
