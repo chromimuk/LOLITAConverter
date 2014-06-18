@@ -55,7 +55,7 @@ BEGIN
 					value=>vnummembre,
 					expires=>sysdate+1,
 					path=>'/',
-					domain=>'utbm.fr'); 
+					domain=>'pc-gi-405.utbm.fr:8080'); 
 			htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
