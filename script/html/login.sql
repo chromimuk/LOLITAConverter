@@ -56,7 +56,7 @@ BEGIN
 					expires=>sysdate+1,
 					path=>'/',
 					domain=>'pc-gi-405.utbm.fr:8080'); 
-			htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+			htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
 	htp.htmlClose;
@@ -97,6 +97,7 @@ BEGIN
 				htp.tableClose;
 				htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
 			htp.formClose;
+			htp.br;
 			htp.br;
 			htp.print('<a class="btn btn-info" href="mdp_oubli" >Mot de passe oublié ?</a>');
 			htp.print('</div>');
