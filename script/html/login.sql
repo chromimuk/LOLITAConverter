@@ -51,7 +51,10 @@ BEGIN
 			htp.header(1, '</a>');
 			htp.hr;
 			htp.header(2, 'Connexion réussie');
-			owa_cookie.send('LOLITA',vnummembre); 
+			owa_cookie.send(name=>'LOLITA',
+					value=>vnummembre,
+					expires=>sysdate+1,
+					path=>'/'); 
 			htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
