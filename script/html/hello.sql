@@ -5,7 +5,7 @@ IS
 	cookie_lolita owa_cookie.cookie;
 	user_id  number(5);
 BEGIN
-    cookie_lolita := owa_cookie.get('LOLITA');
+    cookie_lolita := owa_cookie.get('user');
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 		htp.headOpen;
