@@ -212,10 +212,6 @@ BEGIN
            WHERE
                    M.nummembre = user_id;
    end if;
-   
-   EXCEPTION
-           WHEN NO_DATA_FOUND THEN
-                   htp.print(SQLCODE);
 END;
 /
 
