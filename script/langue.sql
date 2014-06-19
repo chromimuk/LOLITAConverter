@@ -35,7 +35,14 @@ IS
 		*
 	FROM
 		LANGUE;
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+    	get_info_user_right(user_right);
+    	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 		htp.headOpen;
@@ -44,34 +51,47 @@ BEGIN
 		htp.headClose;
 		htp.bodyOpen;
 			htp.print('<div class="container">');
-				htp.header(1, '<a href="hello">');
-				htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-				htp.header(1, '</a>');
-				htp.hr;
-				htp.header(2, 'Liste langue');
-				htp.print('<table class="table">');
-					htp.tableRowOpen(cattributes => 'class=active');
-						htp.tableHeader('N°');
-						htp.tableHeader('Libellé');
-						htp.tableHeader('Actions');
-					htp.tableRowClose;
-					FOR rec IN lst LOOP
-						htp.tableRowOpen;
-							htp.tableData(rec.numlangue);
-							htp.tableData(rec.liblangue);
-							htp.tableData(
-								htf.anchor('ui_frmedit_langue?vnumlangue=' || rec.numlangue, 'Modifier')
-								|| ' ou ' ||
-								htf.anchor('ui_execdel_langue?vnumlangue=' || rec.numlangue, 'Supprimer')
-							);
-						htp.tableRowClose;
-					END LOOP;
-				htp.tableClose;
-			htp.print('</div>');
+			
+	header(user_id, user_name, user_type, user_right);
+
+	if (user_id >= 0)
+	then 
+		
+		htp.hr;
+		htp.header(2, 'Liste langue');
+		htp.print('<table class="table">');
+			htp.tableRowOpen(cattributes => 'class=active');
+				htp.tableHeader('N°');
+				htp.tableHeader('Libellé');
+				htp.tableHeader('Actions');
+			htp.tableRowClose;
+			FOR rec IN lst LOOP
+				htp.tableRowOpen;
+					htp.tableData(rec.numlangue);
+					htp.tableData(rec.liblangue);
+					htp.tableData(
+						htf.anchor('ui_frmedit_langue?vnumlangue=' || rec.numlangue, 'Modifier')
+						|| ' ou ' ||
+						htf.anchor('ui_execdel_langue?vnumlangue=' || rec.numlangue, 'Supprimer')
+					);
+				htp.tableRowClose;
+			END LOOP;
+		htp.tableClose;
+		htp.print('</div>');
+		
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;	
+	
+	
 		htp.bodyClose;
 	htp.htmlClose;
 END;
-
+/
 
 
 
