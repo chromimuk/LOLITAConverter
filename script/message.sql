@@ -20,13 +20,23 @@ IS
 	ORDER BY
 		MS.NUMMESSAGE
 	;
+		user_id number(5);
+	user_name varchar2(80);	
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+	get_info_user_right(user_right);
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
+	
 	htp.title('Affichage table message');
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headClose;
+	
+	header(user_id, user_name, user_type, user_right);
 	
 	if (user_id >= 0)
 	then 
@@ -65,7 +75,10 @@ BEGIN
 		htp.print('</div>');
 		
 	else
-		htp.print('Non connecté');
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
 		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	end if;
 	
