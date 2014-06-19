@@ -570,25 +570,25 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 
+	header(user_id, user_name, user_type, user_right);
+	
 	if(user_id >= 0)
 	then
-		header(user_id, user_name, user_type, user_right);
 		pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
 	
 		htp.hr;
 		htp.header(2, 'Ajout effectue dans la table membre');
 		htp.print('<a class="btn btn-primary" href="afft_membre" >Voir la liste complete</a>');
-		
+		htp.print('</div>');
 	
 	else
-		header('', '', '', '');
-		pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
-		htp.hr;
-		htp.header(2, 'Merci, votre demande d inscription est en cours de validation');
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
 		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	end if;	
-	htp.print('</div>');		
-	
+		
 	htp.bodyClose;
 	htp.htmlClose;
 EXCEPTION
@@ -705,7 +705,8 @@ END;
 
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_membre
-CREATE OR REPLACE PROCEDURE ui_frmedit_membre
+CREATE OR REPLACE
+PROCEDURE ui_frmedit_membre
 (
 	vnummembre integer
 )
@@ -715,6 +716,18 @@ IS
 	user_name varchar2(80);
 	user_type varchar2(2);
 	user_right varchar2(4);
+	CURSOR lstSoc
+	IS
+	SELECT
+	S.NOMSOCIETE, S.NUMSOCIETE
+	FROM
+	SOCIETE S;
+	CURSOR lstLan
+	IS
+	SELECT
+	L.LIBLANGUE, L.NUMLANGUE
+	FROM
+	LANGUE L;
 BEGIN
 	get_info_user(user_id, user_name, user_type);
     	get_info_user_right(user_right);
@@ -738,16 +751,39 @@ BEGIN
 		htp.print('<table class="table">');
 		htp.print('<input type="hidden" name="vnummembre" value="' || vnummembre || '"/>');
 		htp.tableRowOpen;
-		htp.tableData('Numéro de la société');
-		htp.tableData(htf.formText('vnumsociete', 5));
+			htp.print('<td>Numéro de la société</td>');
+			htp.print('<td>');
+			htp.formSelectOpen('vnumsociete', '');
+			FOR rec IN lstSoc LOOP
+				htp.formSelectOption(
+				rec.nomsociete,
+				cattributes=>'value=' || rec.numsociete
+				);
+			END LOOP;
+			htp.formSelectClose;
+			htp.print('</td>');
 		htp.tableRowClose;
 		htp.tableRowOpen;
-		htp.tableData('Numéro de langue');
-		htp.tableData(htf.formText('vnumlangue', 2));
+		htp.print('<td>Langue</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnumlangue', '');
+		FOR rec IN lstLan LOOP
+			htp.formSelectOption(
+			rec.liblangue,
+			cattributes=>'value=' || rec.numlangue
+			);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
 		htp.tableRowClose;
 		htp.tableRowOpen;
-		htp.tableData('Type du membre');
-		htp.tableData(htf.formText('vtypmembre', 1));
+		htp.print('<td>Type du membre</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vtypmembre', '');
+		htp.formSelectOption('C');
+		htp.formSelectOption('E');
+		htp.formSelectClose;
+		htp.print('</td>');
 		htp.tableRowClose;
 		htp.tableRowOpen;
 		htp.tableData('Nom du membre');
