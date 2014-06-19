@@ -48,6 +48,15 @@ BEGIN
 				htp.print('<a class="btn btn-primary" href="afft_sujet" >Edition sujet</a>');
 				htp.hr;
 				
+				
+				-- membre
+				if(user_right_soc = 1)
+				then
+					htp.header(2, 'Membre');
+					htp.print('<a class="btn btn-primary" href="ui_frmadd_se_specialiser" >Ajouter specialisation entre un membre et une domaine</a>');
+					htp.hr;
+				end if;
+				
 				-- société
 				if(user_right_soc = 1)
 				then
