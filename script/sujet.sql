@@ -133,10 +133,12 @@ END;
 CREATE OR REPLACE PROCEDURE afft_sujet_from_numsujet
 	(vnumsujet number) IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
-	vtitsujet varchar(50);
-CURSOR lst IS 
+	vtitsujet varchar2(50);
+	vstasujet varchar(1);
+	CURSOR lst IS 
 	SELECT 
-		MS.NUMMESSAGE, S.TITSUJET, ME.NOMMEMBRE, ME.PREMEMBRE, ME.PHOMEMBRE, MS.TEXMESSAGE, MS.DTEMESSAGE, MS.NSUMESSAGE
+		MS.NUMMESSAGE, S.TITSUJET, ME.NOMMEMBRE, ME.PREMEMBRE,
+		ME.PHOMEMBRE, MS.TEXMESSAGE, MS.DTEMESSAGE, MS.NSUMESSAGE
 	FROM 
 		SUJET S
 		Inner Join MESSAGE MS
@@ -156,7 +158,7 @@ BEGIN
 	get_info_user(user_id, user_name, user_type);
     	get_info_user_right(user_right);
 
-	Select TITSUJET Into vtitsujet From SUJET Where NUMSUJET = vnumsujet;
+	Select TITSUJET, STASUJET Into vtitsujet, vstasujet From SUJET Where NUMSUJET = vnumsujet;
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -191,7 +193,11 @@ BEGIN
 			htp.tableRowClose;
 		END LOOP;
 		htp.tableClose;
-		htp.print('<a class="btn btn-primary" href="ui_frmadd_message?vnumsujet=' || vnumsujet || '" >Repondre</a>');
+		
+		if (vstasujet = 1) then
+			htp.print('<a class="btn btn-primary" href="ui_frmadd_message?vnumsujet=' || vnumsujet || '" >Repondre</a>');
+		end if;
+		
 		htp.hr;
 		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 		htp.print('</div>');
