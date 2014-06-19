@@ -38,50 +38,61 @@ BEGIN
 	htp.print('<div class="container">');
 	
 	header(user_id, user_name, user_type, user_right);
-
-	htp.hr;
-	htp.header(2, 'Liste des membres');
-	htp.print('<table class="table">');
-	htp.tableRowOpen(cattributes => 'class=active');
-		htp.tableheader('N°');
-		htp.tableheader('Type');
-		htp.tableheader('Membre');
-		htp.tableheader('Societe');
-		htp.tableheader('Langue maternelle');
-		htp.tableheader('Mail');
-		htp.tableheader('Inscrit le');
-		htp.tableheader('Poste');
-		htp.tableheader('Actions');
-	htp.tableRowClose;
-	FOR rec IN lst loop
-		if rec.typmembre = 'E' then
-			htp.tableRowOpen(cattributes => 'class=success');
-		elsif rec.typmembre = 'C' then
-			htp.tableRowOpen(cattributes => 'class=info');
-		else
-			htp.tableRowOpen;
-		end if;
-		htp.tableData(rec.nummembre);
-		htp.tableData(rec.typmembre);
-		htp.tableData(
-			htf.anchor('afft_membre_from_nummembre?vnummembre=' || rec.nummembre,
-			rec.premembre || ' ' || rec.nommembre)
-		);
-		htp.tableData(rec.nomsociete);
-		htp.tableData(rec.liblangue);
-		htp.tableData(rec.maimembre);
-		htp.tableData(rec.dtemembre);
-		htp.tableData(rec.posmembre);
-		htp.tableData(
-			htf.anchor('ui_frmedit_membre?vnummembre=' || rec.nummembre, 'Modifier')
-			|| ' ou ' ||
-			htf.anchor('ui_execdel_membre?vnummembre=' || rec.nummembre, 'Supprimer')
-		);
+	
+	if(user_id >= 0)
+	then
+		htp.hr;
+		htp.header(2, 'Liste des membres');
+		htp.print('<table class="table">');
+		htp.tableRowOpen(cattributes => 'class=active');
+			htp.tableheader('N°');
+			htp.tableheader('Type');
+			htp.tableheader('Membre');
+			htp.tableheader('Societe');
+			htp.tableheader('Langue maternelle');
+			htp.tableheader('Mail');
+			htp.tableheader('Inscrit le');
+			htp.tableheader('Poste');
+			htp.tableheader('Actions');
 		htp.tableRowClose;
-	END LOOP;
-	htp.tableClose;
-	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
-	htp.print('</div>');
+		FOR rec IN lst loop
+			if rec.typmembre = 'E' then
+				htp.tableRowOpen(cattributes => 'class=success');
+			elsif rec.typmembre = 'C' then
+				htp.tableRowOpen(cattributes => 'class=info');
+			else
+				htp.tableRowOpen;
+			end if;
+			htp.tableData(rec.nummembre);
+			htp.tableData(rec.typmembre);
+			htp.tableData(
+				htf.anchor('afft_membre_from_nummembre?vnummembre=' || rec.nummembre,
+				rec.premembre || ' ' || rec.nommembre)
+			);
+			htp.tableData(rec.nomsociete);
+			htp.tableData(rec.liblangue);
+			htp.tableData(rec.maimembre);
+			htp.tableData(rec.dtemembre);
+			htp.tableData(rec.posmembre);
+			htp.tableData(
+				htf.anchor('ui_frmedit_membre?vnummembre=' || rec.nummembre, 'Modifier')
+				|| ' ou ' ||
+				htf.anchor('ui_execdel_membre?vnummembre=' || rec.nummembre, 'Supprimer')
+			);
+			htp.tableRowClose;
+		END LOOP;
+		htp.tableClose;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+		htp.print('</div>');
+		
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
+		
 	htp.bodyClose;
 	htp.htmlClose;
 END;
