@@ -17,22 +17,32 @@ BEGIN
 		htp.headClose;
 		htp.bodyOpen;
 			htp.print('<div class="container">');
-			htp.print('<div class="jumbotron">');
-			htp.print('<a href="hello">');
-			htp.print('<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-			htp.print('</a>');
-			htp.print('</div>');
 			
+			htp.print('<div style="display:block; background-color: #D3D3D3; height: 150px; border-radius: 3px; padding:10px;">');
+				
+			htp.print('<a href="hello" style="float: left">');
+			htp.print('<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="200px" style="margin-left:auto; margin-right: auto;" />');
+			htp.print('</a>');
+				
+			htp.br;
+
 			if (cookie_lolita.num_vals > 0)
 			then 
 				user_id  := cookie_lolita.vals(1);
 				SELECT 
 					premembre || ' ' || nommembre, typmembre into user_name, user_type
 				FROM
-					MEMBRE
+					MEMBRE Inner Join ATTRIBUER
+					On MEMBRE.nummembre = ATTRIBUER.nummembre
 				WHERE
 					nummembre = user_id;
-				htp.print('Bonjour ' || user_name);
+				
+				
+				htp.print('<div style="float: right">Bonjour ' || user_name || '</div>');
+				
+				htp.br;
+				htp.br;
+				htp.br;
 				
 				if( user_type = 'C')
 				then
@@ -41,10 +51,14 @@ BEGIN
 					htp.print('<a class="btn btn-danger"  style="float: right" href="admin_expert" >Administration expert</a>');
 				end if;
 				
-				htp.print('<a class="btn btn-primary" style="float: right" href="logout" >Déconnexion</a>');
+				htp.print('<a class="btn btn-primary" style="float: right; margin-right: 10px;" href="logout" >Déconnexion</a>');
 				
+				htp.print('</div>');
+
 				htp.br;	
 				htp.br;
+				htp.br;
+				htp.hr;
 				htp.header(2,'Nos domaines de compétences');
 				htp.print('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 				htp.br;
@@ -65,8 +79,36 @@ BEGIN
 					
 			else
 				htp.br;
-				htp.print('<a class="btn btn-success" href="ui_frmadd_membre" >Inscription</a>');
-				htp.print('<a class="btn btn-primary" href="login" >Connexion</a>');			
+				htp.print('<a class="btn btn-success" style="float: right" href="ui_frmadd_membre" >Inscription</a>');
+				htp.print('<a class="btn btn-primary" style="float: right; margin-right: 10px;" href="login" >Connexion</a>');
+				
+				htp.print('</div>');
+				
+				htp.print('<div style="text-align: center">');
+				htp.br;
+				
+				htp.header(1, 'Des questions en informatique ?');
+				htp.br;
+				htp.header(1, 'Des problématiques difficiles à résoudre ?');
+				htp.br;
+				htp.br;
+				htp.br;
+				
+				htp.header(2,'LOLITA peut vous aider à trouver des solutions !');
+				htp.br;
+				htp.br;
+				htp.br;
+				
+				htp.header(2, 'Parlez-en à votre PDG.');
+				
+				htp.br;
+				htp.br;
+				
+				htp.print('<a class="btn btn-success" style="font-size: 50px; margin-left: auto; margin-right: 10px;" href="ui_frmadd_membre" >Inscription</a>');
+				htp.print('<a class="btn btn-primary" style="font-size: 50px; margin-right:auto;" href="login" >Connexion</a>');
+				
+				
+				htp.print('</div>');
 			end if;
 			
 		htp.bodyClose;
