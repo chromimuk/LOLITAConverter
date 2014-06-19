@@ -31,7 +31,7 @@ IS
 BEGIN
    	owa_util.mime_header('text/html', FALSE);
 	
-	owa_cookie.remove('user', NULL);
+	owa_cookie.remove(name=>'user', val=>NULL);
 	
 	owa_util.http_header_close;
 COMMIT;
