@@ -31,7 +31,7 @@ BEGIN
 	htp.print('<div class="container">');
 	htp.header(1, 'LOLITA');
 	htp.hr;
-	htp.header(2, 'Liste membre');
+	htp.header(2, 'Liste des membres');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
 		htp.tableheader('N°');
