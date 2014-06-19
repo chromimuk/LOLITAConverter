@@ -219,7 +219,15 @@ CREATE OR REPLACE PROCEDURE ui_execadd_domaine
 
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);	
+      	get_info_user_right(user_right);
+      	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -228,13 +236,24 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdscdomaine,vlogdomaine);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Ajout effectue dans la table domaine');
-	htp.print('<a class="btn btn-primary" href="afft_domaine" >Voir la liste complete</a>');
+	
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		pa_add_domaine(vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdscdomaine,vlogdomaine);
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Ajout effectue dans la table domaine');
+		htp.print('<a class="btn btn-primary" href="afft_domaine" >Voir la liste complete</a>');
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -263,8 +282,15 @@ IS
 		D.LIBDOMAINE, D.NUMDOMAINE
 	FROM 
 		DOMAINE D;
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
-	htp.print('<!DOCTYPE html>');
+	get_info_user(user_id, user_name, user_type);	
+      	get_info_user_right(user_right);
+      	
+      	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
 	htp.title('Insertion domaine');
@@ -272,54 +298,64 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Ajout élément dans la table domaine');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_domaine', 'GET');
-	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.print('<td>Domaine père</td>');
-	htp.print('<td>');
-	htp.formSelectOpen('vnumdomaine_appartenir', '');
-	FOR rec IN lstDom LOOP
-		htp.formSelectOption(
-		rec.libdomaine,
-		cattributes=>'value=' || rec.numdomaine
-		);
-	END LOOP;
-	htp.formSelectClose;
-	htp.print('</td>');
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.print('<td>Societe</td>');
-	htp.print('<td>');
-	htp.formSelectOpen('vnumsociete', '');
-	FOR rec IN lstSoc LOOP
-		htp.formSelectOption(
-		rec.nomsociete,
-		cattributes=>'value=' || rec.numsociete
-		);
-	END LOOP;
-	htp.formSelectClose;
-	htp.print('</td>');
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Libellé');
-	htp.tableData(htf.formText('vlibdomaine', 50));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Abréviation');
-	htp.tableData(htf.formText('vabrdomaine', 32));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Description');
-	htp.tableData(htf.formText('vdscdomaine', 1000));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Logo');
-	htp.tableData(htf.formText('vlogdomaine', 100));
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		htp.header(1, 'Ajout élément dans la table domaine');
+		htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_domaine', 'GET');
+		htp.print('<table class="table">');
+		htp.tableRowOpen;
+		htp.print('<td>Domaine père</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnumdomaine_appartenir', '');
+		FOR rec IN lstDom LOOP
+			htp.formSelectOption(
+			rec.libdomaine,
+			cattributes=>'value=' || rec.numdomaine
+			);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.print('<td>Societe</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnumsociete', '');
+		FOR rec IN lstSoc LOOP
+			htp.formSelectOption(
+			rec.nomsociete,
+			cattributes=>'value=' || rec.numsociete
+			);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Libellé');
+		htp.tableData(htf.formText('vlibdomaine', 50));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Abréviation');
+		htp.tableData(htf.formText('vabrdomaine', 32));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Description');
+		htp.tableData(htf.formText('vdscdomaine', 1000));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Logo');
+		htp.tableData(htf.formText('vlogdomaine', 100));
+		htp.tableRowClose;
+		htp.tableClose;
+		htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+		htp.formClose;
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -378,7 +414,14 @@ PROCEDURE ui_execedit_domaine
 	)
 IS
 rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);	
+      	get_info_user_right(user_right);
+      	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -387,14 +430,24 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdscdomaine,vlogdomaine);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Edition effectuée dans la table DOMAINE');
-	htp.print('<a class="btn btn-primary" href="afft_domaine" >>Consulter la liste DOMAINE</a>');
-	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		pa_edit_domaine(vnumdomaine,vnumdomaine_appartenir,vnumsociete,vlibdomaine,vabrdomaine,vdscdomaine,vlogdomaine);
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Edition effectuée dans la table DOMAINE');
+		htp.print('<a class="btn btn-primary" href="afft_domaine" >>Consulter la liste DOMAINE</a>');
+		htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -425,7 +478,15 @@ IS
 		D.LIBDOMAINE, D.NUMDOMAINE
 	FROM 
 		DOMAINE D;
+
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);	
+      	get_info_user_right(user_right);
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -434,55 +495,65 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Edition domaine');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_domaine', 'POST');
-	htp.print('<table class="table">');
-	htp.print('<input type="hidden" name="vnumdomaine" value="' || vnumdomaine || '"/>');
-	htp.tableRowOpen;
-	htp.print('<td>Domaine père</td>');
-	htp.print('<td>');
-	htp.formSelectOpen('vnumdomaine_appartenir', '');
-	FOR rec IN lstDom LOOP
-		htp.formSelectOption(
-		rec.libdomaine,
-		cattributes=>'value=' || rec.numdomaine
-		);
-	END LOOP;
-	htp.formSelectClose;
-	htp.print('</td>');
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.print('<td>Societe</td>');
-	htp.print('<td>');
-	htp.formSelectOpen('vnumsociete', '');
-	FOR rec IN lstSoc LOOP
-		htp.formSelectOption(
-		rec.nomsociete,
-		cattributes=>'value=' || rec.numsociete
-		);
-	END LOOP;
-	htp.formSelectClose;
-	htp.print('</td>');
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Libellé');
-	htp.tableData(htf.formText('vlibdomaine', 50));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Abréviation');
-	htp.tableData(htf.formText('vabrdomaine', 32));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Description');
-	htp.tableData(htf.formText('vdscdomaine', 1000));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Logo');
-	htp.tableData(htf.formText('vlogdomaine', 100));
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		htp.header(1, 'Edition domaine');
+		htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_domaine', 'POST');
+		htp.print('<table class="table">');
+		htp.print('<input type="hidden" name="vnumdomaine" value="' || vnumdomaine || '"/>');
+		htp.tableRowOpen;
+		htp.print('<td>Domaine père</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnumdomaine_appartenir', '');
+		FOR rec IN lstDom LOOP
+			htp.formSelectOption(
+			rec.libdomaine,
+			cattributes=>'value=' || rec.numdomaine
+			);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.print('<td>Societe</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnumsociete', '');
+		FOR rec IN lstSoc LOOP
+			htp.formSelectOption(
+			rec.nomsociete,
+			cattributes=>'value=' || rec.numsociete
+			);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Libellé');
+		htp.tableData(htf.formText('vlibdomaine', 50));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Abréviation');
+		htp.tableData(htf.formText('vabrdomaine', 32));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Description');
+		htp.tableData(htf.formText('vdscdomaine', 1000));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Logo');
+		htp.tableData(htf.formText('vlogdomaine', 100));
+		htp.tableRowClose;
+		htp.tableClose;
+		htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+		htp.formClose;
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -518,7 +589,14 @@ PROCEDURE ui_execdel_domaine
 	)
 IS
 rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);	
+      	get_info_user_right(user_right);
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -527,14 +605,24 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_domaine(vnumdomaine);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Suppression élément dans la table DOMAINE');
-	htp.print('<a class="btn btn-primary" href="afft_domaine" >>Consulter la liste DOMAINE</a>');
-	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		pa_del_domaine(vnumdomaine);
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Suppression élément dans la table DOMAINE');
+		htp.print('<a class="btn btn-primary" href="afft_domaine" >>Consulter la liste DOMAINE</a>');
+		htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
