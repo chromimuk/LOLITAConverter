@@ -27,38 +27,48 @@ BEGIN
 	htp.title('Affichage table message');
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headClose;
-	htp.bodyOpen;
-	htp.print('<div class="container">');
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Liste message');
-	htp.print('<table class="table">');
-	htp.tableRowOpen(cattributes => 'class=active');
-		htp.tableHeader('Dans le sujet');
-		htp.tableHeader('Ecrit par');
-		htp.tableHeader('Message');
-		htp.tableHeader('Date');
-		htp.tableHeader('N° dans sujet');
-		htp.tableHeader('Actions');
-	htp.tableRowClose;
-	FOR rec IN lst LOOP
-	htp.tableRowOpen;
-		htp.tableData(rec.titsujet);
-		htp.tableData(rec.nommembre);
-		htp.tableData(rec.texmessage);
-		htp.tableData(rec.dtemessage);
-		htp.tableData(rec.nsumessage);
-		htp.tableData(
-			htf.anchor('ui_frmedit_message?vnummessage=' || rec.nummessage, 'Modifier')
-			|| ' ou ' ||
-			htf.anchor('ui_execdel_message?vnummessage=' || rec.nummessage, 'Supprimer')
-		);
-	htp.tableRowClose;
-	END LOOP;
-	htp.tableClose;
-	htp.print('</div>');
+	
+	if (user_id >= 0)
+	then 
+	
+		htp.bodyOpen;
+		htp.print('<div class="container">');
+		htp.header(1, '<a href="hello">');
+		htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Liste message');
+		htp.print('<table class="table">');
+		htp.tableRowOpen(cattributes => 'class=active');
+			htp.tableHeader('Dans le sujet');
+			htp.tableHeader('Ecrit par');
+			htp.tableHeader('Message');
+			htp.tableHeader('Date');
+			htp.tableHeader('N° dans sujet');
+			htp.tableHeader('Actions');
+		htp.tableRowClose;
+		FOR rec IN lst LOOP
+		htp.tableRowOpen;
+			htp.tableData(rec.titsujet);
+			htp.tableData(rec.nommembre);
+			htp.tableData(rec.texmessage);
+			htp.tableData(rec.dtemessage);
+			htp.tableData(rec.nsumessage);
+			htp.tableData(
+				htf.anchor('ui_frmedit_message?vnummessage=' || rec.nummessage, 'Modifier')
+				|| ' ou ' ||
+				htf.anchor('ui_execdel_message?vnummessage=' || rec.nummessage, 'Supprimer')
+			);
+		htp.tableRowClose;
+		END LOOP;
+		htp.tableClose;
+		htp.print('</div>');
+		
+	else
+		htp.print('Non connecté');
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
+	
 	htp.bodyClose;
 	htp.htmlClose;
 END;
