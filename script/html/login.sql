@@ -16,7 +16,7 @@ BEGIN
 		MDPMEMBRE = vmdp;
 		
 	set_cookie(vnummembre);
-	ui_execlogin;
+	ui_execlog(0);
 	
 	EXCEPTION
 	    WHEN NO_DATA_FOUND THEN  
@@ -41,7 +41,7 @@ BEGIN
 	
 	owa_util.http_header_close;
 	
-	hello;
+	ui_execlog(1);
 COMMIT;
 END;
 /
@@ -70,14 +70,21 @@ END;
 
 
 CREATE OR REPLACE
-PROCEDURE ui_execlogin
+PROCEDURE ui_execlog
+	(
+		logout in number
+	)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 		htp.headOpen;
-			htp.title('Connexion');
+			if(logout = 1) then
+				htp.title('Déconnexion');
+			else
+				htp.title('Connexion');
+			end if;
 			htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 		htp.headClose;
 		htp.bodyOpen;
@@ -86,14 +93,17 @@ BEGIN
 			htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 			htp.header(1, '</a>');
 			htp.hr;
-			htp.header(2, 'Connexion réussie !');
+			if(logout = 1) then
+				htp.header(2, 'Déconnexion réussie !');
+			else
+				htp.header(2, 'Connexion réussie !');
+			end if;
 			htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
 	htp.htmlClose;
 END;
 /
-
 
 
 CREATE OR REPLACE
