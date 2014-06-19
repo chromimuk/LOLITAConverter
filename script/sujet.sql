@@ -194,7 +194,7 @@ BEGIN
 		END LOOP;
 		htp.tableClose;
 		
-		if (vstasujet = 1) then
+		if (vstasujet = 0) then
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_message?vnumsujet=' || vnumsujet || '" >Repondre</a>');
 		end if;
 		
