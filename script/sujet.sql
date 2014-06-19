@@ -172,6 +172,226 @@ END;
 /
 
 
+--1.3 Affichage des elements d'un sujet selon son type
+CREATE OR REPLACE
+PROCEDURE afft_sujet_from_libtypesujet
+	(vlibtypesujet varchar default 'QR')
+IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	vpreclient varchar2(30);
+	vnomclient varchar2(30);
+	vpreexpert varchar2(30);
+	vnomexpert varchar2(30);
+	CURSOR lst
+	IS
+	SELECT
+		  S.NUMSUJET
+		 ,S.TITSUJET
+		 ,S.STASUJET
+		 ,S.LIBVISIBILITE
+		 ,S.DTESUJET
+		 ,D.LIBDOMAINE
+		 ,S.NUMMEMBRE
+		 ,S.NUMMEMBRE_HER_MEMBRE
+	FROM
+		SUJET S Inner Join DOMAINE D
+		ON S.NUMDOMAINE = D.NUMDOMAINE
+	WHERE
+		S.LIBTYPESUJET = vlibtypesujet
+	ORDER BY
+		S.DTESUJET DESC
+	;
+BEGIN
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Affichage table sujet');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'LOLITA');
+	htp.hr;
+	IF (vlibtypesujet = 'QR') THEN
+		htp.header(2, 'Questions/r‚ponses');
+	ELSIF (vlibtypesujet = 'FQ') THEN
+		htp.header(2, 'Foire aux questions');
+	END IF;
+	htp.print('<table class="table">');
+	htp.tableRowOpen(cattributes => 'class=active');
+		htp.tableHeader('Nø');
+		htp.tableHeader('Titre');
+		htp.tableHeader('Domaine');
+		IF (vlibtypesujet = 'QR') THEN
+			htp.tableHeader('Client');
+		END IF;
+		htp.tableHeader('Expert');
+		htp.tableHeader('Visibilit‚');
+		htp.tableHeader('Date');
+		htp.tableHeader('Actions');
+	htp.tableRowClose;
+	FOR rec IN lst LOOP
+		SELECT PREMEMBRE, NOMMEMBRE
+		INTO vpreclient, vnomclient
+		FROM membre
+		WHERE nummembre = rec.nummembre;
+		SELECT PREMEMBRE, NOMMEMBRE
+		INTO vpreexpert, vnomexpert
+		FROM membre
+		WHERE nummembre = rec.nummembre_her_membre;
+		IF (rec.stasujet = 0) THEN
+			htp.tableRowOpen(cattributes => 'class=warning');
+		ELSE
+			htp.tableRowOpen;
+		END IF;
+			htp.tableData(rec.numsujet);
+			htp.tableData(
+				htf.anchor(
+					'afft_sujet_from_numsujet?vnumsujet=' || rec.numsujet,
+					rec.titsujet
+				)
+			);
+			htp.tableData(rec.libdomaine);
+			IF (vlibtypesujet = 'QR') THEN
+			htp.tableData(
+				htf.anchor(
+					'afft_membre_from_nummembre?vnummembre=' || rec.nummembre,
+					vpreclient || ' ' || vnomclient
+				)
+			);
+			END IF;
+			htp.tableData(
+				htf.anchor(
+					'afft_membre_from_nummembre?vnummembre=' || rec.nummembre_her_membre,
+					vpreexpert || ' ' || vnomexpert
+				)
+			);
+			htp.tableData(rec.libvisibilite);
+			htp.tableData(rec.dtesujet);
+			htp.tableData(
+				htf.anchor('ui_frmedit_sujet?vnumsujet=' || rec.numsujet, 'Modifier')
+				|| ' ou ' ||
+				htf.anchor('ui_execdel_sujet?vnumsujet=' || rec.numsujet, 'Supprimer')
+			);
+		htp.tableRowClose;
+	END LOOP;
+	htp.tableClose;
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
+END;
+/
+
+
+
+--1.4 Affichage des sujets pour users
+CREATE OR REPLACE
+PROCEDURE afft_sujet_from_type_user
+	(vlibtypesujet varchar default 'QR')
+IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	vpreclient varchar2(30);
+	vnomclient varchar2(30);
+	vpreexpert varchar2(30);
+	vnomexpert varchar2(30);
+	CURSOR lst
+	IS
+	SELECT
+		  S.NUMSUJET
+		 ,S.TITSUJET
+		 ,S.STASUJET
+		 ,S.LIBVISIBILITE
+		 ,S.DTESUJET
+		 ,D.LIBDOMAINE
+		 ,S.NUMMEMBRE
+		 ,S.NUMMEMBRE_HER_MEMBRE
+	FROM
+		SUJET S Inner Join DOMAINE D
+		ON S.NUMDOMAINE = D.NUMDOMAINE
+	WHERE
+		S.LIBTYPESUJET = vlibtypesujet
+	ORDER BY
+		S.DTESUJET DESC
+	;
+BEGIN
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Affichage table sujet');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'LOLITA');
+	htp.hr;
+	IF (vlibtypesujet = 'QR') THEN
+		htp.header(2, 'Questions/reponses');
+	ELSIF (vlibtypesujet = 'FQ') THEN
+		htp.header(2, 'Foire aux questions');
+	END IF;
+	htp.print('<table class="table">');
+	htp.tableRowOpen(cattributes => 'class=active');
+		htp.tableHeader('Nø');
+		htp.tableHeader('Titre');
+		htp.tableHeader('Domaine');
+		IF (vlibtypesujet = 'QR') THEN
+			htp.tableHeader('Client');
+		END IF;
+		htp.tableHeader('Expert');
+		htp.tableHeader('Date');
+	htp.tableRowClose;
+	FOR rec IN lst LOOP
+		SELECT PREMEMBRE, NOMMEMBRE
+		INTO vpreclient, vnomclient
+		FROM membre
+		WHERE nummembre = rec.nummembre;
+		
+		SELECT PREMEMBRE, NOMMEMBRE
+		INTO vpreexpert, vnomexpert
+		FROM membre
+		WHERE nummembre = rec.nummembre_her_membre;
+		
+		IF (rec.stasujet = 0) THEN
+			htp.tableRowOpen(cattributes => 'class=warning');
+		ELSE
+			htp.tableRowOpen;
+		END IF;
+		htp.tableData(rec.numsujet);
+		htp.tableData(
+			htf.anchor(
+				'afft_sujet_from_numsujet?vnumsujet=' || rec.numsujet,
+				rec.titsujet
+			)
+		);
+		htp.tableData(rec.libdomaine);
+		IF (vlibtypesujet = 'QR') THEN
+		htp.tableData(
+			htf.anchor(
+				'afft_membre_from_nummembre?vnummembre=' || rec.nummembre,
+				vpreclient || ' ' || vnomclient
+			)
+		);
+		END IF;
+		htp.tableData(
+			htf.anchor(
+				'afft_membre_from_nummembre?vnummembre=' || rec.nummembre_her_membre,
+				vpreexpert || ' ' || vnomexpert
+			)
+		);
+		htp.tableData(rec.dtesujet);
+		htp.tableRowClose;
+	END LOOP;
+	htp.tableClose;
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
+END;
+/
+
+
+
+
+
 
 
 --2 Insertion
