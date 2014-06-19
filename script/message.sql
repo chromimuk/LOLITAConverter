@@ -20,7 +20,7 @@ IS
 	ORDER BY
 		MS.NUMMESSAGE
 	;
-		user_id number(5);
+	user_id number(5);
 	user_name varchar2(80);	
 	user_type varchar2(2);
 	user_right varchar2(4);
@@ -36,13 +36,15 @@ BEGIN
 	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
 	htp.headClose;
 	
+		
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	
 	header(user_id, user_name, user_type, user_right);
 	
 	if (user_id >= 0)
 	then 
-	
-		htp.bodyOpen;
-		htp.print('<div class="container">');
+
 		htp.header(1, '<a href="hello">');
 		htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 		htp.header(1, '</a>');
@@ -73,7 +75,6 @@ BEGIN
 		END LOOP;
 		htp.tableClose;
 		htp.print('</div>');
-		
 	else
 		htp.br;
 		htp.br;
