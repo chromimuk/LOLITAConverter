@@ -169,6 +169,8 @@ BEGIN
                    MEMBRE
            WHERE
                    nummembre = user_id;
+   else
+   	user_id := -1;
    end if;
    EXCEPTION
            WHEN NO_DATA_FOUND THEN
