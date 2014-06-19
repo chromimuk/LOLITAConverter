@@ -5,6 +5,7 @@ IS
 	cookie_lolita owa_cookie.cookie;
 	user_id  varchar(5);
 	user_name varchar(50);
+	user_type varchar(1);
 BEGIN
     	cookie_lolita := owa_cookie.get('user');
 
