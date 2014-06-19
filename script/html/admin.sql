@@ -6,6 +6,7 @@ IS
 	user_name varchar2(80);
 	user_type varchar2(2);
 	user_right varchar2(4);
+	vnumsociete number(3);
 BEGIN
 	get_info_user(user_id, user_name, user_type);
      	get_info_user_right(user_right);
@@ -32,7 +33,8 @@ BEGIN
 				htp.print('<a class="btn btn-primary" href="ui_frmadd_autoriser" >Ajouter un droit sur un domaine</a>');
 				htp.hr;
 				htp.header(2, 'Société');
-				htp.print('<a class="btn btn-primary" href="ui_frmedit_societe?vnumsociete=1" >Modifier de sa soci�t�</a>');
+				Select NUMSOCIETE Into vnumsociete From MEMBRE Where NUMMEMBRE = user_id;
+				htp.print('<a class="btn btn-primary" href="ui_frmedit_societe?vnumsociete=' || vnumsociete || '" >Modifier de sa soci�t�</a>');
 				htp.hr;
 			else
 				htp.br;
