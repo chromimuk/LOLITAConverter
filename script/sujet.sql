@@ -162,7 +162,7 @@ BEGIN
 		htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
-	htp.print('<a class="btn btn-primary" href="ui_frmadd_message_sujet?vnumsujet=' || vnumsujet || '" >Repondre</a>');
+	htp.print('<a class="btn btn-primary" href="ui_frmadd_message?vnumsujet=' || vnumsujet || '" >Repondre</a>');
 	htp.hr;
 	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	htp.print('</div>');
