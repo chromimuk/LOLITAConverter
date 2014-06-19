@@ -742,7 +742,6 @@ BEGIN
 		htp.tableClose;
 		htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
 		htp.formClose;
-		htp.print('</div>');
 		
 	else
 		htp.br;
@@ -751,6 +750,7 @@ BEGIN
 		htp.br;
 		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	end if;	
+	htp.print('</div>');
 
 	htp.bodyClose;
 	htp.htmlClose;
