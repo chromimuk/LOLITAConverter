@@ -32,52 +32,45 @@ BEGIN
 	header(user_id, user_name, user_type, user_right);
 	if(user_id >= 0)
 	then
-		--htp.header(1, '<a href="hello">');
-		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-		--htp.header(1, '</a>');
 		htp.hr;
-		htp.header(2, 'Liste societe');
+		htp.header(2, 'Liste des societes');
 		htp.print('<table class="table">');
 		htp.tableRowOpen(cattributes => 'class=active');
-		htp.tableHeader('Numéro');
-		htp.tableHeader('Type');
-		htp.tableHeader('Nom');
-		htp.tableHeader('Description');
-		htp.tableHeader('Date inscription');
-		htp.tableHeader('Mail');
-		htp.tableHeader('Domaine internet');
-		htp.tableHeader('Numéro de voie');
-		htp.tableHeader('Nom de la voie');
-		htp.tableHeader('Code postal');
-		htp.tableHeader('Ville');
-		htp.tableHeader('Pays');
-		htp.tableHeader('Téléphone');
-		htp.tableHeader('Logo');
-		htp.tableHeader('Wallpaper');
+			htp.tableHeader('N°');
+			htp.tableHeader('Nom');
+			htp.tableHeader('Description');
+			htp.tableHeader('Date inscription');
+			htp.tableHeader('Mail');
+			htp.tableHeader('Adresse');
+			htp.tableHeader('Téléphone');
+			htp.tableHeader('Actions');
 		htp.tableRowClose;
 		FOR rec IN lst LOOP
-		htp.tableRowOpen;
-		htp.tableData(rec.numsociete);
-		htp.tableData(rec.typsociete);
-		htp.tableData(rec.nomsociete);
-		htp.tableData(rec.dscsociete);
-		htp.tableData(rec.dtesociete);
-		htp.tableData(rec.maisociete);
-		htp.tableData(rec.domsociete);
-		htp.tableData(rec.numadrsociete);
-		htp.tableData(rec.nomadrsociete);
-		htp.tableData(rec.copadrsociete);
-		htp.tableData(rec.viladrsociete);
-		htp.tableData(rec.payadrsociete);
-		htp.tableData(rec.telsociete);
-		htp.tableData(rec.logsociete);
-		htp.tableData(rec.fonsociete);
-		htp.tableData(
-			htf.anchor('ui_frmedit_societe?vnumsociete=' || rec.numsociete, 'Modifier')
-			|| ' ou ' ||
-			htf.anchor('ui_execdel_societe?vnumsociete=' || rec.numsociete, 'Supprimer')
-		);
-		htp.tableRowClose;
+			if (rec.typsociete = 'E') then
+				htp.tableRowOpen(cattributes => 'class=success');
+			else
+				htp.tableRowOpen(cattributes => 'class=info');
+			end if;
+			htp.tableData(rec.numsociete);
+			htp.tableData(
+				htf.anchor('afft_societe_from_numsociete?vnumsociete=' || rec.numsociete,
+				rec.nomsociete)
+			);
+			htp.tableData(rec.dscsociete);
+			htp.tableData(rec.dtesociete);
+			htp.tableData(rec.maisociete);
+			htp.tableData(
+				rec.numadrsociete || ' ' || rec.nomadrsociete || '<br/>' ||
+				rec.copadrsociete || ' ' || rec.viladrsociete || '<br/>' ||
+				rec.payadrsociete
+			);
+			htp.tableData(rec.telsociete);
+			htp.tableData(
+				htf.anchor('ui_frmedit_societe?vnumsociete=' || rec.numsociete, 'Modifier')
+				|| ' ou ' ||
+				htf.anchor('ui_execdel_societe?vnumsociete=' || rec.numsociete, 'Supprimer')
+			);
+			htp.tableRowClose;
 		END LOOP;
 		htp.tableClose;
 	else
