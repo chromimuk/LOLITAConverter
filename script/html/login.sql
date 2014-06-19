@@ -1,4 +1,3 @@
--- does not work :(
 CREATE OR REPLACE PROCEDURE pa_login
 	(
 		vemail in varchar2,
@@ -24,6 +23,13 @@ BEGIN
 	    login;
 	    
 COMMIT;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE logout
+IS
+BEGIN
+	owa_cookie.remove('user', NULL);
 END;
 /
 
