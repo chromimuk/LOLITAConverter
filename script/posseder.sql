@@ -77,7 +77,8 @@ END;
 
 --2.1.3 Formulaire d'insertion
 ------- Validation redirige vers ui_execadd_posseder
-CREATE OR REPLACE PROCEDURE ui_frmadd_posseder
+CREATE OR REPLACE 
+PROCEDURE ui_frmadd_posseder
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	CURSOR lstCat IS
@@ -97,7 +98,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Ajout élément dans la table posseder');
+	htp.header(1, 'Attribution catégorie à un domaine');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_posseder', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
