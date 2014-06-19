@@ -546,7 +546,9 @@ END;
 
 --3.1.3 Formulaire d'�dition
 ------- Validation redirige vers ui_execedit_sujet
-CREATE OR REPLACE PROCEDURE ui_frmedit_sujet
+CREATE OR REPLACE
+PROCEDURE ui_frmedit_sujet
+	(vnumsujet in number)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
@@ -567,28 +569,36 @@ BEGIN
 	htp.tableData(htf.formText('vnumdomaine', 2));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro du membre');
-	htp.tableData(htf.formText('vnummembre', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Numéro du membre qui prend en charge');
-	htp.tableData(htf.formText('vnummembre_her_membre', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
 	htp.tableData('Titre');
 	htp.tableData(htf.formText('vtitsujet', 80));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Statut');
-	htp.tableData(htf.formText('vstasujet', 1));
+		htp.print('<td>Statut</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vstasujet', '');
+			htp.formSelectOption(0);
+			htp.formSelectOption(1);
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Visibilité (PU, PR, EN)');
-	htp.tableData(htf.formText('vlibvisibilite', 2));
+		htp.print('<td>Visibilité</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vlibvisibilite', '');
+			htp.formSelectOption('PR');
+			htp.formSelectOption('PU');
+			htp.formSelectOption('EN');
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Type (QR, FQ)');
-	htp.tableData(htf.formText('vlibtypesujet', 2));
+		htp.print('<td>Type du sujet</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vlibtypesujet', '');
+			htp.formSelectOption('QR');
+			htp.formSelectOption('FQ');
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
@@ -799,8 +809,8 @@ BEGIN
 	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Suppression �l�ment dans la table SUJET');
-	htp.print('<a class="btn btn-primary" href="afft_sujet" >>Consulter la liste SUJET</a>');
-	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	htp.print('<a class="btn btn-primary" href="afft_sujet" >Consulter la liste SUJET</a>');
+	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -819,6 +829,7 @@ PROCEDURE pa_del_sujet
 	)
 IS
 BEGIN
+	DELETE FROM MESSAGE WHERE NUMSUJET = numsujet;
 	DELETE FROM 
 		SUJET
 	WHERE 
