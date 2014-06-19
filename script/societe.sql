@@ -314,6 +314,53 @@ END;
 
 --3 Edition
 
+
+--3.1.1 Requête SQL
+CREATE OR REPLACE
+PROCEDURE pa_edit_societe
+	(
+		vnumsociete in number,
+		vtypsociete in varchar2,
+		vnomsociete in varchar2,
+		vdscsociete in clob,
+		vmaisociete in varchar2,
+		vdomsociete in varchar2,
+		vnumadrsociete in varchar2,
+		vnomadrsociete in varchar2,
+		vcopadrsociete in varchar2,
+		vviladrsociete in varchar2,
+		vpayadrsociete in varchar2,
+		vtelsociete in varchar2,
+		vlogsociete in varchar2,
+		vfonsociete in varchar2
+	)
+IS
+BEGIN
+	UPDATE 
+		SOCIETE
+	SET
+		typsociete = vtypsociete,
+		nomsociete = vnomsociete,
+		dscsociete = vdscsociete,
+		dtesociete = TO_CHAR(SYSDATE),
+		maisociete = vmaisociete,
+		domsociete = vdomsociete,
+		numadrsociete = vnumadrsociete,
+		nomadrsociete = vnomadrsociete,
+		copadrsociete = vcopadrsociete,
+		viladrsociete = vviladrsociete,
+		payadrsociete = vpayadrsociete,
+		telsociete = vtelsociete,
+		logsociete = vlogsociete,
+		fonsociete = vfonsociete
+	WHERE 
+		numsociete = vnumsociete;
+	COMMIT;
+END;
+/
+
+
+
 --3.1.2 Page de validation d'édition
 -------Appel à la requête pa_edit_societe
 CREATE OR REPLACE
@@ -363,50 +410,6 @@ END;
 /
 
 
---3.1.1 Requête SQL
-CREATE OR REPLACE
-PROCEDURE pa_edit_societe
-	(
-		vnumsociete in number,
-		vtypsociete in varchar2,
-		vnomsociete in varchar2,
-		vdscsociete in clob,
-		vmaisociete in varchar2,
-		vdomsociete in varchar2,
-		vnumadrsociete in varchar2,
-		vnomadrsociete in varchar2,
-		vcopadrsociete in varchar2,
-		vviladrsociete in varchar2,
-		vpayadrsociete in varchar2,
-		vtelsociete in varchar2,
-		vlogsociete in varchar2,
-		vfonsociete in varchar2
-	)
-IS
-BEGIN
-	UPDATE 
-		SOCIETE
-	SET
-		typsociete = vtypsociete,
-		nomsociete = vnomsociete,
-		dscsociete = vdscsociete,
-		maisociete = vmaisociete,
-		domsociete = vdomsociete,
-		numadrsociete = vnumadrsociete,
-		nomadrsociete = vnomadrsociete,
-		copadrsociete = vcopadrsociete,
-		viladrsociete = vviladrsociete,
-		payadrsociete = vpayadrsociete,
-		telsociete = vtelsociete,
-		logsociete = vlogsociete,
-		fonsociete = vfonsociete
-	WHERE 
-		numsociete = vnumsociete;
-	COMMIT;
-END;
-/
-
-
 --3.1.3 Formulaire d'édition
 ------- Validation redirige vers ui_execedit_societe
 CREATE OR REPLACE PROCEDURE ui_frmedit_societe
@@ -415,6 +418,14 @@ CREATE OR REPLACE PROCEDURE ui_frmedit_societe
 )
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstMem IS
+		SELECT
+		M.NUMMEMBRE, M.NOMMEMBRE, M.PREMEMBRE
+		FROM
+		MEMBRE M
+		ORDER BY
+		M.NUMMEMBRE
+		;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -430,8 +441,13 @@ BEGIN
 	htp.tableRowOpen;
 	htp.print('<input type="hidden" name="vnumsociete" value="' || vnumsociete || '"/>');
 	htp.tableRowOpen;
-	htp.tableData('Type');
-	htp.tableData(htf.formText('vtypsociete', 1));
+		htp.print('<td>Type</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vtypsociete', '');
+			htp.formSelectOption('C');
+			htp.formSelectOption('E');
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Nom');
@@ -440,10 +456,6 @@ BEGIN
 	htp.tableRowOpen;
 	htp.tableData('Description');
 	htp.tableData(htf.formText('vdscsociete', 1000));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Date inscription');
-	htp.tableData(htf.formText('vdtesociete', 10));
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Mail');
