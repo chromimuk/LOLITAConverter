@@ -4,8 +4,10 @@ IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	cookie_lolita owa_cookie.cookie;
 	user_id  varchar(5);
+	user_name varchar(50);
 BEGIN
-    cookie_lolita := owa_cookie.get('user');
+    	cookie_lolita := owa_cookie.get('user');
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 		htp.headOpen;
@@ -21,8 +23,14 @@ BEGIN
 			htp.print('</div>');
 			if (cookie_lolita.num_vals > 0)
 			then 
-			    user_id  := cookie_lolita.vals(1);
-			    htp.header(2, 'Bonjour ' || user_id);
+				user_id  := cookie_lolita.vals(1);
+				SELECT 
+					premembre || ' ' || nommembre into user_name
+				FROM
+					MEMBRE
+				WHERE
+					nummembre = user_id;
+				htp.header(2, 'Bonjour ' || user_name);
 			end if;
 			htp.br;
 			htp.print('<a class="btn btn-success" href="ui_frmadd_membre" >Inscription</a>');
