@@ -490,7 +490,8 @@ CREATE OR REPLACE PROCEDURE pa_add_sujet
 		vnummembre_her_membre in number,
 		vtitsujet in varchar2,
 		vlibvisibilite in varchar2,
-		vlibtypesujet in varchar2
+		vlibtypesujet in varchar2,
+		vnumsujet out number
 	)
 IS
 BEGIN
@@ -506,6 +507,11 @@ BEGIN
 		vlibtypesujet,
 		TO_CHAR(SYSDATE)
 	);
+	
+	SELECT
+		seq_sujet.currval into vnumsujet
+	FROM
+		dual;
 COMMIT;
 END;
 /
@@ -527,6 +533,7 @@ IS
 	user_name varchar2(80);
 	user_type varchar2(2);
 	user_right varchar2(4);
+	vnumsujet number(5);
 BEGIN
 	get_info_user(user_id, user_name, user_type);
     	get_info_user_right(user_right);
@@ -544,11 +551,12 @@ BEGIN
 
 	if (user_id >= 0)
 	then 
-		pa_add_sujet(vnumdomaine,user_id,vnummembre_her_membre,vtitsujet,vlibvisibilite,vlibtypesujet);
+		pa_add_sujet(vnumdomaine,user_id,vnummembre_her_membre,vtitsujet,vlibvisibilite,vlibtypesujet,vnumsujet);
 	
 		htp.hr;
 		htp.header(2, 'Ajout effectue dans la table sujet');
-		htp.print('<a class="btn btn-primary" href="afft_sujet" >Voir la liste complete</a>');
+		htp.print('<a class="btn btn-primary" href="ui_frmadd_message?vnumsujet=');
+		htp.print(vnumsujet || '">Ecrire un premier message</a>');
 		htp.print('</div>');
 		
 	else
