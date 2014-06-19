@@ -86,7 +86,7 @@ BEGIN
 			htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 			htp.header(1, '</a>');
 			htp.hr;
-			htp.header(2, 'Connexion réussie');
+			htp.header(2, 'Connexion réussie !');
 			htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
