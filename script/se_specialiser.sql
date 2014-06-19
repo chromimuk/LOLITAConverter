@@ -144,16 +144,34 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Ajout élément dans la table se_specialiser');
+	htp.header(1, 'Specialiser un membre');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_se_specialiser', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Numéro du domaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
+	htp.print('<td>Domaine</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumdomaine', '');
+	FOR rec IN lstDom LOOP
+		htp.formSelectOption(
+		rec.libdomaine,
+		cattributes=>'value=' || rec.numdomaine
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro du membre');
-	htp.tableData(htf.formText('vnummembre', 5));
+	htp.print('<td>Membre</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnummembre', '');
+	FOR rec IN lstMem LOOP
+		htp.formSelectOption(
+		rec.premembre || ' ' || rec.nommembre,
+		cattributes=>'value=' || rec.nummembre
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
