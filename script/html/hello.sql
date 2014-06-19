@@ -111,12 +111,15 @@ BEGIN
 				htp.br;
 				htp.br;
 				
-				if( user_type = 'C' and user_right = 'D03')
+				if(user_right = 'D03')
 				then
 					htp.print('<a class="btn btn-info"  style="float: right" href="admin" >Administration</a>');
-				elsif( user_type = 'E' and user_right = 'D03')
-				then
-					htp.print('<a class="btn btn-danger"  style="float: right" href="admin_expert" >Administration expert</a>');
+				
+					if( user_type = 'E' and user_right = 'D03')
+					then
+						htp.print('<a class="btn btn-danger"  style="float: right; margin-right: 10px;" href="admin_expert" >Administration expert</a>');
+					end if;
+					
 				elsif(user_type = 'null')
 				then
 					htp.print('Pas de droits administration');
