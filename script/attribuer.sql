@@ -84,7 +84,14 @@ CREATE OR REPLACE PROCEDURE ui_execadd_attribuer
 
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+	get_info_user_right(user_right);
+      
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -93,13 +100,23 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_attribuer(vcode,vnummembre);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Ajout effectue dans la table attribuer');
-	htp.print('<a class="btn btn-primary" href="afft_attribuer" >Voir la liste complete</a>');
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		pa_add_attribuer(vcode,vnummembre);
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Ajout effectue dans la table attribuer');
+		htp.print('<a class="btn btn-primary" href="afft_attribuer" >Voir la liste complete</a>');
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -132,7 +149,14 @@ IS
 		ORDER BY
 			C.CODE
 		;
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+      	get_info_user_right(user_right);
+      
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -141,33 +165,43 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Attribuer un droit à un membre');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_attribuer', 'POST');
-	htp.print('<table class="table">');
-	htp.tableRowOpen;
-		htp.print('<td>Code</td>');
-		htp.print('<td>');
-		htp.formSelectOpen('vcode', '');
-		FOR rec IN lstCod LOOP
-			htp.formSelectOption(rec.code);
-		END LOOP;
-		htp.formSelectClose;
-		htp.print('</td>');
-	htp.tableRowClose;
-	htp.tableRowOpen;
-		htp.print('<td>Membre</td>');
-		htp.print('<td>');
-		htp.formSelectOpen('vnummembre', '');
-		FOR rec IN lstMem LOOP
-			htp.formSelectOption(rec.premembre || ' ' || rec.nommembre,
-				cattributes=>'value=' || rec.nummembre);
-		END LOOP;
-		htp.formSelectClose;
-		htp.print('</td>');
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		htp.header(1, 'Attribuer un droit à un membre');
+		htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_attribuer', 'POST');
+		htp.print('<table class="table">');
+		htp.tableRowOpen;
+			htp.print('<td>Code</td>');
+			htp.print('<td>');
+			htp.formSelectOpen('vcode', '');
+			FOR rec IN lstCod LOOP
+				htp.formSelectOption(rec.code);
+			END LOOP;
+			htp.formSelectClose;
+			htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+			htp.print('<td>Membre</td>');
+			htp.print('<td>');
+			htp.formSelectOpen('vnummembre', '');
+			FOR rec IN lstMem LOOP
+				htp.formSelectOption(rec.premembre || ' ' || rec.nommembre,
+					cattributes=>'value=' || rec.nummembre);
+			END LOOP;
+			htp.formSelectClose;
+			htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableClose;
+		htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+		htp.formClose;
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
