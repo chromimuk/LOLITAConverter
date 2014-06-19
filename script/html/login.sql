@@ -29,8 +29,12 @@ END;
 CREATE OR REPLACE PROCEDURE logout
 IS
 BEGIN
+   	owa_util.mime_header('text/html', FALSE);
+
 	owa_cookie.remove('user', NULL);
 	hello;
+	
+	owa_util.http_header_close;
 END;
 /
 
