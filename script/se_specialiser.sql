@@ -16,7 +16,14 @@ IS
 		ON S.nummembre = M.nummembre
 		Inner Join DOMAINE D
 		ON S.numdomaine = D.numdomaine;
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+      	get_info_user_right(user_right);
+      
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -25,31 +32,41 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Liste se_specialiser');
-	htp.print('<table class="table">');
-	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro du domaine');
-	htp.tableHeader('Libellé du domaine');
-	htp.tableHeader('Numéro membre');
-	htp.tableHeader('Prénom/Nom du membre');
-	htp.tableHeader('Actions');
-	htp.tableRowClose;
-	FOR rec IN lst LOOP
-	htp.tableRowOpen;
-	htp.tableData(rec.numdomaine);
-	htp.tableData(rec.libdomaine);
-	htp.tableData(rec.nummembre);
-	htp.tableData(rec.premembre || ' ' || rec.nommembre);
-	htp.tableData(
-		htf.anchor('ui_execdel_se_specialiser?vnumdomaine=' || rec.numdomaine, 'Supprimer')
-	);
-	htp.tableRowClose;
-	END LOOP;
-	htp.tableClose;
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Liste se_specialiser');
+		htp.print('<table class="table">');
+		htp.tableRowOpen(cattributes => 'class=active');
+		htp.tableHeader('Numéro du domaine');
+		htp.tableHeader('Libellé du domaine');
+		htp.tableHeader('Numéro membre');
+		htp.tableHeader('Prénom/Nom du membre');
+		htp.tableHeader('Actions');
+		htp.tableRowClose;
+		FOR rec IN lst LOOP
+		htp.tableRowOpen;
+		htp.tableData(rec.numdomaine);
+		htp.tableData(rec.libdomaine);
+		htp.tableData(rec.nummembre);
+		htp.tableData(rec.premembre || ' ' || rec.nommembre);
+		htp.tableData(
+			htf.anchor('ui_execdel_se_specialiser?vnumdomaine=' || rec.numdomaine, 'Supprimer')
+		);
+		htp.tableRowClose;
+		END LOOP;
+		htp.tableClose;
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
@@ -178,7 +195,14 @@ PROCEDURE ui_execdel_se_specialiser
 	)
 IS
 rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+	get_info_user_right(user_right);
+	    
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -187,14 +211,24 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_se_specialiser(vnumdomaine);
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Suppression élément dans la table SE_SPECIALISER');
-	htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >>Consulter la liste SE_SPECIALISER</a>');
-	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+		pa_del_se_specialiser(vnumdomaine);
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Suppression élément dans la table SE_SPECIALISER');
+		htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >>Consulter la liste SE_SPECIALISER</a>');
+		htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
