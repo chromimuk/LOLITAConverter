@@ -75,11 +75,6 @@ BEGIN
 				htp.print('</div>');
 			end if;
 			
-		FOR i IN user_rights.FIRST .. user_rights.LAST
-		LOOP
-      			htp.print(user_rights(i));
-   		END LOOP;
-   			
 		htp.bodyClose;
 	htp.htmlClose;
 	EXCEPTION
