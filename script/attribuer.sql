@@ -143,11 +143,11 @@ IS
 		;
 	CURSOR lstCod IS
 		SELECT
-			C.CODE
+			C.CODE, C.LIBELLE
 		FROM
 			CODELOLITA C
 		ORDER BY
-			C.CODE
+			C.LIBELLE
 		;
 	user_id number(5);
 	user_name varchar2(80);
@@ -165,6 +165,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
+	
 	header(user_id, user_name, user_type, user_right);
 	if(user_id >= 0)
 	then
@@ -172,11 +173,12 @@ BEGIN
 		htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_attribuer', 'POST');
 		htp.print('<table class="table">');
 		htp.tableRowOpen;
-			htp.print('<td>Code</td>');
+			htp.print('<td>Libellé</td>');
 			htp.print('<td>');
-			htp.formSelectOpen('vcode', '');
+			htp.formSelectOpen('vcod', '');
 			FOR rec IN lstCod LOOP
-				htp.formSelectOption(rec.code);
+				htp.formSelectOption(rec.libelle,
+					cattributes=>'value=' || rec.code);
 			END LOOP;
 			htp.formSelectClose;
 			htp.print('</td>');
@@ -202,6 +204,7 @@ BEGIN
 		htp.br;
 		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	end if;
+	
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
