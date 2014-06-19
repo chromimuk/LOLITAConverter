@@ -175,7 +175,7 @@ BEGIN
 		htp.tableRowOpen;
 			htp.print('<td>Libellé</td>');
 			htp.print('<td>');
-			htp.formSelectOpen('vcod', '');
+			htp.formSelectOpen('vcode', '');
 			FOR rec IN lstCod LOOP
 				htp.formSelectOption(rec.libelle,
 					cattributes=>'value=' || rec.code);
