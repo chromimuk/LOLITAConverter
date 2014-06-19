@@ -204,44 +204,29 @@ END;
 
 --3 Edition
 
---3.1.3 Formulaire d'édition
-------- Validation redirige vers ui_execedit_autoriser
-CREATE OR REPLACE PROCEDURE ui_frmedit_autoriser
+--3.1.1 Requête SQL
+CREATE OR REPLACE
+PROCEDURE pa_edit_autoriser
+	(
+		vnummembre in number,
+		vcode in varchar2,
+		vnumdomaine in number
+	)
 IS
-	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
-	htp.print('<!DOCTYPE html>');
-	htp.htmlOpen;
-	htp.headOpen;
-	htp.title('Edition autoriser');
-	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
-	htp.headClose;
-	htp.bodyOpen;
-	htp.print('<div class="container">');
-	htp.header(1, 'Edition autoriser');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_autoriser', 'POST');
-	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('vnummembre');
-	htp.tableData(htf.formText('vnummembre', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vcode');
-	htp.tableData(htf.formText('vcode', 3));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('vnumdomaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
-	htp.print('</div>');
-	htp.bodyClose;
-	htp.htmlClose;
+	UPDATE 
+		AUTORISER
+	SET
+		code = vcode,
+	WHERE 
+		nature = 'DRO'
+	AND
+		nummembre = vnummembre
+	AND
+		numdomaine = vnumdomaine;
+	COMMIT;
 END;
 /
-
 
 --3.1.2 Page de validation d'édition
 -------Appel à la requête pa_edit_autoriser
@@ -281,32 +266,64 @@ END;
 /
 
 
---3.1.1 Requête SQL
-CREATE OR REPLACE
-PROCEDURE pa_edit_autoriser
-	(
-		vnummembre in number,
-		vcode in varchar2,
-		vnumdomaine in number
-	)
+--3.1.3 Formulaire d'édition
+------- Validation redirige vers ui_execedit_autoriser
+CREATE OR REPLACE PROCEDURE ui_frmedit_autoriser
 IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
-	UPDATE 
-		AUTORISER
-	SET
-		code = vcode,
-	WHERE 
-		nature = 'DRO'
-	AND
-		nummembre = vnummembre
-	AND
-		numdomaine = vnumdomaine;
-	COMMIT;
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Edition autoriser');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'Edition autoriser');
+	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_autoriser', 'POST');
+	htp.print('<table class="table">');
+	htp.tableRowOpen;
+	htp.tableData('vnummembre');
+	htp.tableData(htf.formText('vnummembre', 5));
+	htp.tableRowClose;
+	htp.tableRowOpen;
+	htp.tableData('vcode');
+	htp.tableData(htf.formText('vcode', 3));
+	htp.tableRowClose;
+	htp.tableRowOpen;
+	htp.tableData('vnumdomaine');
+	htp.tableData(htf.formText('vnumdomaine', 2));
+	htp.tableRowClose;
+	htp.tableClose;
+	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+	htp.formClose;
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
 END;
 /
 
 
+
 --4 Suppression
+
+--4.1.1 Requête SQL
+CREATE OR REPLACE
+PROCEDURE pa_del_autoriser
+	(
+		vnummembre in number
+	)
+IS
+BEGIN
+	DELETE FROM 
+		AUTORISER
+	WHERE 
+		nummembre = vnummembre;
+	COMMIT;
+END;
+/
+
 
 --4.1.2 Page de validation de suppression
 -------Appel à la requête pa_del_autoriser
@@ -342,21 +359,3 @@ EXCEPTION
 		htp.print('ERROR: ' || SQLCODE);
 END;
 /
-
-
---4.1.1 Requête SQL
-CREATE OR REPLACE
-PROCEDURE pa_del_autoriser
-	(
-		vnummembre in number
-	)
-IS
-BEGIN
-	DELETE FROM 
-		AUTORISER
-	WHERE 
-		nummembre = vnummembre;
-	COMMIT;
-END;
-/
-
