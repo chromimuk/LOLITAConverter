@@ -396,60 +396,34 @@ END;
 
 --2 Insertion
 
---2.1.3 Formulaire d'insertion
-------- Validation redirige vers ui_execadd_sujet
-CREATE OR REPLACE PROCEDURE ui_frmadd_sujet
+
+--2.1.1 Requ�te SQL
+CREATE OR REPLACE PROCEDURE pa_add_sujet
+	(
+		vnumdomaine in number,
+		vnummembre in number,
+		vnummembre_her_membre in number,
+		vtitsujet in varchar2,
+		vlibvisibilite in varchar2,
+		vlibtypesujet in varchar2
+	)
 IS
-	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
-	htp.print('<!DOCTYPE html>');
-	htp.htmlOpen;
-	htp.headOpen;
-	htp.title('Insertion sujet');
-	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
-	htp.headClose;
-	htp.bodyOpen;
-	htp.print('<div class="container">');
-	htp.header(1, 'Ajout �l�ment dans la table sujet');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_sujet', 'POST');
-	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('Numéro de domaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Numéro de membre');
-	htp.tableData(htf.formText('vnummembre', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Numéro du membre qui prend en charge');
-	htp.tableData(htf.formText('vnummembre_her_membre', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Titre du sujet');
-	htp.tableData(htf.formText('vtitsujet', 80));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Statut du sujet');
-	htp.tableData(htf.formText('vstasujet', 1));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Visibilité (PR, PU, EN)');
-	htp.tableData(htf.formText('vlibvisibilite', 2));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Type du sujet (QR, FQ)');
-	htp.tableData(htf.formText('vlibtypesujet', 2));
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
-	htp.print('</div>');
-	htp.bodyClose;
-	htp.htmlClose;
+	INSERT INTO sujet VALUES
+	(
+		seq_sujet.nextval,
+		vnumdomaine,
+		vnummembre,
+		vnummembre_her_membre,
+		vtitsujet,
+		0,
+		vlibvisibilite,
+		vlibtypesujet,
+		TO_CHAR(SYSDATE)
+	);
+COMMIT;
 END;
 /
-
 
 --2.1.2 Page de validation d'insertion, avec gestion des erreurs
 -------Appel � la requ�te pa_add_sujet
@@ -459,7 +433,6 @@ CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 		vnummembre in number,
 		vnummembre_her_membre in number,
 		vtitsujet in varchar2,
-		vstasujet in number,
 		vlibvisibilite in varchar2,
 		vlibtypesujet in varchar2
 	)
@@ -475,7 +448,7 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_add_sujet(vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vstasujet,vlibvisibilite,vlibtypesujet);
+	pa_add_sujet(vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vlibvisibilite,vlibtypesujet);
 	htp.header(1, '<a href="hello">');
 	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 	htp.header(1, '</a>');
@@ -492,34 +465,81 @@ END;
 /
 
 
---2.1.1 Requ�te SQL
-CREATE OR REPLACE PROCEDURE pa_add_sujet
-	(
-		vnumdomaine in number,
-		vnummembre in number,
-		vnummembre_her_membre in number,
-		vtitsujet in varchar2,
-		vstasujet in number,
-		vlibvisibilite in varchar2,
-		vlibtypesujet in varchar2
-	)
+--2.1.3 Formulaire d'insertion
+------- Validation redirige vers ui_execadd_sujet
+CREATE OR REPLACE
+PROCEDURE ui_frmadd_sujet
 IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstDom IS
+	SELECT D.NUMDOMAINE, D.LIBDOMAINE
+	FROM DOMAINE D
+	ORDER BY 1;
 BEGIN
-	INSERT INTO sujet VALUES
-	(
-		seq_sujet.nextval,
-		vnumdomaine,
-		vnummembre,
-		vnummembre_her_membre,
-		vtitsujet,
-		vstasujet,
-		vlibvisibilite,
-		vlibtypesujet,
-		TO_CHAR(SYSDATE)
-	);
-COMMIT;
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Insertion sujet');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'Ajout �l�ment dans la table sujet');
+	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_sujet', 'POST');
+		htp.print('<table class="table">');
+		htp.tableRowOpen;
+		htp.print('<td>Domaine</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnumdomaine', '');
+		FOR rec IN lstDom LOOP
+		htp.formSelectOption(
+			rec.libdomaine,
+			cattributes=>'value=' || rec.numdomaine
+		);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Numéro de membre');
+		htp.tableData(htf.formText('vnummembre', 5));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Numéro du membre qui prend en charge');
+		htp.tableData(htf.formText('vnummembre_her_membre', 5));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Titre du sujet');
+		htp.tableData(htf.formText('vtitsujet', 80));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.print('<td>Visibilité</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vlibvisibilite', '');
+			htp.formSelectOption('PR');
+			htp.formSelectOption('PU');
+			htp.formSelectOption('EN');
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.print('<td>Type du sujet</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vlibtypesujet', '');
+			htp.formSelectOption('QR');
+			htp.formSelectOption('FQ');
+		htp.formSelectClose;
+		htp.print('</td>');
+		htp.tableRowClose;
+		htp.tableClose;
+		htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+	htp.formClose;
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
 END;
 /
+
 
 
 --3 Edition
