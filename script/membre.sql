@@ -478,12 +478,12 @@ CREATE OR REPLACE
 PROCEDURE ui_frmadd_membre
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstSoc IS
+	SELECT S.NUMSOCIETE, S.NOMSOCIETE
+	FROM SOCIETE S;
 	CURSOR lstLan IS
-		SELECT 
-			L.NUMLANGUE, L.LIBLANGUE
-		FROM 
-			LANGUE L
-		;
+	SELECT L.NUMLANGUE, L.LIBLANGUE
+	FROM LANGUE L;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -497,12 +497,26 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_membre', 'GET');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Numéro de la société');
-	htp.tableData(htf.formText('vnumsociete', 5));
+	htp.print('<td>Societe</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumsociete', '');
+	FOR rec IN lstSoc LOOP
+		htp.formSelectOption(
+			rec.nomsociete,
+			cattributes=>'value=' || rec.numsociete
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Type du membre');
-	htp.tableData(htf.formText('vtypmembre', 1));
+	htp.print('<td>Type du membre</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vtypmembre', '');
+	htp.formSelectOption('E');
+	htp.formSelectOption('C');
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.print('<td>Langue</td>');
