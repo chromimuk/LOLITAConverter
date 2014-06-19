@@ -154,9 +154,6 @@ BEGIN
 	if (user_id >= 0)
 	then 
 		pa_add_message(vnumsujet,vnummembre,vtexmessage,vnsumessage);
-		htp.header(1, '<a href="hello">');
-		htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-		htp.header(1, '</a>');
 		htp.hr;
 		htp.header(2, 'Ajout effectue dans la table message');
 		htp.print('<a class="btn btn-primary" href="afft_sujet_from_numsujet?vnumsujet=' || vnumsujet || '" >Retour au sujet</a>');
@@ -211,10 +208,7 @@ BEGIN
 		htp.print('<table class="table">');
 		htp.print('<input type="hidden" name="vnumsujet" value="' || vnumsujet || '"/>');
 		htp.print('<input type="hidden" name="vnsumessage" value="' || vcount || '"/>');
-		htp.tableRowOpen;
-		htp.tableData('Numéro du membre');
-		htp.tableData(htf.formText('vnummembre', 5));
-		htp.tableRowClose;
+		htp.print('<input type="hidden" name="vnummembre" value="' || user_id || '"/>');
 		htp.tableRowOpen;
 		htp.tableData('Texte du message');
 		htp.tableData(htf.formText('vtexmessage', 1000));
