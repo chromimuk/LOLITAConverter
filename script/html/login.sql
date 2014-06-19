@@ -31,7 +31,13 @@ IS
 BEGIN
    	owa_util.mime_header('text/html', FALSE);
 	
-	owa_cookie.remove(name=>'user', val=>NULL);
+   	-- Remove the cookie
+   	-- because pl/sql is dummy, you have to create a remove in order to remove a cookie
+   	owa_cookie.send(
+      		name=>'user',
+      		value=>NULL,
+      		expires=> sysdate-1,
+		path=>'/');
 	
 	owa_util.http_header_close;
 COMMIT;
