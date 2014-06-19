@@ -25,10 +25,12 @@ BEGIN
 			htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Edition spécialisation</a>');
 			htp.hr;
 			htp.header(2, 'Catégorie');
+			htp.print('<a class="btn btn-primary" href="afft_categorie" >Afficher catégorie</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_categorie" >Création catégorie</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_posseder" >Attribution catégorie à un domaine</a>');
 			htp.hr;
 			htp.header(2, 'Langue');
+			htp.print('<a class="btn btn-primary" href="afft_langue" >Afficher langue</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_langue" >Création langue</a>');
 			htp.print('<a class="btn btn-primary" href="ui_frmadd_parler" >Ajouter une langue parlée à un membre</a>');
 			htp.hr;
@@ -36,3 +38,4 @@ BEGIN
 		htp.bodyClose;
 	htp.htmlClose;
 END;
+/
