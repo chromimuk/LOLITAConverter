@@ -16,7 +16,8 @@ BEGIN
 	AND
 		MDPMEMBRE = vmdp;
 		
-	ui_execlogin(vnummembre);
+	set_cookie(vnummembre);
+	ui_execlogin;
 	
 	EXCEPTION
 	    WHEN NO_DATA_FOUND THEN  
@@ -26,15 +27,31 @@ COMMIT;
 END;
 /
 
-
-
+CREATE OR REPLACE PROCEDURE set_cookie
+	(
+		vid in number
+	)
+IS
+BEGIN
+   owa_util.mime_header('text/html', FALSE);
+   
+   -- Create a cookie
+   owa_cookie.send(
+      name=>'user',
+      value=>vid,
+      expires=> sysdate+1,
+      path=>'/');
+      
+   owa_util.http_header_close;
+ 
+EXCEPTION
+   WHEN OTHERS THEN NULL;
+END;
+/
 
 
 CREATE OR REPLACE
 PROCEDURE ui_execlogin
-	(
-		vnummembre in number
-	)
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 BEGIN
@@ -51,18 +68,10 @@ BEGIN
 			htp.header(1, '</a>');
 			htp.hr;
 			htp.header(2, 'Connexion réussie');
-			owa_cookie.send(name=>'user',
-					value=>vnummembre,
-					expires=>sysdate+1,
-					path=>'/',
-					domain=>'pc-gi-405.utbm.fr:8080'); 
 			htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 			htp.print('</div>');
 		htp.bodyClose;
 	htp.htmlClose;
-EXCEPTION
-	WHEN OTHERS THEN
-		htp.print('ERROR: ' || SQLCODE);
 END;
 /
 
