@@ -515,7 +515,6 @@ END;
 CREATE OR REPLACE PROCEDURE ui_execadd_sujet
 	(
 		vnumdomaine in number,
-		vnummembre in number,
 		vnummembre_her_membre in number,
 		vtitsujet in varchar2,
 		vlibvisibilite in varchar2,
@@ -545,7 +544,7 @@ BEGIN
 
 	if (user_id >= 0)
 	then 
-		pa_add_sujet(vnumdomaine,vnummembre,vnummembre_her_membre,vtitsujet,vlibvisibilite,vlibtypesujet);
+		pa_add_sujet(vnumdomaine,user_id,vnummembre_her_membre,vtitsujet,vlibvisibilite,vlibtypesujet);
 	
 		htp.hr;
 		htp.header(2, 'Ajout effectue dans la table sujet');
@@ -616,10 +615,6 @@ BEGIN
 			END LOOP;
 			htp.formSelectClose;
 			htp.print('</td>');
-			htp.tableRowClose;
-			htp.tableRowOpen;
-			htp.tableData('Numéro de membre');
-			htp.tableData(htf.formText('vnummembre', 5));
 			htp.tableRowClose;
 			htp.tableRowOpen;
 			htp.tableData('Numéro du membre qui prend en charge');
