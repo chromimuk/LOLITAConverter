@@ -6,9 +6,31 @@ IS
 	user_name varchar2(80);
 	user_type varchar2(2);
 	user_right varchar2(4);
+	user_rights array_t;
+	user_right_soc number(1);
+	user_right_dom number(1);
 BEGIN
 	get_info_user(user_id, user_name, user_type);
      	get_info_user_right(user_right);
+     	get_info_user_rights(user_rights);    
+     	
+     	user_right_dom := 0;
+     	user_right_soc := 0;
+     	
+     	FOR i IN user_rights.FIRST .. user_rights.LAST
+	LOOP
+		-- édition domaine
+		if(user_rights(i) = 'D04')
+		then
+			user_right_dom := 1;
+		-- édition société
+		elsif(user_rights(i) = 'D06')
+		then
+			user_right_soc := 1;
+		end if;
+   	END LOOP;
+   			
+     	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 		htp.headOpen;
@@ -25,14 +47,25 @@ BEGIN
 				htp.header(2, 'Sujet');
 				htp.print('<a class="btn btn-primary" href="afft_sujet" >Edition sujet</a>');
 				htp.hr;
-				htp.header(2, 'Société');
-				htp.print('<a class="btn btn-primary" href="ui_frmadd_societe" >Inscription société</a>');
-				htp.hr;
-				htp.header(2, 'Domaine');
-				htp.print('<a class="btn btn-primary" href="ui_frmadd_domaine" >Création domaine</a>');
-				htp.print('<a class="btn btn-primary" href="afft_domaine" >Edition domaine</a>');
-				htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Edition spécialisation</a>');
-				htp.hr;
+				
+				-- société
+				if(user_right_soc = 1)
+				then
+					htp.header(2, 'Société');
+					htp.print('<a class="btn btn-primary" href="ui_frmadd_societe" >Inscription société</a>');
+					htp.hr;
+				end if;
+				
+				-- domaine
+				if(user_right_dom = 1)
+				then				
+					htp.header(2, 'Domaine');
+					htp.print('<a class="btn btn-primary" href="ui_frmadd_domaine" >Création domaine</a>');
+					htp.print('<a class="btn btn-primary" href="afft_domaine" >Edition domaine</a>');
+					htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Edition spécialisation</a>');
+					htp.hr;
+				end if;
+				
 				htp.header(2, 'Catégorie');
 				htp.print('<a class="btn btn-primary" href="afft_categorie" >Afficher catégorie</a>');
 				htp.print('<a class="btn btn-primary" href="ui_frmadd_categorie" >Création catégorie</a>');
