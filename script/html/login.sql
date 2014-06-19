@@ -40,6 +40,8 @@ BEGIN
 		path=>'/');
 	
 	owa_util.http_header_close;
+	
+	hello;
 COMMIT;
 END;
 /
