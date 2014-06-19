@@ -112,7 +112,7 @@ END;
 
 --1.2 Affichage des elements d'un sujet selon son ID
 CREATE OR REPLACE PROCEDURE afft_sujet_from_numsujet
-	(vnumsujet varchar2 default 'test') IS
+	(vnumsujet number) IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	vtitsujet varchar(50);
 CURSOR lst IS 
