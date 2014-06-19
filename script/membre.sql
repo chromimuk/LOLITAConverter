@@ -505,7 +505,9 @@ BEGIN
 	htp.tableData(htf.formText('vtypmembre', 1));
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.formSelectOpen('vnumlangue', 'Langue');
+	htp.print('<td>Langue</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumlangue', '');
 	FOR rec IN lstLan LOOP
 		htp.formSelectOption(
 			rec.liblangue,
@@ -513,6 +515,7 @@ BEGIN
 		);
 	END LOOP;
 	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Nom du membre');
