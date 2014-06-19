@@ -3,10 +3,10 @@ PROCEDURE hello
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	cookie_lolita owa_cookie.cookie;
-	user_id  number(5);
-	user_name varchar(50);
-	user_type varchar(1);
-	user_right varchar(3);
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
     	get_info_user(user_id, user_name, user_type);
     	get_info_user_right(user_right);
@@ -42,7 +42,7 @@ BEGIN
 				elsif( user_type = 'E' and user_right = 'D03')
 				then
 					htp.print('<a class="btn btn-danger"  style="float: right" href="admin_expert" >Administration expert</a>');
-				elsif(user_type = 'null');
+				elsif(user_type = 'null')
 				then
 					htp.print('Pas de droits administration');
 				end if;
@@ -110,8 +110,8 @@ BEGIN
 		htp.bodyClose;
 	htp.htmlClose;
 	EXCEPTION
-		WHEN NO_DATA_FOUND THEN
-		htp.print('Pas de droits administration');
+		WHEN OTHERS THEN
+		htp.print(SQLCODE);
 END;
 /
 
