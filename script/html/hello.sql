@@ -41,9 +41,9 @@ BEGIN
 					htp.print('<a class="btn btn-danger" href="admin_expert" >Administration expert</a>');
 				end if;
 				
-				htp.br;
 				htp.print('<a class="btn btn-primary" href="logout" >Déconnexion</a>');
 				
+				htp.br;	
 				htp.br;
 				htp.header(2,'Nos domaines de compétences');
 				htp.print('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
