@@ -10,10 +10,15 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		 A.NATURE, A.CODE, M.PREMEMBRE, M.NOMMEMBRE
+		A.CODE, C.LIBELLE, M.PREMEMBRE, M.NOMMEMBRE
 	FROM 
-		ATTRIBUER A Inner Join MEMBRE M
-		ON A.NUMMEMBRE = M.NUMMEMBRE;
+		CODELOLITA C
+		Inner Join ATTRIBUER A
+		ON C.CODE = A.CODE
+		Inner Join MEMBRE M
+		ON A.NUMMEMBRE = M.NUMMEMBRE
+	ORDER BY
+		1;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -27,21 +32,18 @@ BEGIN
 	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 	htp.header(1, '</a>');
 	htp.hr;
-	htp.header(2, 'Liste attribuer');
+	htp.header(2, 'Attribution des droits');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
+	htp.tableHeader('Code');
+	htp.tableHeader('Libellé');
+	htp.tableHeader('Membre');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
-	htp.tableData(rec.nature);
 	htp.tableData(rec.code);
+	htp.tableData(rec.libelle);
 	htp.tableData(rec.premembre || ' ' || rec.nommembre);
-	htp.tableData(
-		htf.anchor('ui_frmedit_attribuer?vnature=' || rec.nature, 'Modifier')
-		|| ' ou ' ||
-		htf.anchor('ui_execdel_attribuer?vnature=' || rec.nature, 'Supprimer')
-	);
 	htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
@@ -53,6 +55,24 @@ END;
 
 
 --2 Insertion
+
+--2.1.1 Requête SQL
+CREATE OR REPLACE PROCEDURE pa_add_attribuer
+	(
+		vcode in varchar2,
+		vnummembre in number
+	)
+IS
+BEGIN
+	INSERT INTO attribuer VALUES
+	(
+		'DRO',
+		vcode,
+		vnummembre
+	);
+COMMIT;
+END;
+/
 
 --2.1.2 Page de validation d'insertion, avec gestion des erreurs
 -------Appel à la requête pa_add_attribuer
@@ -90,11 +110,28 @@ END;
 /
 
 
+
 --2.1.3 Formulaire d'insertion
 ------- Validation redirige vers ui_execadd_attribuer
 CREATE OR REPLACE PROCEDURE ui_frmadd_attribuer
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstMem IS
+		SELECT
+			M.NUMMEMBRE, M.NOMMEMBRE, M.PREMEMBRE
+		FROM
+			MEMBRE M
+		ORDER BY
+			M.NUMMEMBRE
+		;
+	CURSOR lstCod IS
+		SELECT
+			C.CODE
+		FROM
+			CODELOLITA C
+		ORDER BY
+			C.CODE
+		;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -104,16 +141,29 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Ajout élément dans la table attribuer');
+	htp.header(1, 'Attribuer un droit à un membre');
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_attribuer', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Code');
-	htp.tableData(htf.formText('vcode', 3));
+		htp.print('<td>Code</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vcode', '');
+		FOR rec IN lstCod LOOP
+			htp.formSelectOption(rec.code);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro du membre');
-	htp.tableData(htf.formText('vnummembre', 5));
+		htp.print('<td>Membre</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vnummembre', '');
+		FOR rec IN lstMem LOOP
+			htp.formSelectOption(rec.premembre || ' ' || rec.nommembre,
+				cattributes=>'value=' || rec.nummembre);
+		END LOOP;
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
@@ -123,26 +173,6 @@ BEGIN
 	htp.htmlClose;
 END;
 /
-
-
---2.1.1 Requête SQL
-CREATE OR REPLACE PROCEDURE pa_add_attribuer
-	(
-		vcode in varchar2,
-		vnummembre in number
-	)
-IS
-BEGIN
-	INSERT INTO attribuer VALUES
-	(
-		'DRO',
-		vcode,
-		vnummembre
-	);
-COMMIT;
-END;
-/
-
 
 
 
