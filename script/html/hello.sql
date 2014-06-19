@@ -6,6 +6,7 @@ IS
 	user_id  varchar(5);
 	user_name varchar(50);
 	user_type varchar(1);
+	user_right varchar(3);
 BEGIN
     	cookie_lolita := owa_cookie.get('user');
 
@@ -32,10 +33,20 @@ BEGIN
 				SELECT 
 					premembre || ' ' || nommembre, typmembre into user_name, user_type
 				FROM
-					MEMBRE Inner Join ATTRIBUER
-					On MEMBRE.nummembre = ATTRIBUER.nummembre
+					MEMBRE
 				WHERE
 					nummembre = user_id;
+					
+				SELECT 
+					A.code into user_right
+				FROM
+					MEMBRE M Inner Join ATTRIBUER A
+					On M.nummembre = A.nummembre
+				WHERE
+					M.nummembre = user_id
+				AND
+					A.code = 'D03';
+				
 				
 				
 				htp.print('<div style="float: right">Bonjour ' || user_name || '</div>');
@@ -44,10 +55,13 @@ BEGIN
 				htp.br;
 				htp.br;
 				
-				if( user_type = 'C')
+				if( user_type = 'C' and user_right = 'D03')
 				then
 					htp.print('<a class="btn btn-info"  style="float: right" href="admin" >Administration</a>');
-				else
+				end if;
+				
+				if( user_type = 'E' and user_right = 'D03')
+				then
 					htp.print('<a class="btn btn-danger"  style="float: right" href="admin_expert" >Administration expert</a>');
 				end if;
 				
@@ -114,7 +128,7 @@ BEGIN
 		htp.bodyClose;
 	htp.htmlClose;
 	EXCEPTION
-		WHEN OTHERS THEN
-		htp.print('ERROR: ' || SQLCODE);
+		WHEN NO_DATA_FOUND THEN
+		htp.print('Pas de droits administration');
 END;
 /
