@@ -48,15 +48,6 @@ BEGIN
 				htp.print('<a class="btn btn-primary" href="afft_sujet" >Edition sujet</a>');
 				htp.hr;
 				
-				
-				-- membre
-				if(user_right_soc = 1)
-				then
-					htp.header(2, 'Membre');
-					htp.print('<a class="btn btn-primary" href="ui_frmadd_se_specialiser" >Ajouter specialisation entre un membre et une domaine</a>');
-					htp.hr;
-				end if;
-				
 				-- société
 				if(user_right_soc = 1)
 				then
@@ -71,7 +62,8 @@ BEGIN
 					htp.header(2, 'Domaine');
 					htp.print('<a class="btn btn-primary" href="ui_frmadd_domaine" >Création domaine</a>');
 					htp.print('<a class="btn btn-primary" href="afft_domaine" >Edition domaine</a>');
-					htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Edition spécialisation</a>');
+					htp.print('<a class="btn btn-primary" href="afft_se_specialiser" >Voir les spécialisations</a>');
+					htp.print('<a class="btn btn-primary" href="ui_frmadd_se_specialiser" >Ajouter specialisation entre un membre et un domaine</a>');
 					htp.hr;
 				end if;
 				
