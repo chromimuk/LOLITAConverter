@@ -10,9 +10,12 @@ IS
 	CURSOR lst
 	IS 
 	SELECT 
-		A.CODE, M.PREMEMBRE, M.NOMMEMBRE, M.NUMMEMBRE, D.LIBDOMAINE
+		A.CODE, C.LIBELLE, M.PREMEMBRE, M.NOMMEMBRE, M.NUMMEMBRE, D.LIBDOMAINE
 	FROM 
-		AUTORISER A Inner Join MEMBRE M
+		CODELOLITA C
+		Inner Join AUTORISER A 
+		ON C.CODE = A.CODE
+		Inner Join MEMBRE M
 		ON A.NUMMEMBRE = M.NUMMEMBRE
 		Inner Join DOMAINE D
 		ON A.NUMDOMAINE = D.NUMDOMAINE;
@@ -29,23 +32,20 @@ BEGIN
 	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 	htp.header(1, '</a>');
 	htp.hr;
-	htp.header(2, 'Liste autoriser');
+	htp.header(2, 'Droits sur les domaines');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Prénom/Nom du membre');
+	htp.tableHeader('Membre');
 	htp.tableHeader('Code du droit');
+	htp.tableHeader('Libellé');
 	htp.tableHeader('Domaine');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
 	htp.tableData(rec.premembre || ' ' || rec.nommembre);
 	htp.tableData(rec.code);
+	htp.tableData(rec.libelle);
 	htp.tableData(rec.libdomaine);
-	htp.tableData(
-		htf.anchor('ui_frmedit_autoriser?vnummembre=' || rec.nummembre, 'Modifier')
-		|| ' ou ' ||
-		htf.anchor('ui_execdel_autoriser?vnummembre=' || rec.nummembre, 'Supprimer')
-	);
 	htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
@@ -121,6 +121,32 @@ END;
 CREATE OR REPLACE PROCEDURE ui_frmadd_autoriser
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstMem IS
+		SELECT
+		M.NUMMEMBRE, M.NOMMEMBRE, M.PREMEMBRE
+		FROM
+		MEMBRE M
+		ORDER BY
+		M.NUMMEMBRE
+		;
+	CURSOR lstCod IS
+		SELECT
+		C.CODE
+		FROM
+		CODELOLITA C
+		WHERE
+		C.NATURE='DRO'
+		ORDER BY
+		C.CODE
+		;
+	CURSOR lstDom IS
+		SELECT
+		D.NUMDOMAINE, D.LIBDOMAINE
+		FROM
+		DOMAINE D
+		ORDER BY
+		D.LIBDOMAINE
+		;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -131,19 +157,39 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	htp.header(1, 'Ajout élément dans la table autoriser');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_autoriser', 'POST');
+	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_autoriser', 'GET');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Numéro du membre');
-	htp.tableData(htf.formText('vnummembre', 5));
+	htp.print('<td>Code</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vcode', '');
+	FOR rec IN lstCod LOOP
+		htp.formSelectOption(rec.code);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Code du droit');
-	htp.tableData(htf.formText('vcode', 3));
+	htp.print('<td>Membre</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnummembre', '');
+	FOR rec IN lstMem LOOP
+		htp.formSelectOption(rec.premembre || ' ' || rec.nommembre,
+		cattributes=>'value=' || rec.nummembre);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro du domaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
+	htp.print('<td>Numéro du domaine</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumdomaine', '');
+	FOR rec IN lstDom LOOP
+		htp.formSelectOption(rec.libdomaine,
+		cattributes=>'value=' || rec.numdomaine);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
