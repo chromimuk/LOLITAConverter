@@ -132,3 +132,65 @@ BEGIN
 		htp.print('Pas de droits administration');
 END;
 /
+
+CREATE OR REPLACE
+PROCEDURE get_info_user_right
+   (
+   user_right out varchar2
+   )
+IS
+   cookie_lolita owa_cookie.cookie;
+   user_id number(5);
+BEGIN
+           cookie_lolita := owa_cookie.get('user');
+
+   if (cookie_lolita.num_vals > 0)
+   then
+           user_id  := cookie_lolita.vals(1);
+
+           SELECT
+                   A.code into user_right
+           FROM
+                   MEMBRE M Inner Join ATTRIBUER A
+                   On M.nummembre = A.nummembre
+           WHERE
+                   M.nummembre = user_id
+           AND
+                   A.code = 'D03';
+   end if;
+
+   EXCEPTION
+           WHEN NO_DATA_FOUND THEN
+                   user_right := 'null';
+END;
+/
+
+CREATE OR REPLACE
+PROCEDURE get_info_user
+   (
+   user_id out number,
+   user_name out varchar2,
+   user_type out varchar2
+   )
+IS
+   cookie_lolita owa_cookie.cookie;
+BEGIN
+           cookie_lolita := owa_cookie.get('user');
+
+
+   if (cookie_lolita.num_vals > 0)
+   then
+           user_id  := cookie_lolita.vals(1);
+           SELECT
+                   premembre || ' ' || nommembre, typmembre into user_name, user_type
+           FROM
+                   MEMBRE
+           WHERE
+                   nummembre = user_id;
+   end if;
+   EXCEPTION
+           WHEN NO_DATA_FOUND THEN
+                   user_id := -1;
+END;
+/
+
