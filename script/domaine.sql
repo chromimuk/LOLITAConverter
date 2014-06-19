@@ -14,7 +14,14 @@ IS
 		 *
 	FROM 
 		DOMAINE;
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);	
+      	get_info_user_right(user_right);
+      	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -23,49 +30,60 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, '<a href="hello">');
-	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
-	htp.header(1, '</a>');
-	htp.hr;
-	htp.header(2, 'Liste domaine');
-	htp.print('<table class="table">');
-	htp.tableRowOpen(cattributes => 'class=active');
-	htp.tableHeader('Numéro');
-	htp.tableHeader('Numéro domaine père');
-	htp.tableHeader('Numéro de société');
-	htp.tableHeader('Libellé domaine');
-	htp.tableHeader('Abréviation domaine');
-	htp.tableHeader('Date domaine');
-	htp.tableHeader('Date modification domaine');
-	htp.tableHeader('Description');
-	htp.tableHeader('Logo domaine');
-	htp.tableHeader('Actions');
-	htp.tableRowClose;
-	FOR rec IN lst LOOP
-		BEGIN
-		Select LIBDOMAINE Into vdompere From DOMAINE Where NUMDOMAINE = rec.numdomaine_appartenir;
-		EXCEPTION
-		      WHEN NO_DATA_FOUND THEN
-		        vdompere := NULL;
-		END;
-		htp.tableRowOpen;
-			htp.tableData(rec.numdomaine);
-			htp.tableData(vdompere);
-			htp.tableData(rec.numsociete);
-			htp.tableData(rec.libdomaine);
-			htp.tableData(rec.abrdomaine);
-			htp.tableData(rec.dtedomaine);
-			htp.tableData(rec.dmodomaine);
-			htp.tableData(rec.dscdomaine);
-			htp.tableData(rec.logdomaine);
-			htp.tableData(
-				htf.anchor('ui_frmedit_domaine?vnumdomaine=' || rec.numdomaine, 'Modifier')
-				|| ' ou ' ||
-				htf.anchor('ui_execdel_domaine?vnumdomaine=' || rec.numdomaine, 'Supprimer')
-			);
+	header(user_id, user_name, user_type, user_right);
+	if(user_id >= 0)
+	then
+	
+		--htp.header(1, '<a href="hello">');
+		--htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+		--htp.header(1, '</a>');
+		htp.hr;
+		htp.header(2, 'Liste domaine');
+		htp.print('<table class="table">');
+		htp.tableRowOpen(cattributes => 'class=active');
+		htp.tableHeader('Numéro');
+		htp.tableHeader('Numéro domaine père');
+		htp.tableHeader('Numéro de société');
+		htp.tableHeader('Libellé domaine');
+		htp.tableHeader('Abréviation domaine');
+		htp.tableHeader('Date domaine');
+		htp.tableHeader('Date modification domaine');
+		htp.tableHeader('Description');
+		htp.tableHeader('Logo domaine');
+		htp.tableHeader('Actions');
 		htp.tableRowClose;
-	END LOOP;
-	htp.tableClose;
+		FOR rec IN lst LOOP
+			BEGIN
+			Select LIBDOMAINE Into vdompere From DOMAINE Where NUMDOMAINE = rec.numdomaine_appartenir;
+			EXCEPTION
+			      WHEN NO_DATA_FOUND THEN
+			        vdompere := NULL;
+			END;
+			htp.tableRowOpen;
+				htp.tableData(rec.numdomaine);
+				htp.tableData(vdompere);
+				htp.tableData(rec.numsociete);
+				htp.tableData(rec.libdomaine);
+				htp.tableData(rec.abrdomaine);
+				htp.tableData(rec.dtedomaine);
+				htp.tableData(rec.dmodomaine);
+				htp.tableData(rec.dscdomaine);
+				htp.tableData(rec.logdomaine);
+				htp.tableData(
+					htf.anchor('ui_frmedit_domaine?vnumdomaine=' || rec.numdomaine, 'Modifier')
+					|| ' ou ' ||
+					htf.anchor('ui_execdel_domaine?vnumdomaine=' || rec.numdomaine, 'Supprimer')
+				);
+			htp.tableRowClose;
+		END LOOP;
+		htp.tableClose;
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
