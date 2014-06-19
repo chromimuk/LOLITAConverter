@@ -178,6 +178,23 @@ END;
 
 --4 Suppression
 
+--4.1.1 Requête SQL
+CREATE OR REPLACE
+PROCEDURE pa_del_attribuer
+	(
+		vnature in varchar2
+	)
+IS
+BEGIN
+	DELETE FROM 
+		ATTRIBUER
+	WHERE 
+		nature = vnature;
+	COMMIT;
+END;
+/
+
+
 --4.1.2 Page de validation de suppression
 -------Appel à la requête pa_del_attribuer
 CREATE OR REPLACE
@@ -212,21 +229,3 @@ EXCEPTION
 		htp.print('ERROR: ' || SQLCODE);
 END;
 /
-
-
---4.1.1 Requête SQL
-CREATE OR REPLACE
-PROCEDURE pa_del_attribuer
-	(
-		vnature in varchar2
-	)
-IS
-BEGIN
-	DELETE FROM 
-		ATTRIBUER
-	WHERE 
-		nature = vnature;
-	COMMIT;
-END;
-/
-
