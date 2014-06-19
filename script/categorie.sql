@@ -26,10 +26,12 @@ BEGIN
 	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
 	htp.header(1, '</a>');
 	htp.hr;
-	htp.header(2, 'Liste categorie');
+	htp.header(2, 'Liste des categories');
 	htp.print('<table class="table">');
 	htp.tableRowOpen(cattributes => 'class=active');
 	htp.tableHeader('Numéro');
+	htp.tableHeader('Libelle');
+	htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
