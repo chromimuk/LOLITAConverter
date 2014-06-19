@@ -570,25 +570,25 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 
-	header(user_id, user_name, user_type, user_right);
-	
 	if(user_id >= 0)
 	then
+		header(user_id, user_name, user_type, user_right);
 		pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
 	
 		htp.hr;
 		htp.header(2, 'Ajout effectue dans la table membre');
 		htp.print('<a class="btn btn-primary" href="afft_membre" >Voir la liste complete</a>');
-		htp.print('</div>');
+		
 	
 	else
-		htp.br;
-		htp.br;
-		htp.header(2, 'Non connecté !');
-		htp.br;
+		header('', '', '', '');
+		pa_add_membre(vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
+		htp.hr;
+		htp.header(2, 'Merci, votre demande d inscription est en cours de validation');
 		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
 	end if;	
-		
+	htp.print('</div>');		
+	
 	htp.bodyClose;
 	htp.htmlClose;
 EXCEPTION
