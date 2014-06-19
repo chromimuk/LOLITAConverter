@@ -732,7 +732,14 @@ CREATE OR REPLACE PROCEDURE ui_frmedit_membre
 )
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+    	get_info_user_right(user_right);
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -741,58 +748,73 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'Edition membre');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_membre', 'POST');
-	htp.print('<table class="table">');
-	htp.print('<input type="hidden" name="vnumcategorie" value="' || vnumcategorie || '"/>');
-	htp.tableRowOpen;
-	htp.tableData('Numéro de la société');
-	htp.tableData(htf.formText('vnumsociete', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Numéro de langue');
-	htp.tableData(htf.formText('vnumlangue', 2));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Type du membre');
-	htp.tableData(htf.formText('vtypmembre', 1));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Nom du membre');
-	htp.tableData(htf.formText('vnommembre', 30));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Prénom du membre');
-	htp.tableData(htf.formText('vpremembre', 30));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Mail du membre');
-	htp.tableData(htf.formText('vmaimembre', 80));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Mot de passe du membre');
-	htp.tableData(htf.formText('vmdpmembre', 20));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Poste occupé par le membre');
-	htp.tableData(htf.formText('vposmembre', 40));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Photo du membre');
-	htp.tableData(htf.formText('vphomembre', 100));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Description (expert)');
-	htp.tableData(htf.formText('vdscexpert', 1000));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Téléphone (expert)');
-	htp.tableData(htf.formText('vtelexpert', 20));
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
-	htp.print('</div>');
+	
+	header(user_id, user_name, user_type, user_right);
+	
+	if(user_id >= 0)
+	then
+	
+		htp.header(1, 'Edition membre');
+		htp.formOpen(owa_util.get_owa_service_path || 'ui_execedit_membre', 'POST');
+		htp.print('<table class="table">');
+		htp.print('<input type="hidden" name="vnummembre" value="' || vnummembre || '"/>');
+		htp.tableRowOpen;
+		htp.tableData('Numéro de la société');
+		htp.tableData(htf.formText('vnumsociete', 5));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Numéro de langue');
+		htp.tableData(htf.formText('vnumlangue', 2));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Type du membre');
+		htp.tableData(htf.formText('vtypmembre', 1));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Nom du membre');
+		htp.tableData(htf.formText('vnommembre', 30));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Prénom du membre');
+		htp.tableData(htf.formText('vpremembre', 30));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Mail du membre');
+		htp.tableData(htf.formText('vmaimembre', 80));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Mot de passe du membre');
+		htp.tableData(htf.formText('vmdpmembre', 20));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Poste occupé par le membre');
+		htp.tableData(htf.formText('vposmembre', 40));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Photo du membre');
+		htp.tableData(htf.formText('vphomembre', 100));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Description (expert)');
+		htp.tableData(htf.formText('vdscexpert', 1000));
+		htp.tableRowClose;
+		htp.tableRowOpen;
+		htp.tableData('Téléphone (expert)');
+		htp.tableData(htf.formText('vtelexpert', 20));
+		htp.tableRowClose;
+		htp.tableClose;
+		htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+		htp.formClose;
+		htp.print('</div>');
+	
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;		
+	
 	htp.bodyClose;
 	htp.htmlClose;
 END;
@@ -858,8 +880,15 @@ PROCEDURE ui_execedit_membre
 		vtelexpert in varchar2
 	)
 IS
-rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+    	get_info_user_right(user_right);
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -868,13 +897,27 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_edit_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
-	htp.header(1, 'LOLITA');
-	htp.hr;
-	htp.header(2, 'Edition effectuée dans la table MEMBRE');
-	htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
-	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
-	htp.print('</div>');
+	
+	header(user_id, user_name, user_type, user_right);
+	
+	if(user_id >= 0)
+	then
+		pa_edit_membre(vnummembre,vnumsociete,vnumlangue,vtypmembre,vnommembre,vpremembre,vmaimembre,vmdpmembre,vposmembre,vphomembre,vdscexpert,vtelexpert);
+
+		htp.hr;
+		htp.header(2, 'Edition effectuée dans la table MEMBRE');
+		htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
+		htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+		htp.print('</div>');
+
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;			
+	
 	htp.bodyClose;
 	htp.htmlClose;
 EXCEPTION
@@ -911,8 +954,15 @@ PROCEDURE ui_execdel_membre
 		vnummembre in number
 	)
 IS
-rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+    	get_info_user_right(user_right);
+    	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -921,13 +971,26 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	pa_del_membre(vnummembre);
-	htp.header(1, 'LOLITA');
-	htp.hr;
-	htp.header(2, 'Suppression élément dans la table MEMBRE');
-	htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
-	htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
-	htp.print('</div>');
+	
+	header(user_id, user_name, user_type, user_right);
+	
+	if(user_id >= 0)
+	then
+		pa_del_membre(vnummembre);
+
+		htp.hr;
+		htp.header(2, 'Suppression élément dans la table MEMBRE');
+		htp.print('<a class="btn btn-primary" href="afft_membre" >>Consulter la liste MEMBRE</a>');
+		htp.print('<a class="btn btn-primary" href="hello" >>Retour accueil</a>');
+		htp.print('</div>');
+	else
+		htp.br;
+		htp.br;
+		htp.header(2, 'Non connecté !');
+		htp.br;
+		htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	end if;			
+		
 	htp.bodyClose;
 	htp.htmlClose;
 EXCEPTION
