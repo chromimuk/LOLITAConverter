@@ -20,7 +20,14 @@ IS
 		ORDER BY
 			M.NUMMEMBRE
 		;
+	user_id number(5);
+	user_name varchar2(80);
+	user_type varchar2(2);
+	user_right varchar2(4);
 BEGIN
+	get_info_user(user_id, user_name, user_type);
+    	get_info_user_right(user_right);
+
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
 	htp.headOpen;
@@ -29,7 +36,9 @@ BEGIN
 	htp.headClose;
 	htp.bodyOpen;
 	htp.print('<div class="container">');
-	htp.header(1, 'LOLITA');
+	
+	header(user_id, user_name, user_type, user_right);
+
 	htp.hr;
 	htp.header(2, 'Liste des membres');
 	htp.print('<table class="table">');
