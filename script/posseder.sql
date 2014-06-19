@@ -36,6 +36,7 @@ BEGIN
 	htp.tableHeader('Libellé de la catégorie');
 	htp.tableHeader('Numéro du domaine');
 	htp.tableHeader('Libellé du domaine');
+	htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
 	htp.tableRowOpen;
@@ -43,11 +44,7 @@ BEGIN
 	htp.tableData(rec.libcategorie);
 	htp.tableData(rec.numdomaine);
 	htp.tableData(rec.libdomaine);
-	htp.tableData(
-		htf.anchor('ui_frmedit_posseder?vnumcategorie=' || rec.numcategorie, 'Modifier')
-		|| ' ou ' ||
-		htf.anchor('ui_execdel_posseder?vnumcategorie=' || rec.numcategorie, 'Supprimer')
-	);
+	htp.tableData(htf.anchor('ui_execdel_posseder?vnumcategorie=' || rec.numcategorie, 'Supprimer'));
 	htp.tableRowClose;
 	END LOOP;
 	htp.tableClose;
@@ -83,6 +80,14 @@ END;
 CREATE OR REPLACE PROCEDURE ui_frmadd_posseder
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstCat IS
+	SELECT C.NUMCATEGORIE, C.LIBCATEGORIE
+	FROM CATEGORIE C
+	ORDER BY 1;
+	CURSOR lstDom IS
+	SELECT D.NUMDOMAINE, D.LIBDOMAINE
+	FROM DOMAINE D
+	ORDER BY 1;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -96,12 +101,30 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_posseder', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Numéro de catégorie');
-	htp.tableData(htf.formText('vnumcategorie', 4));
+	htp.print('<td>Catégorie</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumcategorie', '');
+	FOR rec IN lstCat LOOP
+		htp.formSelectOption(
+		rec.libcategorie,
+		cattributes=>'value=' || rec.numcategorie
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro de domaine');
-	htp.tableData(htf.formText('vnumdomaine', 2));
+	htp.print('<td>Domaine</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumdomaine', '');
+	FOR rec IN lstDom LOOP
+		htp.formSelectOption(
+		rec.libdomaine,
+		cattributes=>'value=' || rec.numdomaine
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableClose;
 	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
