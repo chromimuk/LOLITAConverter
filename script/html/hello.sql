@@ -3,12 +3,13 @@ PROCEDURE hello
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
 	cookie_lolita owa_cookie.cookie;
-	user_id  varchar(5);
+	user_id  number(5);
 	user_name varchar(50);
 	user_type varchar(1);
 	user_right varchar(3);
 BEGIN
-    	cookie_lolita := owa_cookie.get('user');
+    	get_info_user(user_id, user_name, user_type);
+    	get_info_user_right(user_right);
 
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -27,28 +28,8 @@ BEGIN
 				
 			htp.br;
 
-			if (cookie_lolita.num_vals > 0)
+			if (user_id >= 0)
 			then 
-				user_id  := cookie_lolita.vals(1);
-				SELECT 
-					premembre || ' ' || nommembre, typmembre into user_name, user_type
-				FROM
-					MEMBRE
-				WHERE
-					nummembre = user_id;
-					
-				SELECT 
-					A.code into user_right
-				FROM
-					MEMBRE M Inner Join ATTRIBUER A
-					On M.nummembre = A.nummembre
-				WHERE
-					M.nummembre = user_id
-				AND
-					A.code = 'D03';
-				
-				
-				
 				htp.print('<div style="float: right">Bonjour ' || user_name || '</div>');
 				
 				htp.br;
@@ -58,11 +39,12 @@ BEGIN
 				if( user_type = 'C' and user_right = 'D03')
 				then
 					htp.print('<a class="btn btn-info"  style="float: right" href="admin" >Administration</a>');
-				end if;
-				
-				if( user_type = 'E' and user_right = 'D03')
+				elsif( user_type = 'E' and user_right = 'D03')
 				then
 					htp.print('<a class="btn btn-danger"  style="float: right" href="admin_expert" >Administration expert</a>');
+				elsif(user_type = 'null');
+				then
+					htp.print('Pas de droits administration');
 				end if;
 				
 				htp.print('<a class="btn btn-primary" style="float: right; margin-right: 10px;" href="logout" >Déconnexion</a>');
