@@ -30,6 +30,7 @@ CREATE OR REPLACE PROCEDURE logout
 IS
 BEGIN
 	owa_cookie.remove('user', NULL);
+	hello;
 END;
 /
 
