@@ -42,9 +42,15 @@ BEGIN
 	htp.tableHeader('Actions');
 	htp.tableRowClose;
 	FOR rec IN lst LOOP
+		BEGIN
+		Select LIBDOMAINE Into vdompere From DOMAINE Where NUMDOMAINE = rec.numdomaine_appartenir;
+		EXCEPTION
+		      WHEN NO_DATA_FOUND THEN
+		        vdompere := NULL;
+		END;
 		htp.tableRowOpen;
 			htp.tableData(rec.numdomaine);
-			htp.tableData(rec.numdomaine_appartenir);
+			htp.tableData(vdompere);
 			htp.tableData(rec.numsociete);
 			htp.tableData(rec.libdomaine);
 			htp.tableData(rec.abrdomaine);
@@ -65,6 +71,68 @@ BEGIN
 	htp.htmlClose;
 END;
 /
+
+
+CREATE OR REPLACE
+PROCEDURE afft_domaine_user
+IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	vdompere varchar2(30);
+	CURSOR lst
+	IS 
+	SELECT 
+		 *
+	FROM 
+		DOMAINE;
+BEGIN
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Affichage table domaine');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, '<a href="hello">');
+	htp.header(1, '<img src="https://dl.dropboxusercontent.com/u/21548623/LOGOLOLITA.PNG" width="300px" style="display:block; margin-left:auto; margin-right: auto;" />');
+	htp.header(1, '</a>');
+	htp.hr;
+	htp.header(2, 'Liste de nos domaines de compétences');
+	htp.print('<table class="table">');
+	htp.tableRowOpen(cattributes => 'class=active');
+	htp.tableHeader('Numéro');
+	htp.tableHeader('Domaine père');
+	htp.tableHeader('Numéro de société');
+	htp.tableHeader('Libellé domaine');
+	htp.tableHeader('Abréviation domaine');
+	htp.tableHeader('Description');
+	htp.tableRowClose;
+	FOR rec IN lst LOOP
+		BEGIN
+		Select LIBDOMAINE Into vdompere From DOMAINE Where NUMDOMAINE = rec.numdomaine_appartenir;
+		EXCEPTION
+		      WHEN NO_DATA_FOUND THEN
+		        vdompere := NULL;
+		END;
+		htp.tableRowOpen;
+			htp.tableData(rec.numdomaine);
+			htp.tableData(vdompere);
+			htp.tableData(rec.numsociete);
+			htp.tableData(rec.libdomaine);
+			htp.tableData(rec.abrdomaine);
+			htp.tableData(rec.dscdomaine);
+		htp.tableRowClose;
+	END LOOP;
+	htp.tableClose;
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
+END;
+/
+
+
+
+
 
 
 --2 Insertion
