@@ -137,6 +137,36 @@ END;
 
 --2 Insertion
 
+
+--2.1.1 Requête SQL
+CREATE OR REPLACE PROCEDURE pa_add_domaine
+	(
+		vnumdomaine_appartenir in number,
+		vnumsociete in number,
+		vlibdomaine in varchar2,
+		vabrdomaine in varchar2,
+		vdscdomaine in clob,
+		vlogdomaine in varchar2
+	)
+IS
+BEGIN
+	INSERT INTO domaine VALUES
+	(
+		seq_domaine.nextval,
+		vnumdomaine_appartenir,
+		vnumsociete,
+		vlibdomaine,
+		vabrdomaine,
+		TO_CHAR(SYSDATE),
+		TO_CHAR(SYSDATE),
+		vdscdomaine,
+		vlogdomaine
+	);
+COMMIT;
+END;
+/
+
+
 --2.1.2 Page de validation d'insertion, avec gestion des erreurs
 -------Appel à la requête pa_add_domaine
 CREATE OR REPLACE PROCEDURE ui_execadd_domaine
@@ -179,9 +209,22 @@ END;
 
 --2.1.3 Formulaire d'insertion
 ------- Validation redirige vers ui_execadd_domaine
-CREATE OR REPLACE PROCEDURE ui_frmadd_domaine
+CREATE OR REPLACE
+PROCEDURE ui_frmadd_domaine
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstSoc
+	IS 
+	SELECT 
+		S.NOMSOCIETE, S.NUMSOCIETE
+	FROM 
+		SOCIETE S;
+	CURSOR lstDom
+	IS 
+	SELECT 
+		D.LIBDOMAINE, D.NUMDOMAINE
+	FROM 
+		DOMAINE D;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -192,15 +235,33 @@ BEGIN
 	htp.bodyOpen;
 	htp.print('<div class="container">');
 	htp.header(1, 'Ajout élément dans la table domaine');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_domaine', 'POST');
+	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_domaine', 'GET');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Domaine père');
-	htp.tableData(htf.formText('vnumdomaine_appartenir', 2));
+	htp.print('<td>Domaine père</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumdomaine_appartenir', '');
+	FOR rec IN lstDom LOOP
+		htp.formSelectOption(
+		rec.libdomaine,
+		cattributes=>'value=' || rec.numdomaine
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro société');
-	htp.tableData(htf.formText('vnumsociete', 5));
+	htp.print('<td>Societe</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumsociete', '');
+	FOR rec IN lstSoc LOOP
+		htp.formSelectOption(
+		rec.nomsociete,
+		cattributes=>'value=' || rec.numsociete
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Libellé');
@@ -228,33 +289,7 @@ END;
 /
 
 
---2.1.1 Requête SQL
-CREATE OR REPLACE PROCEDURE pa_add_domaine
-	(
-		vnumdomaine_appartenir in number,
-		vnumsociete in number,
-		vlibdomaine in varchar2,
-		vabrdomaine in varchar2,
-		vdscdomaine in clob,
-		vlogdomaine in varchar2
-	)
-IS
-BEGIN
-	INSERT INTO domaine VALUES
-	(
-		seq_domaine.nextval,
-		vnumdomaine_appartenir,
-		vnumsociete,
-		vlibdomaine,
-		vabrdomaine,
-		TO_CHAR(SYSDATE),
-		TO_CHAR(SYSDATE),
-		vdscdomaine,
-		vlogdomaine
-	);
-COMMIT;
-END;
-/
+
 
 
 --3 Edition
@@ -340,6 +375,18 @@ CREATE OR REPLACE PROCEDURE ui_frmedit_domaine
 )
 IS
 	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lstSoc
+	IS 
+	SELECT 
+		S.NOMSOCIETE, S.NUMSOCIETE
+	FROM 
+		SOCIETE S;
+	CURSOR lstDom
+	IS 
+	SELECT 
+		D.LIBDOMAINE, D.NUMDOMAINE
+	FROM 
+		DOMAINE D;
 BEGIN
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -354,12 +401,30 @@ BEGIN
 	htp.print('<table class="table">');
 	htp.print('<input type="hidden" name="vnumdomaine" value="' || vnumdomaine || '"/>');
 	htp.tableRowOpen;
-	htp.tableData('Domaine père');
-	htp.tableData(htf.formText('vnumdomaine_appartenir', 2));
+	htp.print('<td>Domaine père</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumdomaine_appartenir', '');
+	FOR rec IN lstDom LOOP
+		htp.formSelectOption(
+		rec.libdomaine,
+		cattributes=>'value=' || rec.numdomaine
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
-	htp.tableData('Numéro société');
-	htp.tableData(htf.formText('vnumsociete', 5));
+	htp.print('<td>Societe</td>');
+	htp.print('<td>');
+	htp.formSelectOpen('vnumsociete', '');
+	FOR rec IN lstSoc LOOP
+		htp.formSelectOption(
+		rec.nomsociete,
+		cattributes=>'value=' || rec.numsociete
+		);
+	END LOOP;
+	htp.formSelectClose;
+	htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Libellé');
