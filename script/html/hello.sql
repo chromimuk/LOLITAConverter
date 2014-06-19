@@ -32,16 +32,16 @@ BEGIN
 					MEMBRE
 				WHERE
 					nummembre = user_id;
-				htp.header(2, 'Bonjour ' || user_name);
+				htp.print('Bonjour ' || user_name);
 				
 				if( user_type = 'C')
 				then
-					htp.print('<a class="btn btn-info" href="admin" >Administration</a>');
+					htp.print('<a class="btn btn-info"  style="float: right" href="admin" >Administration</a>');
 				else
-					htp.print('<a class="btn btn-danger" href="admin_expert" >Administration expert</a>');
+					htp.print('<a class="btn btn-danger"  style="float: right" href="admin_expert" >Administration expert</a>');
 				end if;
 				
-				htp.print('<a class="btn btn-primary" href="logout" >Déconnexion</a>');
+				htp.print('<a class="btn btn-primary" style="float: right" href="logout" >Déconnexion</a>');
 				
 				htp.br;	
 				htp.br;
