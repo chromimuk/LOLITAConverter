@@ -425,7 +425,7 @@ IS
 		WHERE
 			M.TYPMEMBRE = 'E'
 		ORDER BY
-			M.NUMMEMBRE
+			S.NOMSOCIETE
 		;
 	user_id number(5);
 	user_name varchar2(80);
