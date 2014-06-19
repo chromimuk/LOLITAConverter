@@ -162,8 +162,13 @@ BEGIN
 	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_societe', 'POST');
 	htp.print('<table class="table">');
 	htp.tableRowOpen;
-	htp.tableData('Type');
-	htp.tableData(htf.formText('vtypsociete', 1));
+		htp.print('<td>Type</td>');
+		htp.print('<td>');
+		htp.formSelectOpen('vtypsociete', '');
+			htp.formSelectOption('C');
+			htp.formSelectOption('E');
+		htp.formSelectClose;
+		htp.print('</td>');
 	htp.tableRowClose;
 	htp.tableRowOpen;
 	htp.tableData('Nom');
