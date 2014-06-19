@@ -67,51 +67,13 @@ END;
 
 --2 Insertion
 
---2.1.3 Formulaire d'insertion
-------- Validation redirige vers ui_execadd_message
-CREATE OR REPLACE PROCEDURE ui_frmadd_message
-IS
-	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
-BEGIN
-	htp.print('<!DOCTYPE html>');
-	htp.htmlOpen;
-	htp.headOpen;
-	htp.title('Insertion message');
-	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
-	htp.headClose;
-	htp.bodyOpen;
-	htp.print('<div class="container">');
-	htp.header(1, 'Ajout élément dans la table message');
-	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_message', 'POST');
-	htp.print('<table class="table">');
-	htp.tableRowOpen;
-	htp.tableData('Numéro du sujet');
-	htp.tableData(htf.formText('vnumsujet', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Numéro du membre');
-	htp.tableData(htf.formText('vnummembre', 5));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Texte du message');
-	htp.tableData(htf.formText('vtexmessage', 1000));
-	htp.tableRowClose;
-	htp.tableRowOpen;
-	htp.tableData('Numéro du message dans le sujet');
-	htp.tableData(htf.formText('vnsumessage', 4));
-	htp.tableRowClose;
-	htp.tableClose;
-	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
-	htp.formClose;
-	htp.print('</div>');
-	htp.bodyClose;
-	htp.htmlClose;
-END;
-/
+
+
 
 
 --2.1.1 Requête SQL
-CREATE OR REPLACE PROCEDURE pa_add_message
+CREATE OR REPLACE
+PROCEDURE pa_add_message
 	(
 		vnumsujet in number,
 		vnummembre in number,
@@ -136,7 +98,8 @@ END;
 
 --2.1.2 Page de validation d'insertion, avec gestion des erreurs
 -------Appel à la requête pa_add_message
-CREATE OR REPLACE PROCEDURE ui_execadd_message
+CREATE OR REPLACE
+PROCEDURE ui_execadd_message
 	(
 		vnumsujet in number,
 		vnummembre in number,
@@ -161,13 +124,54 @@ BEGIN
 	htp.header(1, '</a>');
 	htp.hr;
 	htp.header(2, 'Ajout effectue dans la table message');
-	htp.print('<a class="btn btn-primary" href="afft_message" >Voir la liste complete</a>');
+	htp.print('<a class="btn btn-primary" href="afft_sujet_from_numsujet?vnumsujet=' || vnumsujet || '" >Retour au sujet</a>');
 	htp.print('</div>');
 	htp.bodyClose;
 	htp.htmlClose;
 EXCEPTION
 	WHEN OTHERS THEN
 		htp.print('ERROR: ' || SQLCODE);
+END;
+/
+
+
+--2.1.3 Formulaire d'insertion
+------- Validation redirige vers ui_execadd_message
+CREATE OR REPLACE 
+PROCEDURE ui_frmadd_message
+	(vnumsujet number)
+IS
+	vcount number(3);
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+BEGIN
+	Select Count(*) Into vcount From SUJET Where NUMSUJET = vnumsujet;
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Insertion message');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'Ajout élément dans la table message');
+	htp.formOpen(owa_util.get_owa_service_path || 'ui_execadd_message', 'POST');
+	htp.print('<table class="table">');
+	htp.print('<input type="hidden" name="vnumsujet" value="' || vnumsujet || '"/>');
+	htp.print('<input type="hidden" name="vnsumessage" value="' || vcount || '"/>');
+	htp.tableRowOpen;
+	htp.tableData('Numéro du membre');
+	htp.tableData(htf.formText('vnummembre', 5));
+	htp.tableRowClose;
+	htp.tableRowOpen;
+	htp.tableData('Texte du message');
+	htp.tableData(htf.formText('vtexmessage', 1000));
+	htp.tableRowClose;
+	htp.tableClose;
+	htp.print('<button class="btn btn-primary" type="submit">Validation</button>');
+	htp.formClose;
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
 END;
 /
 
