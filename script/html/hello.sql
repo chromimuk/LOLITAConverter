@@ -6,9 +6,12 @@ IS
 	user_name varchar2(80);
 	user_type varchar2(2);
 	user_right varchar2(4);
+	user_rights array_t;
 BEGIN
 	get_info_user(user_id, user_name, user_type);
     	get_info_user_right(user_right);
+    	get_info_user_rights(user_rights);
+    	
     	
 	htp.print('<!DOCTYPE html>');
 	htp.htmlOpen;
@@ -72,6 +75,11 @@ BEGIN
 				htp.print('</div>');
 			end if;
 			
+		FOR i IN user_rights.FIRST .. user_rights.LAST
+		LOOP
+      			htp.print(user_rights(i));
+   		END LOOP;
+   			
 		htp.bodyClose;
 	htp.htmlClose;
 	EXCEPTION
@@ -182,6 +190,39 @@ END;
 /
 
 
+CREATE TYPE array_t AS TABLE OF VARCHAR2(5)
+/
+
+CREATE OR REPLACE
+PROCEDURE get_info_user_rights
+   (
+   rights out array_t
+   )
+IS
+   cookie_lolita owa_cookie.cookie;
+   user_id number(5);
+BEGIN
+   cookie_lolita := owa_cookie.get('user');
+
+   if (cookie_lolita.num_vals > 0)
+   then
+           user_id  := cookie_lolita.vals(1);
+
+           SELECT
+                   A.code 
+                   BULK COLLECT INTO rights
+           FROM
+                   MEMBRE M Inner Join ATTRIBUER A
+                   On M.nummembre = A.nummembre
+           WHERE
+                   M.nummembre = user_id;
+   end if;
+   
+   EXCEPTION
+           WHEN NO_DATA_FOUND THEN
+                   htp.print(SQLCODE);
+END;
+/
 
 
 
