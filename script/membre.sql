@@ -255,7 +255,7 @@ END;
 /
 
 
---1.3 Affichage des membres selon leurs statuts
+--1.4 Affichage des membres selon leurs statuts
 CREATE OR REPLACE 
 PROCEDURE afft_membre_from_stamembre
 	(vstamembre varchar default 'S05')
@@ -321,6 +321,71 @@ BEGIN
 END;
 /
 
+
+
+--1.4 Affichage des membres pour les utilisateurs de base
+CREATE OR REPLACE 
+PROCEDURE afft_membre_user
+IS
+	rep_css varchar2(255) := 'https://dl.dropboxusercontent.com/u/21548623/bootstrap.min.css';
+	CURSOR lst IS
+		SELECT 
+			M.NUMMEMBRE, S.NOMSOCIETE, L.LIBLANGUE, M.TYPMEMBRE, M.NOMMEMBRE,
+			M.PREMEMBRE, M.MAIMEMBRE, M.DTEMEMBRE, M.POSMEMBRE
+		FROM 
+			SOCIETE S
+			Inner Join MEMBRE M
+			On M.NUMSOCIETE = S.NUMSOCIETE
+			Inner Join LANGUE L
+			On L.NUMLANGUE = M.NUMLANGUE
+		WHERE
+			M.TYPMEMBRE = 'E'
+		ORDER BY
+			M.NUMMEMBRE
+		;
+BEGIN
+	htp.print('<!DOCTYPE html>');
+	htp.htmlOpen;
+	htp.headOpen;
+	htp.title('Table membre');
+	htp.print('<link href="' || rep_css || '" rel="stylesheet" type="text/css" />');
+	htp.headClose;
+	htp.bodyOpen;
+	htp.print('<div class="container">');
+	htp.header(1, 'LOLITA');
+	htp.hr;
+	htp.header(2, 'Liste de nos membres experts');
+	htp.print('<table class="table">');
+	htp.tableRowOpen(cattributes => 'class=active');
+		htp.tableheader('N°');
+		htp.tableheader('Membre');
+		htp.tableheader('Societe');
+		htp.tableheader('Langue maternelle');
+		htp.tableheader('Mail');
+		htp.tableheader('Inscrit le');
+		htp.tableheader('Poste');
+	htp.tableRowClose;
+	FOR rec IN lst loop
+		htp.tableRowOpen;
+			htp.tableData(rec.nummembre);
+			htp.tableData(
+				htf.anchor('afft_membre_from_nummembre?vnummembre=' || rec.nummembre,
+				rec.premembre || ' ' || rec.nommembre)
+			);
+			htp.tableData(rec.nomsociete);
+			htp.tableData(rec.liblangue);
+			htp.tableData(rec.maimembre);
+			htp.tableData(rec.dtemembre);
+			htp.tableData(rec.posmembre);
+		htp.tableRowClose;
+	END LOOP;
+	htp.tableClose;
+	htp.print('<a class="btn btn-primary" href="hello" >Retour accueil</a>');
+	htp.print('</div>');
+	htp.bodyClose;
+	htp.htmlClose;
+END;
+/
 
 
 
