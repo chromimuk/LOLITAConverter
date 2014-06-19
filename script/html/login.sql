@@ -119,7 +119,8 @@ BEGIN
 		htp.headClose;
 		htp.bodyOpen;
 			htp.print('<div class="container">');
-			htp.header(1,'LOLITA');
+			header('', '', '', '');
+			--htp.header(1,'LOLITA');
 			htp.br;
 			htp.header(2, 'Connexion');
 			htp.formOpen(owa_util.get_owa_service_path || 'pa_login', 'POST');
