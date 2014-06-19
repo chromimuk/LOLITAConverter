@@ -307,9 +307,9 @@ BEGIN
 		htp.tableData(rec.dtemembre);
 		htp.tableData(rec.posmembre);
 		htp.tableData(
-			htf.anchor('ui_frmedit_avoir_acc?vnummembre=' || rec.nummembre, 'Accepter')
+			htf.anchor('ui_execedit_avoir_ref?vnummembre=' || rec.nummembre, 'Accepter')
 			|| ' ou ' ||
-			htf.anchor('ui_frmedit_avoir_ref?vnummembre=' || rec.nummembre, 'Refuser')
+			htf.anchor('ui_execedit_avoir_ref?vnummembre=' || rec.nummembre, 'Refuser')
 		);
 		htp.tableRowClose;
 	END LOOP;
