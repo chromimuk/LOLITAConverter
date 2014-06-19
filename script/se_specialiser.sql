@@ -139,6 +139,18 @@ IS
 	user_name varchar2(80);
 	user_type varchar2(2);
 	user_right varchar2(4);
+	CURSOR lstDom IS
+	SELECT
+		D.NUMDOMAINE, D.LIBDOMAINE 
+	FROM
+		DOMAINE D
+	;
+	CURSOR lstMem IS
+	SELECT
+		M.NUMMEMBRE, M.PREMEMBRE, M.NOMMEMBRE
+	FROM
+		MEMBRE M
+	;
 BEGIN
 	get_info_user(user_id, user_name, user_type);
       	get_info_user_right(user_right);
