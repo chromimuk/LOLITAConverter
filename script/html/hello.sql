@@ -35,7 +35,7 @@ BEGIN
 			htp.print('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 			htp.br;
 			htp.br;
-			htp.print('<a class="btn btn-primary" href="afft_domaine" >Consulter nos domaines de compétences</a>');
+			htp.print('<a class="btn btn-primary" href="afft_domaine_user" >Consulter nos domaines de compétences</a>');
 			htp.hr;
 			htp.header(2,'Nos experts');
 			htp.print('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.');
